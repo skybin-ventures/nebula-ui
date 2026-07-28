@@ -6,9 +6,8 @@ import { useController, useFormContext as useRHFFormContext, type FieldValues, t
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
-import { labelVariants } from "./variants";
+import { FieldLayout } from "./FieldLayout";
 import { TextBoxPrimitive } from "../../primitives/textbox";
-import { Label } from "../../primitives/label";
 import { X } from "lucide-react";
 
 const textBoxVariants = cva(
@@ -239,29 +238,27 @@ function TextBoxInner<
   };
 
   return (
-    <div className={cn("space-y-1.5", fullWidth && "w-full")}>
-      {label && (
-        <Label
-          htmlFor={inputId}
-          className={labelVariants({ required: !!required })}
-        >
-          {label}
-          {formConfig.colon && ":"}
-        </Label>
-      )}
-      
+    <FieldLayout
+      inputId={inputId}
+      label={label}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      fullWidth={fullWidth}
+      formConfig={formConfig}
+    >
       <div className="relative">
         {prefix && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
             {prefix}
           </div>
         )}
-        
+
         <TextBoxPrimitive
           {...props}
           {...field}
           ref={(node) => {
-            // Handle both refs
             if (typeof ref === "function") {
               ref(node);
             } else if (ref) {
@@ -276,8 +273,8 @@ function TextBoxInner<
             hasError
               ? `${inputId}-error`
               : helperText
-              ? `${inputId}-helper`
-              : undefined
+                ? `${inputId}-helper`
+                : undefined
           }
           className={cn(
             textBoxVariants({ size: effectiveSize, variant: effectiveVariant }),
@@ -295,6 +292,7 @@ function TextBoxInner<
                 onClick={handleClear}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 tabIndex={-1}
+                aria-label="Clear"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -305,26 +303,7 @@ function TextBoxInner<
           </div>
         )}
       </div>
-
-      {showError && hasError && (
-        <p
-          id={`${inputId}-error`}
-          className="text-sm text-destructive"
-          role="alert"
-        >
-          {errorMessage}
-        </p>
-      )}
-      
-      {helperText && !hasError && (
-        <p
-          id={`${inputId}-helper`}
-          className="text-sm text-muted-foreground"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 

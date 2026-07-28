@@ -11,6 +11,21 @@ export type { TextAreaProps } from "./TextArea";
 export { Select, Select as FormSelect } from "./Select";
 export type { SelectProps, SelectProps as FormSelectProps, SelectOption } from "./Select";
 
+export { CountrySelect, CountrySelect as FormCountrySelect } from "./CountrySelect";
+export type {
+  CountrySelectProps,
+  CountrySelectProps as FormCountrySelectProps,
+} from "./CountrySelect";
+
+export { PhoneInput, PhoneInput as FormPhoneInput } from "./PhoneInput";
+export type { PhoneInputProps, PhoneInputProps as FormPhoneInputProps } from "./PhoneInput";
+
+export { DatePicker, DatePicker as FormDatePicker } from "./DatePicker";
+export type { DatePickerProps, DatePickerProps as FormDatePickerProps } from "./DatePicker";
+
+export { Combobox, Combobox as FormCombobox } from "./Combobox";
+export type { ComboboxProps, ComboboxProps as FormComboboxProps } from "./Combobox";
+
 export { Checkbox, Checkbox as FormCheckbox } from "./Checkbox";
 export type { CheckboxProps } from "./Checkbox";
 
@@ -20,15 +35,21 @@ export type { RadioGroupProps, RadioItemProps, RadioOption } from "./Radio";
 export { FormSwitch } from "./FormSwitch";
 export type { FormSwitchProps } from "./FormSwitch";
 
+export { FieldLayout } from "./FieldLayout";
+export type { FieldLayoutProps } from "./FieldLayout";
+
+export { CountryPicker } from "./CountryPicker";
+export type { CountryPickerProps } from "./CountryPicker";
+
 // Context and types
-export { 
-  FormConfigContext, 
+export {
+  FormConfigContext,
   defaultFormConfig,
   buildZodSchemaFromRules,
   useFieldValidationRegistry,
 } from "./context";
-export type { 
-  FormConfig, 
+export type {
+  FormConfig,
   FormContextValue,
   FieldValidationRules,
   FieldRegistration,

@@ -92,12 +92,24 @@ export function Form<
   config,
   children,
   form: externalForm,
-  mode = "onBlur",
-  reValidateMode = "onChange",
+  mode: modeProp,
+  reValidateMode: reValidateModeProp,
   resolver: customResolver,
   ...formProps
 }: FormProps<TFieldValues, TContext>) {
   const mergedConfig = { ...defaultFormConfig, ...config };
+
+  const mode =
+    modeProp ??
+    (mergedConfig.validateOnChange
+      ? "onChange"
+      : mergedConfig.validateOnBlur !== false
+        ? "onBlur"
+        : "onSubmit");
+
+  const reValidateMode =
+    reValidateModeProp ??
+    (mergedConfig.validateOnChange ? "onChange" : "onBlur");
 
   const {
     registerFieldValidation,

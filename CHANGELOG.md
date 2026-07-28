@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.29] - 2026-07-28
+
+### Added
+- Form fields: `Combobox`, `CountrySelect` / `CountryPicker`, `DatePicker`, `PhoneInput`, and shared `FieldLayout`
+- Components: `AlertDialog`, `Breadcrumb`, `InputOTP`, `Progress`, `Sheet`, `Slider`, plus stories for Alert/Badge/Card/Dialog/Tabs
+- Package export `./styles.css` (ships `src/styles`) and unit test scripts (`test`, `test:coverage`)
+- Storybook Vite/Vitest setup files; remove the old template `src/stories` samples
+
+### Changed
+- Bump package to `0.0.29`; expand peer deps for new Radix primitives and `input-otp`
+- Harden Form context/Select/TextBox registration and Pagination button wiring
+- Export additional primitives and components from the main barrel
+
 ## [0.0.28] - 2026-07-11
 
 ### Added

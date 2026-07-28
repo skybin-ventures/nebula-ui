@@ -3,6 +3,8 @@ import { type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { ButtonPrimitive, buttonVariants as buttonVariantsPrimitive } from "../../primitives/button"
 
+// Re-exported for consumers that compose custom button styles
+// eslint-disable-next-line react-refresh/only-export-components
 export const buttonVariants = buttonVariantsPrimitive;
 
 type PrimitiveVariant = NonNullable<VariantProps<typeof buttonVariants>["variant"]>;

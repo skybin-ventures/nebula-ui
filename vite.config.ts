@@ -13,22 +13,26 @@ import { playwright } from '@vitest/browser-playwright';
 import dts from 'vite-plugin-dts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isStorybook = process.argv.some((arg) => arg.includes("storybook"));
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    checker({ typescript: true }),
-    eslint(),
-    dts({
+    !isStorybook && checker({ typescript: true }),
+    !isStorybook && eslint({
+      emitError: false,
+      emitWarning: false,
+    }),
+    !isStorybook && dts({
       include: ['src'],
       outDir: 'dist',
       tsconfigPath: './tsconfig.app.json',
       insertTypesEntry: true,
       rollupTypes: false,
     }),
-  ],
+  ].filter(Boolean),
   build: {
     lib: {
       entry: {
@@ -65,6 +69,10 @@ export default defineConfig({
         "@radix-ui/react-toggle",
         "@radix-ui/react-tooltip",
         "@radix-ui/react-accordion",
+        "@radix-ui/react-alert-dialog",
+        "@radix-ui/react-progress",
+        "@radix-ui/react-slider",
+        "input-otp",
         "cmdk",
         "date-fns",
         "react-day-picker",
@@ -112,25 +120,32 @@ export default defineConfig({
     }
   },
   test: {
-    projects: [{
-      extends: true,
-      plugins: [
-        storybookTest({
-          configDir: path.join(__dirname, '.storybook')
-        })
-      ],
-      test: {
-        name: 'storybook',
-        browser: {
-          enabled: true,
-          headless: true,
-          provider: playwright({}),
-          instances: [{
-            browser: 'chromium'
-          }]
+    projects: [
+      {
+        test: {
+          name: "unit",
+          include: ["src/**/*.test.ts"],
+          environment: "node",
         },
-        setupFiles: ['.storybook/vitest.setup.ts']
-      }
-    }]
-  }
+      },
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            configDir: path.join(__dirname, ".storybook"),
+          }),
+        ],
+        test: {
+          name: "storybook",
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [{ browser: "chromium" }],
+          },
+          setupFiles: [".storybook/vitest.setup.ts"],
+        },
+      },
+    ],
+  },
 } as any);

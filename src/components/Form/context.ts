@@ -152,11 +152,16 @@ export function buildZodSchemaFromRules(
     // Handle required - for strings, require non-empty
     if (rules.required) {
       const message = typeof rules.required === "string" ? rules.required : "This field is required";
-      schema = schema.min(1, message);
-      return schema;
+      return finalizeSchema(
+        z.preprocess(
+          (value) => (value === undefined || value === null ? "" : value),
+          schema.min(1, message)
+        ),
+        rules
+      );
     }
 
-    return schema.optional();
+    return finalizeSchema(schema.optional(), rules);
   }
 
   // Build number schema
@@ -180,30 +185,32 @@ export function buildZodSchemaFromRules(
     }
 
     if (!rules.required) {
-      return schema.optional();
+      return finalizeSchema(schema.optional(), rules);
     }
-    return schema;
+    return finalizeSchema(schema, rules);
   }
 
   // Build boolean schema
   if (type === "boolean") {
     const schema = z.boolean();
     if (rules.required) {
-      // For required boolean, must be true (like accepting terms)
-      return schema.refine((val) => val === true, {
-        message: typeof rules.required === "string" ? rules.required : "This field is required",
-      });
+      return finalizeSchema(
+        schema.refine((val) => val === true, {
+          message: typeof rules.required === "string" ? rules.required : "This field is required",
+        }),
+        rules
+      );
     }
-    return schema.optional();
+    return finalizeSchema(schema.optional(), rules);
   }
 
   // Build date schema
   if (type === "date") {
     const schema = z.coerce.date();
     if (!rules.required) {
-      return schema.optional();
+      return finalizeSchema(schema.optional(), rules);
     }
-    return schema;
+    return finalizeSchema(schema, rules);
   }
 
   // Build array schema
@@ -213,11 +220,42 @@ export function buildZodSchemaFromRules(
       const message = typeof rules.required === "string" ? rules.required : "This field is required";
       schema = schema.min(1, message);
     }
-    return schema;
+    return finalizeSchema(schema, rules);
   }
 
   // Default fallback
-  return z.unknown();
+  return finalizeSchema(z.unknown(), rules);
+}
+
+function applyCustomValidate(
+  schema: z.ZodTypeAny,
+  rules: FieldValidationRules
+): z.ZodTypeAny {
+  if (!rules.validate) {
+    return schema;
+  }
+
+  const validateFn = rules.validate;
+
+  return schema.superRefine(async (value, ctx) => {
+    const result = await validateFn(value);
+
+    if (result === true) {
+      return;
+    }
+
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: typeof result === "string" ? result : "Invalid value",
+    });
+  });
+}
+
+function finalizeSchema(
+  schema: z.ZodTypeAny,
+  rules: FieldValidationRules
+): z.ZodTypeAny {
+  return applyCustomValidate(schema, rules);
 }
 
 /**

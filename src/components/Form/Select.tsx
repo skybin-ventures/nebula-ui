@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
-import { labelVariants } from "./variants";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
+import { FieldLayout } from "./FieldLayout";
 import {
   Select as ShadcnSelect,
   SelectContent,
@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../primitives/select";
-import { Label } from "../../primitives/label";
 
 const selectSizeVariants = cva(
   "",
@@ -175,21 +174,19 @@ export function Select<
   const effectiveVariant = hasError ? "error" : variant;
 
   return (
-    <div className={cn("space-y-1.5", fullWidth && "w-full")}>
-      {label && (
-        <Label
-          htmlFor={inputId}
-          className={labelVariants({ required: !!required })}
-        >
-          {label}
-          {formConfig.colon && ":"}
-        </Label>
-      )}
-      
+    <FieldLayout
+      inputId={inputId}
+      label={label}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      fullWidth={fullWidth}
+      formConfig={formConfig}
+    >
       <ShadcnSelect
         value={field.value?.toString() ?? ""}
         onValueChange={(value) => {
-          // Handle clear selection
           if (value === "" && allowClear) {
             field.onChange("");
           } else {
@@ -205,8 +202,8 @@ export function Select<
             hasError
               ? `${inputId}-error`
               : helperText
-              ? `${inputId}-helper`
-              : undefined
+                ? `${inputId}-helper`
+                : undefined
           }
           className={cn(
             selectSizeVariants({ size: effectiveSize }),
@@ -234,26 +231,7 @@ export function Select<
           ))}
         </SelectContent>
       </ShadcnSelect>
-
-      {showError && hasError && (
-        <p
-          id={`${inputId}-error`}
-          className="text-sm text-destructive"
-          role="alert"
-        >
-          {errorMessage}
-        </p>
-      )}
-      
-      {helperText && !hasError && (
-        <p
-          id={`${inputId}-helper`}
-          className="text-sm text-muted-foreground"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 

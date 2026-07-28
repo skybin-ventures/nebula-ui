@@ -22,11 +22,26 @@ npm install react react-dom react-hook-form @hookform/resolvers zod \
 
 ### Styles
 
-Import the stylesheet once in your app entry point:
+Import the Nebula UI theme tokens once in your app entry point:
 
 ```ts
 import "@skybin-tech/nebula-ui/styles.css";
 ```
+
+Your app must also use Tailwind CSS v3/v4 with the standard shadcn CSS variables (`--background`, `--primary`, `--border`, etc.). See [src/styles/index.css](src/styles/index.css) for the token set shipped with this package.
+
+### Toast notifications
+
+Use **Sonner** for app toasts:
+
+```tsx
+import { Toaster } from "@skybin-tech/nebula-ui";
+
+// in root layout
+<Toaster />
+```
+
+Radix Toast primitives remain exported for advanced custom toast UIs, but Sonner is the recommended default.
 
 ---
 
@@ -154,6 +169,57 @@ import { Form, FormSelect } from "@skybin-tech/nebula-ui";
   <SelectItem value="admin">Admin</SelectItem>
   <SelectItem value="user">User</SelectItem>
 </FormSelect>
+```
+
+---
+
+### CountrySelect
+
+Searchable country picker with flag emoji and country name. Stores ISO alpha-2 codes (`"IN"`, `"US"`).
+
+```tsx
+<CountrySelect
+  name="country"
+  label="Country"
+  required
+  priorityCountries={["IN", "US", "GB"]}
+/>
+```
+
+---
+
+### PhoneInput
+
+International mobile number input with country picker, read-only dial code, and national number field. Stores E.164 values (`"+919876543210"`).
+
+```tsx
+<PhoneInput
+  name="phone"
+  label="Mobile number"
+  defaultCountry="IN"
+  required="Please enter your mobile number"
+  minLength={10}
+/>
+```
+
+Supports the same `required` prop as `TextBox` — pass `true` or a custom error message string. Optional `minLength` / `maxLength` apply to the national number digits.
+
+---
+
+### DatePicker / Combobox
+
+Form-integrated date picker and searchable combobox:
+
+```tsx
+<DatePicker name="birthDate" label="Date of birth" required />
+<Combobox
+  name="department"
+  label="Department"
+  options={[
+    { label: "Engineering", value: "eng" },
+    { label: "Sales", value: "sales" },
+  ]}
+/>
 ```
 
 ---

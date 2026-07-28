@@ -19,6 +19,14 @@ export {
   useForm,
   useFormField,
   useFieldError,
+  CountrySelect,
+  FormCountrySelect,
+  PhoneInput,
+  FormPhoneInput,
+  DatePicker,
+  FormDatePicker,
+  Combobox,
+  FormCombobox,
 } from "./components/Form"
 
 export { Select as FormSelect } from "./components/Form/Select"
@@ -36,9 +44,28 @@ export type {
   FormContextValue,
   FieldValidationRules,
   FieldRegistration,
+  CountrySelectProps,
+  FormCountrySelectProps,
+  PhoneInputProps,
+  FormPhoneInputProps,
+  DatePickerProps,
+  FormDatePickerProps,
+  ComboboxProps,
+  FormComboboxProps,
 } from "./components/Form"
 
 export type { SelectProps as FormSelectProps, SelectOption } from "./components/Form/Select"
+
+export {
+  getCountryFlag,
+  getCountryByCode,
+  getCountryName,
+  getCountryDialCode,
+  formatE164,
+  parseE164,
+  COUNTRIES,
+} from "./data/countries"
+export type { Country } from "./data/countries"
 
 // ─── Standalone Checkbox ─────────────────────────────────────────────────────
 export { Checkbox } from "./components/Checkbox/Checkbox"
@@ -122,6 +149,54 @@ export {
   DialogTitle,
   DialogDescription,
 } from "./components/Dialog"
+
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from "./components/Sheet"
+
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "./components/AlertDialog"
+
+export { Progress } from "./components/Progress"
+
+export { Slider } from "./components/Slider"
+
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from "./components/Breadcrumb"
+
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "./components/InputOTP"
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./components/Popover"
 
