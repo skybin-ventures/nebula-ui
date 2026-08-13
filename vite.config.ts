@@ -27,10 +27,10 @@ export default defineConfig({
     }),
     !isStorybook && dts({
       include: ['src'],
-      outDir: 'dist',
+      outDirs: 'dist',
       tsconfigPath: './tsconfig.app.json',
       insertTypesEntry: true,
-      rollupTypes: false,
+      bundleTypes: false,
     }),
   ].filter(Boolean),
   build: {

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.30] - 2026-08-13
+
+### Changed
+- Bump package to `0.0.30`
+- Dev toolchain: ESLint 9→10, Storybook 10.5.5→10.5.7, Vite 8.1.5→8.2.1, lucide-react 1.27→1.31, react-hook-form 7.83→7.85, and related type/plugin patches
+- `vite-plugin-dts`: use v5 `outDirs` / `bundleTypes` options (replaces `outDir` / `rollupTypes`)
+- Allow `globals@17.11.0` in `pnpm-workspace.yaml` `minimumReleaseAgeExclude`
+
 ## [0.0.29] - 2026-07-28
 
 ### Added
