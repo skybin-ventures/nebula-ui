@@ -2,30 +2,19 @@
 
 import { useContext, useEffect, useId, useState } from "react";
 import { format, startOfDay } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Clock } from "lucide-react";
 import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { Button } from "../../primitives/button";
 import { Calendar } from "../../primitives/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover";
+import { Separator } from "../../primitives/separator";
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context";
 import { FieldLayout } from "./FieldLayout";
+import { TimePicker } from "./TimePicker";
 
-function toStartOfDay(value: unknown): Date | undefined {
-  if (!value || value === "") {
-    return undefined;
-  }
-
-  const date = value instanceof Date ? value : new Date(value as string | number);
-  if (Number.isNaN(date.getTime())) {
-    return undefined;
-  }
-
-  return startOfDay(date);
-}
-
-const datePickerVariants = cva("w-full justify-start text-left font-normal", {
+const dateTimePickerVariants = cva("w-full justify-start text-left font-normal", {
   variants: {
     size: {
       sm: "h-8 text-xs",
@@ -44,10 +33,10 @@ const datePickerVariants = cva("w-full justify-start text-left font-normal", {
   },
 });
 
-export interface DatePickerProps<
+export interface DateTimePickerProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> extends VariantProps<typeof datePickerVariants> {
+> extends VariantProps<typeof dateTimePickerVariants> {
   name: TName;
   label?: string;
   helperText?: string;
@@ -61,9 +50,42 @@ export interface DatePickerProps<
   control?: Control<TFieldValues>;
   required?: boolean | string;
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
+  minuteStep?: number;
 }
 
-export function DatePicker<
+function toValidDate(value: unknown): Date | undefined {
+  if (!value || value === "") {
+    return undefined;
+  }
+
+  const date = value instanceof Date ? value : new Date(value as string | number);
+  if (Number.isNaN(date.getTime())) {
+    return undefined;
+  }
+
+  return date;
+}
+
+function hasTimePart(date: Date): boolean {
+  return date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0 || date.getMilliseconds() !== 0;
+}
+
+function withPreservedTime(nextDay: Date, previous: Date): Date {
+  const next = new Date(nextDay);
+  next.setHours(
+    previous.getHours(),
+    previous.getMinutes(),
+    previous.getSeconds(),
+    previous.getMilliseconds()
+  );
+  return next;
+}
+
+function isSelectEventTarget(target: EventTarget | null): boolean {
+  return target instanceof Element && Boolean(target.closest("[data-radix-select-content]"));
+}
+
+export function DateTimePicker<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >({
@@ -82,10 +104,13 @@ export function DatePicker<
   control: externalControl,
   required,
   validate,
-}: DatePickerProps<TFieldValues, TName>) {
+  minuteStep = 5,
+}: DateTimePickerProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
   const [open, setOpen] = useState(false);
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [timeSet, setTimeSet] = useState(false);
   const formConfigContext = useContext(FormConfigContext);
   const formConfig: FormConfig = formConfigContext ?? {};
   const rhfContext = useRHFFormContext<TFieldValues>();
@@ -102,7 +127,7 @@ export function DatePicker<
 
       registerFieldValidation({
         name: name as string,
-        type: "date",
+        type: "datetime",
         rules,
       });
 
@@ -123,13 +148,39 @@ export function DatePicker<
     control,
   });
 
-  const selectedDate = toStartOfDay(field.value);
+  const selectedDate = toValidDate(field.value);
+
+  useEffect(() => {
+    const date = toValidDate(field.value);
+    if (!date) {
+      setTimeSet(false);
+      return;
+    }
+
+    if (hasTimePart(date)) {
+      setTimeSet(true);
+    }
+  }, [field.value]);
+
   const fieldError = fieldState.error?.message;
   const errorMessage = customError ?? fieldError;
   const hasError = !!errorMessage;
   const effectiveSize = size ?? formConfig.size ?? "md";
   const effectiveDisabled = disabled ?? formConfig.disabled;
   const effectiveVariant = hasError ? "error" : variant;
+  const displayHasTime = timeSet && !!selectedDate;
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (nextOpen && timeSet) {
+      setTimeOpen(true);
+      return;
+    }
+
+    if (!nextOpen) {
+      setTimeOpen(false);
+    }
+  };
 
   return (
     <FieldLayout
@@ -142,7 +193,7 @@ export function DatePicker<
       fullWidth={fullWidth}
       formConfig={formConfig}
     >
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button
             id={inputId}
@@ -158,28 +209,85 @@ export function DatePicker<
                   : undefined
             }
             className={cn(
-              datePickerVariants({ size: effectiveSize, variant: effectiveVariant }),
+              dateTimePickerVariants({ size: effectiveSize, variant: effectiveVariant }),
               !selectedDate && "text-muted-foreground",
               className
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedDate ? format(selectedDate, "PPP") : placeholder}
+            {selectedDate
+              ? format(selectedDate, displayHasTime ? "PPP p" : "PPP")
+              : placeholder}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent
+          className="w-auto p-0"
+          align="start"
+          onPointerDownOutside={(event) => {
+            if (isSelectEventTarget(event.target)) {
+              event.preventDefault();
+            }
+          }}
+          onFocusOutside={(event) => {
+            if (isSelectEventTarget(event.target)) {
+              event.preventDefault();
+            }
+          }}
+        >
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={(date) => {
-              field.onChange(date ? startOfDay(date) : "");
-              setOpen(false);
+              if (!date) {
+                field.onChange("");
+                setTimeSet(false);
+                return;
+              }
+
+              if (selectedDate && timeSet) {
+                field.onChange(withPreservedTime(date, selectedDate));
+                setOpen(false);
+                return;
+              }
+
+              field.onChange(startOfDay(date));
             }}
           />
+          <Separator />
+          <div className="p-3">
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={effectiveDisabled}
+              className="h-8 w-full justify-start px-2 font-normal"
+              onClick={() => setTimeOpen((current) => !current)}
+            >
+              <Clock className="mr-2 h-4 w-4" />
+              {displayHasTime && selectedDate ? format(selectedDate, "p") : "Add time"}
+            </Button>
+            {timeOpen ? (
+              <TimePicker
+                className="mt-2"
+                value={selectedDate}
+                minuteStep={minuteStep}
+                disabled={effectiveDisabled}
+                onChange={(date) => {
+                  field.onChange(date);
+                  setTimeSet(true);
+                }}
+                onClear={() => {
+                  if (selectedDate) {
+                    field.onChange(startOfDay(selectedDate));
+                  }
+                  setTimeSet(false);
+                }}
+              />
+            ) : null}
+          </div>
         </PopoverContent>
       </Popover>
     </FieldLayout>
   );
 }
 
-DatePicker.displayName = "DatePicker";
+DateTimePicker.displayName = "DateTimePicker";

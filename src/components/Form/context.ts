@@ -55,7 +55,7 @@ export interface FormConfig {
  */
 export interface FieldRegistration {
   name: string;
-  type: "string" | "number" | "boolean" | "date" | "array";
+  type: "string" | "number" | "boolean" | "date" | "datetime" | "array";
   rules: FieldValidationRules;
 }
 
@@ -204,8 +204,8 @@ export function buildZodSchemaFromRules(
     return finalizeSchema(schema.optional(), rules);
   }
 
-  // Build date schema
-  if (type === "date") {
+  // Build date / datetime schema
+  if (type === "date" || type === "datetime") {
     const schema = z.coerce.date();
     if (!rules.required) {
       return finalizeSchema(schema.optional(), rules);

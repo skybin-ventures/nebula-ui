@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-09-01
+
+### Added
+- `DateTimePicker` and `TimePicker` form components with Storybook stories and package exports
+- `datetime` field type support in the Zod schema builder with coercion tests
+
+### Changed
+- Normalize `DatePicker` values with `startOfDay` for consistent date-only handling
+
 ## [0.0.30] - 2026-08-13
 
 ### Changed

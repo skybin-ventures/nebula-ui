@@ -27,3 +27,21 @@ export const Default: Story = {
     placeholder: "Pick a date",
   },
 };
+
+export const Required: Story = {
+  args: {
+    name: "date",
+    label: "Start date",
+    placeholder: "Pick a date",
+    required: "Start date is required",
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    name: "date",
+    label: "Locked date",
+    placeholder: "Pick a date",
+    disabled: true,
+  },
+};

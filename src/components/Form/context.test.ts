@@ -53,4 +53,14 @@ describe("buildZodSchemaFromRules", () => {
     expect(schema.safeParse({ username: "ab", age: 20 }).success).toBe(false);
     expect(schema.safeParse({ username: "abc", age: 20 }).success).toBe(true);
   });
+
+  it("coerces date and datetime values", () => {
+    const dateSchema = buildZodSchemaFromRules("date", { required: true });
+    const datetimeSchema = buildZodSchemaFromRules("datetime", { required: true });
+    const instant = new Date("2026-08-13T14:30:00");
+
+    expect(dateSchema.safeParse(instant).success).toBe(true);
+    expect(datetimeSchema.safeParse(instant).success).toBe(true);
+    expect(datetimeSchema.safeParse(undefined).success).toBe(false);
+  });
 });
