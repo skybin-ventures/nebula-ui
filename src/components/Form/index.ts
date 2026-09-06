@@ -5,6 +5,9 @@ export type { FormProps } from "./Form";
 export { TextBox } from "./TextBox";
 export type { TextBoxProps } from "./TextBox";
 
+export { PasswordRevealToggle } from "./PasswordRevealToggle";
+export type { PasswordRevealToggleProps } from "./PasswordRevealToggle";
+
 export { TextArea } from "./TextArea";
 export type { TextAreaProps } from "./TextArea";
 

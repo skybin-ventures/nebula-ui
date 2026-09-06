@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.33] - 2026-09-06
+
+### Fixed
+- Password reveal toggle hit target enlarged with `z-index` so clicks reliably toggle visibility
+- `TextBoxPrimitive` applies `type` after prop spread so password reveal cannot be overridden
+
+## [0.0.32] - 2026-09-06
+
+### Fixed
+- Password reveal toggle positioning no longer depends on consumer Tailwind content scanning (inline position styles)
+
+## [0.0.31] - 2026-09-06
+
+### Added
+- Built-in password reveal toggle on `TextBox` and `Input` when `type="password"` (opt out with `passwordToggle={false}`)
+- `PasswordRevealToggle` exported for reuse
+
 ## [Unreleased] - 2026-09-01
 
 ### Added

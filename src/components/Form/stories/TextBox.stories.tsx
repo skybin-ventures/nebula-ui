@@ -72,6 +72,13 @@ export const WithMinLength: Story = {
     required: true,
     minLength: { value: 8, message: 'Password must be at least 8 characters' },
   },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Password fields include a built-in eye toggle. Pass `passwordToggle={false}` to hide it.',
+      },
+    },
+  },
 };
 
 export const WithMaxLength: Story = {

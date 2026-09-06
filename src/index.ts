@@ -6,6 +6,7 @@ export type { ButtonProps } from "./components/Button"
 export {
   Form,
   TextBox,
+  PasswordRevealToggle,
   TextArea,
   FormCheckbox,
   RadioGroup,
@@ -37,6 +38,7 @@ export { Select as FormSelect } from "./components/Form/Select"
 export type {
   FormProps,
   TextBoxProps,
+  PasswordRevealToggleProps,
   TextAreaProps,
   CheckboxProps,
   RadioGroupProps,

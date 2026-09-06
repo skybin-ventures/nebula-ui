@@ -1,6 +1,6 @@
 {
   "name": "@skybin-tech/nebula-ui",
-  "version": "0.0.30",
+  "version": "0.0.33",
   "type": "module",
   "author": "Anwar <anwar@skybin.io>",
   "description": "Reusable React component library with form validation using shadcn/ui patterns, react-hook-form, and Zod",

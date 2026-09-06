@@ -1,12 +1,13 @@
 'use client';
 
-import { forwardRef, useId, useContext, useEffect } from "react";
+import { forwardRef, useId, useContext, useEffect, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
+import { PasswordRevealToggle } from "./PasswordRevealToggle";
 import { TextBoxPrimitive } from "../../primitives/textbox";
 import { X } from "lucide-react";
 
@@ -62,6 +63,11 @@ export interface TextBoxProps<
   allowClear?: boolean;
   /** Callback when clear is clicked */
   onClear?: () => void;
+  /**
+   * Show an eye toggle for password fields.
+   * Defaults to true when `type="password"`.
+   */
+  passwordToggle?: boolean;
   /** External control (for use outside Form) */
   control?: Control<TFieldValues>;
   
@@ -95,6 +101,7 @@ export interface TextBoxProps<
  * - Label, helper text, and error message support
  * - Prefix/suffix elements
  * - Clear button functionality
+ * - Built-in password reveal toggle when `type="password"`
  * 
  * @example
  * ```tsx
@@ -102,6 +109,7 @@ export interface TextBoxProps<
  * <Form onSubmit={handleSubmit} defaultValues={{ username: "", email: "" }}>
  *   <TextBox name="username" label="Username" required minLength={3} maxLength={50} />
  *   <TextBox name="email" label="Email" type="email" required email />
+ *   <TextBox name="password" label="Password" type="password" required />
  *   <TextBox name="website" label="Website" url />
  *   <Button type="submit">Submit</Button>
  * </Form>
@@ -126,6 +134,7 @@ function TextBoxInner<
     suffix,
     allowClear,
     onClear,
+    passwordToggle,
     id: providedId,
     control: externalControl,
     // Validation props
@@ -144,6 +153,10 @@ function TextBoxInner<
 ) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const isPasswordType = props.type === "password";
+  const showPasswordToggle = isPasswordType && passwordToggle !== false;
+  const resolvedType = showPasswordToggle && passwordVisible ? "text" : props.type;
   
   // Try to get form context
   const formConfigContext = useContext(FormConfigContext);
@@ -248,9 +261,12 @@ function TextBoxInner<
       fullWidth={fullWidth}
       formConfig={formConfig}
     >
-      <div className="relative">
+      <div className="relative" style={{ position: "relative" }}>
         {prefix && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+          <div
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)" }}
+          >
             {prefix}
           </div>
         )}
@@ -258,6 +274,7 @@ function TextBoxInner<
         <TextBoxPrimitive
           {...props}
           {...field}
+          type={resolvedType}
           ref={(node) => {
             if (typeof ref === "function") {
               ref(node);
@@ -279,13 +296,16 @@ function TextBoxInner<
           className={cn(
             textBoxVariants({ size: effectiveSize, variant: effectiveVariant }),
             prefix && "pl-10",
-            (suffix || allowClear) && "pr-10",
+            (suffix || allowClear || showPasswordToggle) && "pr-10",
             className
           )}
         />
 
-        {(suffix || (allowClear && field.value)) && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        {(suffix || (allowClear && field.value) || showPasswordToggle) && (
+          <div
+            className="absolute right-1 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1"
+            style={{ position: "absolute", right: "0.25rem", top: "50%", transform: "translateY(-50%)", zIndex: 10 }}
+          >
             {allowClear && field.value && (
               <button
                 type="button"
@@ -296,6 +316,13 @@ function TextBoxInner<
               >
                 <X className="h-4 w-4" />
               </button>
+            )}
+            {showPasswordToggle && (
+              <PasswordRevealToggle
+                visible={passwordVisible}
+                onToggle={() => setPasswordVisible((visible) => !visible)}
+                disabled={effectiveDisabled}
+              />
             )}
             {suffix && (
               <span className="text-muted-foreground">{suffix}</span>
