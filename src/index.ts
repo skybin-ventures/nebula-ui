@@ -241,9 +241,6 @@ export type { CalendarProps } from "./components/Calendar"
 export { Toaster } from "./components/Sonner"
 
 export {
-  type ToastProps,
-  type ToastActionElement,
-  ToastProvider,
   ToastViewport,
   Toast,
   ToastTitle,
@@ -251,6 +248,10 @@ export {
   ToastClose,
   ToastAction,
 } from "./components/Toast"
+
+// ─── ToastProvider (Sonner-based) ──────────────────────────────────────────
+export { ToastProvider as ToastProviderRoot, useToastContext } from "./components/ToastProvider"
+export type { ToastProviderProps } from "./components/ToastProvider"
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 export { useToggle } from "./hooks/useToggle"
@@ -281,3 +282,21 @@ export {
 
 // ─── Utils ───────────────────────────────────────────────────────────────────
 export { cn } from "./utils/cn"
+
+// ─── Tier 1 Composite Components ─────────────────────────────────────────────
+export { DataTable, useDataTable } from "./components/DataTable"
+export type { DataTableProps } from "./components/DataTable"
+
+export { KanbanBoard } from "./components/KanbanBoard"
+export type {
+  KanbanBoardProps,
+  KanbanCard,
+  KanbanColumn,
+} from "./components/KanbanBoard"
+
+export { Sidebar } from "./components/Sidebar"
+export type {
+  SidebarProps,
+  SidebarItem,
+  SidebarGroup,
+} from "./components/Sidebar"
