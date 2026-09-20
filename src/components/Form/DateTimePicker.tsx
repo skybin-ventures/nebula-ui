@@ -13,6 +13,7 @@ import { Separator } from "../../primitives/separator";
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context";
 import { FieldLayout } from "./FieldLayout";
 import { TimePicker } from "./TimePicker";
+import { deriveTimeSet, toValidDate, withPreservedTime } from "./dateTime";
 
 const dateTimePickerVariants = cva("w-full justify-start text-left font-normal", {
   variants: {
@@ -53,34 +54,6 @@ export interface DateTimePickerProps<
   minuteStep?: number;
 }
 
-function toValidDate(value: unknown): Date | undefined {
-  if (!value || value === "") {
-    return undefined;
-  }
-
-  const date = value instanceof Date ? value : new Date(value as string | number);
-  if (Number.isNaN(date.getTime())) {
-    return undefined;
-  }
-
-  return date;
-}
-
-function hasTimePart(date: Date): boolean {
-  return date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0 || date.getMilliseconds() !== 0;
-}
-
-function withPreservedTime(nextDay: Date, previous: Date): Date {
-  const next = new Date(nextDay);
-  next.setHours(
-    previous.getHours(),
-    previous.getMinutes(),
-    previous.getSeconds(),
-    previous.getMilliseconds()
-  );
-  return next;
-}
-
 function isSelectEventTarget(target: EventTarget | null): boolean {
   return target instanceof Element && Boolean(target.closest("[data-radix-select-content]"));
 }
@@ -110,7 +83,6 @@ export function DateTimePicker<
   const inputId = providedId ?? generatedId;
   const [open, setOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
-  const [timeSet, setTimeSet] = useState(false);
   const formConfigContext = useContext(FormConfigContext);
   const formConfig: FormConfig = formConfigContext ?? {};
   const rhfContext = useRHFFormContext<TFieldValues>();
@@ -149,18 +121,7 @@ export function DateTimePicker<
   });
 
   const selectedDate = toValidDate(field.value);
-
-  useEffect(() => {
-    const date = toValidDate(field.value);
-    if (!date) {
-      setTimeSet(false);
-      return;
-    }
-
-    if (hasTimePart(date)) {
-      setTimeSet(true);
-    }
-  }, [field.value]);
+  const timeSet = deriveTimeSet(field.value);
 
   const fieldError = fieldState.error?.message;
   const errorMessage = customError ?? fieldError;
@@ -240,7 +201,6 @@ export function DateTimePicker<
             onSelect={(date) => {
               if (!date) {
                 field.onChange("");
-                setTimeSet(false);
                 return;
               }
 
@@ -273,13 +233,11 @@ export function DateTimePicker<
                 disabled={effectiveDisabled}
                 onChange={(date) => {
                   field.onChange(date);
-                  setTimeSet(true);
                 }}
                 onClear={() => {
                   if (selectedDate) {
                     field.onChange(startOfDay(selectedDate));
                   }
-                  setTimeSet(false);
                 }}
               />
             ) : null}

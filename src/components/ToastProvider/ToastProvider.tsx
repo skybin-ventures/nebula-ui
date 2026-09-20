@@ -2,35 +2,7 @@ import * as React from "react"
 import { ToastProvider as ToastProviderPrimitive } from "@/primitives/toast"
 import { ToastViewport, Toast, ToastTitle, ToastDescription, ToastClose, ToastAction } from "@/primitives/toast"
 import { cn } from "@/utils"
-
-// ─── Context ─────────────────────────────────────────────────────────────────
-
-interface ToastContextValue {
-  toast: (props: Omit<ToastOptions, "id"> & { id?: string }) => string
-  dismiss: (id: string) => void
-  dismissAll: () => void
-}
-
-interface ToastOptions {
-  id?: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: { label: React.ReactNode; onClick?: () => void }
-  duration?: number
-  variant?: "default" | "destructive"
-}
-
-const ToastContext = React.createContext<ToastContextValue>({
-  toast: () => "",
-  dismiss: () => {},
-  dismissAll: () => {},
-})
-
-export function useToastContext() {
-  return React.useContext(ToastContext)
-}
-
-// ─── Provider ────────────────────────────────────────────────────────────────
+import { ToastContext, type ToastOptions } from "./toast-context"
 
 export interface ToastProviderProps {
   children: React.ReactNode
@@ -57,6 +29,22 @@ export function ToastProvider({
   className,
 }: ToastProviderProps) {
   const [toasts, setToasts] = React.useState<ToastOptions[]>([])
+  const timersRef = React.useRef(new Map<string, ReturnType<typeof setTimeout>>())
+
+  const dismiss = React.useCallback((id: string) => {
+    const timer = timersRef.current.get(id)
+    if (timer) {
+      clearTimeout(timer)
+      timersRef.current.delete(id)
+    }
+    setToasts((prev) => prev.filter((t) => t.id !== id))
+  }, [])
+
+  const dismissAll = React.useCallback(() => {
+    timersRef.current.forEach((timer) => clearTimeout(timer))
+    timersRef.current.clear()
+    setToasts([])
+  }, [])
 
   const addToast = React.useCallback(
     (props: Omit<ToastOptions, "id"> & { id?: string }) => {
@@ -65,19 +53,20 @@ export function ToastProvider({
       setToasts((prev) => [...prev, toastData])
       const dur = toastData.duration ?? duration
       if (dur > 0) {
-        setTimeout(() => dismiss(id), dur)
+        const timer = setTimeout(() => dismiss(id), dur)
+        timersRef.current.set(id, timer)
       }
       return id
     },
-    [duration]
+    [duration, dismiss]
   )
 
-  const dismiss = React.useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id))
-  }, [])
-
-  const dismissAll = React.useCallback(() => {
-    setToasts([])
+  React.useEffect(() => {
+    const timers = timersRef.current
+    return () => {
+      timers.forEach((timer) => clearTimeout(timer))
+      timers.clear()
+    }
   }, [])
 
   const contextValue = React.useMemo(
@@ -104,7 +93,9 @@ export function ToastProvider({
               variant={toast.variant}
               className={cn(variantClass)}
               onOpenChange={(open) => {
-                if (!open) toast.id && dismiss(toast.id)
+                if (!open && toast.id) {
+                  dismiss(toast.id)
+                }
               }}
             >
               {toast.action && (

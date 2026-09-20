@@ -30,8 +30,7 @@ export interface FormProps<
   TContext = unknown
 > extends Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit" | "onError"> {
   /** Base Zod schema for validation (will be extended by field props) */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  schema?: z.ZodType<TFieldValues, any, any>;
+  schema?: z.ZodType<TFieldValues>;
   /** Default values for the form */
   defaultValues?: UseFormProps<TFieldValues, TContext>["defaultValues"];
   /** Values to reset the form to */
@@ -125,13 +124,10 @@ export function Form<
         return customResolver(vals, context, options);
       }
       const fieldSchema = getValidationSchema();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let finalSchema: z.ZodType<any, any, any>;
-      if (baseSchema instanceof z.ZodObject) {
-        finalSchema = baseSchema.merge(fieldSchema);
-      } else {
-        finalSchema = baseSchema ?? fieldSchema;
-      }
+      const mergedSchema = baseSchema instanceof z.ZodObject
+        ? baseSchema.merge(fieldSchema)
+        : baseSchema ?? fieldSchema;
+      const finalSchema = mergedSchema as z.ZodType<TFieldValues, TFieldValues>;
       return zodResolver(finalSchema)(vals, context, options);
     },
     // getValidationSchema reads a ref — always current, intentionally omitted.

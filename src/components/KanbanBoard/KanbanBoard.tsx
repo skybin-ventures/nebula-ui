@@ -20,6 +20,7 @@ import {
 import { cn } from "@/utils"
 import { Badge } from "@/primitives/badge"
 import { GripVertical } from "lucide-react"
+import { resolveKanbanDragCard } from "./resolveDragCard"
 
 // ─── Data types ─────────────────────────────────────────────────────────────
 
@@ -236,21 +237,10 @@ export function KanbanBoard({
     return map
   }, [columns])
 
-  const activeData = React.useMemo(() => {
-    if (!activeId) return null
-    for (const col of columns) {
-      for (const cid of col.cardIds) {
-        if (cid === activeId) return { card: cards[cid], columnId: col.id }
-      }
-    }
-    return null
-  }, [activeId, columns, cards])
-
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event
     setActiveId(active.id)
-    const data = activeData
-    if (data) setActiveCard(data.card || null)
+    setActiveCard(resolveKanbanDragCard(active.id, cards))
   }
 
   const handleDragEnd = (event: DragEndEvent) => {

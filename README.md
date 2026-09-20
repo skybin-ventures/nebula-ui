@@ -10,25 +10,19 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 npm install @skybin-tech/nebula-ui
 ```
 
-### Peer dependencies
+That single install includes Radix primitives, Sonner, cmdk, date-fns, react-day-picker, lucide-react, class-variance-authority, clsx, tailwind-merge, react-hook-form, Zod, and the other UI runtime libraries. You do not need to copy shadcn components or install Radix packages yourself.
 
-```bash
-npm install react react-dom react-hook-form @hookform/resolvers zod \
-  @radix-ui/react-avatar @radix-ui/react-checkbox @radix-ui/react-dropdown-menu \
-  @radix-ui/react-label @radix-ui/react-radio-group @radix-ui/react-select \
-  @radix-ui/react-separator @radix-ui/react-slot @radix-ui/react-switch \
-  class-variance-authority clsx tailwind-merge lucide-react tailwindcss
-```
+The only **peer dependencies** are `react` and `react-dom`, so the app keeps a single React instance.
+
+Form-connected fields (`Form`, `TextBox`, `FormDateRangePicker`, `FormRepeater`, and so on) use the `react-hook-form` and `zod` copies shipped with Nebula UI. If your app also uses those libraries directly, depend on the same major versions so the package manager hoists one copy. Apps that do not use the form system can skip `Form` entirely and use the standalone components (`DateRangePicker`, `MultiSelect`, `FileUpload`, `Repeater`, `Stepper`, etc.) with `value` / `onChange`.
 
 ### Styles
 
-Import the Nebula UI theme tokens once in your app entry point:
+Import the Nebula UI stylesheet once in your app entry point:
 
 ```ts
 import "@skybin-tech/nebula-ui/styles.css";
 ```
-
-Your app must also use Tailwind CSS v3/v4 with the standard shadcn CSS variables (`--background`, `--primary`, `--border`, etc.). See [src/styles/index.css](src/styles/index.css) for the token set shipped with this package.
 
 ### Toast notifications
 

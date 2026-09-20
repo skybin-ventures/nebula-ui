@@ -1,6 +1,6 @@
 {
   "name": "@skybin-tech/nebula-ui",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "type": "module",
   "author": "Anwar <anwar@skybin.io>",
   "description": "Reusable React component library with form validation using shadcn/ui patterns, react-hook-form, and Zod",
@@ -25,11 +25,11 @@
     "./components/Button": {
       "import": {
         "types": "./dist/components/Button/index.d.ts",
-        "default": "./dist/components/Button/Button.js"
+        "default": "./dist/components/Button/index.js"
       },
       "require": {
         "types": "./dist/components/Button/index.d.ts",
-        "default": "./dist/cjs/components/Button/Button.cjs"
+        "default": "./dist/cjs/components/Button/index.cjs"
       }
     },
     "./components/Form": {
@@ -73,7 +73,11 @@
       }
     },
     "./package.json": "./package.json",
-    "./styles.css": "./src/styles/index.css",
+    "./styles.css": {
+      "import": "./dist/styles.css",
+      "require": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
     "./components/Card": {
       "import": {
         "types": "./dist/components/Card/index.d.ts",
@@ -226,12 +230,12 @@
     },
     "./components/Checkbox": {
       "import": {
-        "types": "./dist/components/Checkbox/Checkbox.d.ts",
-        "default": "./dist/components/Checkbox/Checkbox.js"
+        "types": "./dist/components/Checkbox/index.d.ts",
+        "default": "./dist/components/Checkbox/index.js"
       },
       "require": {
-        "types": "./dist/components/Checkbox/Checkbox.d.ts",
-        "default": "./dist/cjs/components/Checkbox/Checkbox.cjs"
+        "types": "./dist/components/Checkbox/index.d.ts",
+        "default": "./dist/cjs/components/Checkbox/index.cjs"
       }
     },
     "./components/Tooltip": {
@@ -373,6 +377,186 @@
         "types": "./dist/components/Breadcrumb/index.d.ts",
         "default": "./dist/cjs/components/Breadcrumb/index.cjs"
       }
+    },
+    "./components/CommandPalette": {
+      "import": {
+        "types": "./dist/components/CommandPalette/index.d.ts",
+        "default": "./dist/components/CommandPalette/index.js"
+      },
+      "require": {
+        "types": "./dist/components/CommandPalette/index.d.ts",
+        "default": "./dist/cjs/components/CommandPalette/index.cjs"
+      }
+    },
+    "./components/ConfirmDialog": {
+      "import": {
+        "types": "./dist/components/ConfirmDialog/index.d.ts",
+        "default": "./dist/components/ConfirmDialog/index.js"
+      },
+      "require": {
+        "types": "./dist/components/ConfirmDialog/index.d.ts",
+        "default": "./dist/cjs/components/ConfirmDialog/index.cjs"
+      }
+    },
+    "./components/DataTable": {
+      "import": {
+        "types": "./dist/components/DataTable/index.d.ts",
+        "default": "./dist/components/DataTable/index.js"
+      },
+      "require": {
+        "types": "./dist/components/DataTable/index.d.ts",
+        "default": "./dist/cjs/components/DataTable/index.cjs"
+      }
+    },
+    "./components/DateRangePicker": {
+      "import": {
+        "types": "./dist/components/DateRangePicker/index.d.ts",
+        "default": "./dist/components/DateRangePicker/index.js"
+      },
+      "require": {
+        "types": "./dist/components/DateRangePicker/index.d.ts",
+        "default": "./dist/cjs/components/DateRangePicker/index.cjs"
+      }
+    },
+    "./components/EmptyState": {
+      "import": {
+        "types": "./dist/components/EmptyState/index.d.ts",
+        "default": "./dist/components/EmptyState/index.js"
+      },
+      "require": {
+        "types": "./dist/components/EmptyState/index.d.ts",
+        "default": "./dist/cjs/components/EmptyState/index.cjs"
+      }
+    },
+    "./components/ErrorState": {
+      "import": {
+        "types": "./dist/components/ErrorState/index.d.ts",
+        "default": "./dist/components/ErrorState/index.js"
+      },
+      "require": {
+        "types": "./dist/components/ErrorState/index.d.ts",
+        "default": "./dist/cjs/components/ErrorState/index.cjs"
+      }
+    },
+    "./components/FileUpload": {
+      "import": {
+        "types": "./dist/components/FileUpload/index.d.ts",
+        "default": "./dist/components/FileUpload/index.js"
+      },
+      "require": {
+        "types": "./dist/components/FileUpload/index.d.ts",
+        "default": "./dist/cjs/components/FileUpload/index.cjs"
+      }
+    },
+    "./components/FilterPanel": {
+      "import": {
+        "types": "./dist/components/FilterPanel/index.d.ts",
+        "default": "./dist/components/FilterPanel/index.js"
+      },
+      "require": {
+        "types": "./dist/components/FilterPanel/index.d.ts",
+        "default": "./dist/cjs/components/FilterPanel/index.cjs"
+      }
+    },
+    "./components/FormRepeater": {
+      "import": {
+        "types": "./dist/components/FormRepeater/index.d.ts",
+        "default": "./dist/components/FormRepeater/index.js"
+      },
+      "require": {
+        "types": "./dist/components/FormRepeater/index.d.ts",
+        "default": "./dist/cjs/components/FormRepeater/index.cjs"
+      }
+    },
+    "./components/KanbanBoard": {
+      "import": {
+        "types": "./dist/components/KanbanBoard/index.d.ts",
+        "default": "./dist/components/KanbanBoard/index.js"
+      },
+      "require": {
+        "types": "./dist/components/KanbanBoard/index.d.ts",
+        "default": "./dist/cjs/components/KanbanBoard/index.cjs"
+      }
+    },
+    "./components/Label": {
+      "import": {
+        "types": "./dist/components/Label/index.d.ts",
+        "default": "./dist/components/Label/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Label/index.d.ts",
+        "default": "./dist/cjs/components/Label/index.cjs"
+      }
+    },
+    "./components/MultiSelect": {
+      "import": {
+        "types": "./dist/components/MultiSelect/index.d.ts",
+        "default": "./dist/components/MultiSelect/index.js"
+      },
+      "require": {
+        "types": "./dist/components/MultiSelect/index.d.ts",
+        "default": "./dist/cjs/components/MultiSelect/index.cjs"
+      }
+    },
+    "./components/Select": {
+      "import": {
+        "types": "./dist/components/Select/index.d.ts",
+        "default": "./dist/components/Select/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Select/index.d.ts",
+        "default": "./dist/cjs/components/Select/index.cjs"
+      }
+    },
+    "./components/Sidebar": {
+      "import": {
+        "types": "./dist/components/Sidebar/index.d.ts",
+        "default": "./dist/components/Sidebar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Sidebar/index.d.ts",
+        "default": "./dist/cjs/components/Sidebar/index.cjs"
+      }
+    },
+    "./components/Stepper": {
+      "import": {
+        "types": "./dist/components/Stepper/index.d.ts",
+        "default": "./dist/components/Stepper/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Stepper/index.d.ts",
+        "default": "./dist/cjs/components/Stepper/index.cjs"
+      }
+    },
+    "./components/Textarea": {
+      "import": {
+        "types": "./dist/components/Textarea/index.d.ts",
+        "default": "./dist/components/Textarea/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Textarea/index.d.ts",
+        "default": "./dist/cjs/components/Textarea/index.cjs"
+      }
+    },
+    "./components/ToastProvider": {
+      "import": {
+        "types": "./dist/components/ToastProvider/index.d.ts",
+        "default": "./dist/components/ToastProvider/index.js"
+      },
+      "require": {
+        "types": "./dist/components/ToastProvider/index.d.ts",
+        "default": "./dist/cjs/components/ToastProvider/index.cjs"
+      }
+    },
+    "./hooks/useControllableState": {
+      "import": {
+        "types": "./dist/hooks/useControllableState.d.ts",
+        "default": "./dist/hooks/useControllableState.js"
+      },
+      "require": {
+        "types": "./dist/hooks/useControllableState.d.ts",
+        "default": "./dist/cjs/hooks/useControllableState.cjs"
+      }
     }
   },
   "typesVersions": {
@@ -438,7 +622,7 @@
         "./dist/hooks/useToast.d.ts"
       ],
       "components/Checkbox": [
-        "./dist/components/Checkbox/Checkbox.d.ts"
+        "./dist/components/Checkbox/index.d.ts"
       ],
       "components/Tooltip": [
         "./dist/components/Tooltip/index.d.ts"
@@ -455,11 +639,86 @@
       "components/Switch": [
         "./dist/components/Switch/index.d.ts"
       ],
+      "components/Alert": [
+        "./dist/components/Alert/index.d.ts"
+      ],
+      "components/Tabs": [
+        "./dist/components/Tabs/index.d.ts"
+      ],
+      "components/Input": [
+        "./dist/components/Input/index.d.ts"
+      ],
+      "components/Sheet": [
+        "./dist/components/Sheet/index.d.ts"
+      ],
+      "components/AlertDialog": [
+        "./dist/components/AlertDialog/index.d.ts"
+      ],
+      "components/Progress": [
+        "./dist/components/Progress/index.d.ts"
+      ],
+      "components/InputOTP": [
+        "./dist/components/InputOTP/index.d.ts"
+      ],
       "components/Slider": [
         "./dist/components/Slider/index.d.ts"
       ],
       "components/Breadcrumb": [
         "./dist/components/Breadcrumb/index.d.ts"
+      ],
+      "components/CommandPalette": [
+        "./dist/components/CommandPalette/index.d.ts"
+      ],
+      "components/ConfirmDialog": [
+        "./dist/components/ConfirmDialog/index.d.ts"
+      ],
+      "components/DataTable": [
+        "./dist/components/DataTable/index.d.ts"
+      ],
+      "components/DateRangePicker": [
+        "./dist/components/DateRangePicker/index.d.ts"
+      ],
+      "components/EmptyState": [
+        "./dist/components/EmptyState/index.d.ts"
+      ],
+      "components/ErrorState": [
+        "./dist/components/ErrorState/index.d.ts"
+      ],
+      "components/FileUpload": [
+        "./dist/components/FileUpload/index.d.ts"
+      ],
+      "components/FilterPanel": [
+        "./dist/components/FilterPanel/index.d.ts"
+      ],
+      "components/FormRepeater": [
+        "./dist/components/FormRepeater/index.d.ts"
+      ],
+      "components/KanbanBoard": [
+        "./dist/components/KanbanBoard/index.d.ts"
+      ],
+      "components/Label": [
+        "./dist/components/Label/index.d.ts"
+      ],
+      "components/MultiSelect": [
+        "./dist/components/MultiSelect/index.d.ts"
+      ],
+      "components/Select": [
+        "./dist/components/Select/index.d.ts"
+      ],
+      "components/Sidebar": [
+        "./dist/components/Sidebar/index.d.ts"
+      ],
+      "components/Stepper": [
+        "./dist/components/Stepper/index.d.ts"
+      ],
+      "components/Textarea": [
+        "./dist/components/Textarea/index.d.ts"
+      ],
+      "components/ToastProvider": [
+        "./dist/components/ToastProvider/index.d.ts"
+      ],
+      "hooks/useControllableState": [
+        "./dist/hooks/useControllableState.d.ts"
       ]
     }
   },
@@ -472,6 +731,7 @@
     "build:lib": "vite build",
     "lint": "eslint .",
     "test": "vitest run --project unit",
+    "test:storybook": "vitest run --project storybook",
     "test:coverage": "vitest run --project unit --coverage",
     "preview": "vite preview",
     "prepublishOnly": "npm run build:lib",
@@ -480,116 +740,41 @@
     "deploy": "npm publish --access public"
   },
   "peerDependencies": {
-    "@hookform/resolvers": "^5.0.0",
-    "@radix-ui/react-accordion": ">=1.0.0",
-    "@radix-ui/react-alert-dialog": ">=1.0.0",
-    "@radix-ui/react-avatar": ">=1.0.0",
-    "@radix-ui/react-checkbox": ">=1.0.0",
-    "@radix-ui/react-dialog": ">=1.0.0",
-    "@radix-ui/react-dropdown-menu": ">=2.1.16",
-    "@radix-ui/react-label": ">=2.0.0",
-    "@radix-ui/react-popover": ">=1.0.0",
-    "@radix-ui/react-progress": ">=1.0.0",
-    "@radix-ui/react-radio-group": ">=1.0.0",
-    "@radix-ui/react-scroll-area": ">=1.0.0",
-    "@radix-ui/react-select": ">=2.0.0",
-    "@radix-ui/react-separator": ">=1.0.0",
-    "@radix-ui/react-slider": ">=1.0.0",
-    "@radix-ui/react-slot": ">=1.0.0",
-    "@radix-ui/react-switch": ">=1.0.0",
-    "@radix-ui/react-tabs": ">=1.0.0",
-    "@radix-ui/react-toast": ">=1.0.0",
-    "@radix-ui/react-toggle": ">=1.0.0",
-    "@radix-ui/react-tooltip": ">=1.0.0",
-    "class-variance-authority": ">=0.7.0",
-    "clsx": ">=2.0.0",
-    "cmdk": ">=1.0.0",
-    "date-fns": ">=3.0.0",
-    "input-otp": ">=1.0.0",
-    "lucide-react": ">=0.400.0",
     "react": "^18.0.0 || ^19.0.0",
-    "react-day-picker": ">=8.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0",
-    "react-hook-form": "^7.0.0",
-    "sonner": ">=1.0.0",
-    "tailwind-merge": ">=2.0.0",
-    "tailwindcss": "^3.0.0 || ^4.0.0",
-    "zod": "^3.0.0 || ^4.0.0"
-  },
-  "peerDependenciesMeta": {
-    "zod": {
-      "optional": false
-    },
-    "react-hook-form": {
-      "optional": false
-    },
-    "@hookform/resolvers": {
-      "optional": false
-    }
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@hookform/resolvers": "^5.7.1",
-    "@radix-ui/react-accordion": "^1.2.20",
-    "@radix-ui/react-alert-dialog": "^1.1.23",
-    "@radix-ui/react-avatar": "^1.2.6",
-    "@radix-ui/react-checkbox": "^1.3.11",
-    "@radix-ui/react-dialog": "^1.1.23",
-    "@radix-ui/react-dropdown-menu": "2.1.24",
-    "@radix-ui/react-label": "^2.1.15",
-    "@radix-ui/react-popover": "^1.1.23",
-    "@radix-ui/react-progress": "^1.1.16",
-    "@radix-ui/react-radio-group": "^1.4.7",
-    "@radix-ui/react-scroll-area": "^1.2.18",
-    "@radix-ui/react-select": "^2.3.7",
-    "@radix-ui/react-separator": "^1.1.15",
-    "@radix-ui/react-slider": "^1.4.7",
-    "@radix-ui/react-slot": "^1.3.3",
-    "@radix-ui/react-switch": "^1.3.7",
-    "@radix-ui/react-tabs": "^1.1.21",
-    "@radix-ui/react-toast": "^1.2.23",
-    "@radix-ui/react-toggle": "^1.1.18",
-    "@radix-ui/react-tooltip": "^1.2.16",
-    "@storybook/addon-a11y": "^10.5.7",
-    "@storybook/addon-docs": "^10.5.7",
-    "@storybook/addon-onboarding": "^10.5.7",
-    "@storybook/addon-vitest": "^10.5.7",
-    "@storybook/react-vite": "^10.5.7",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-onboarding": "^10.6.0",
+    "@storybook/addon-vitest": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.2.0",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react-swc": "^4.3.3",
-    "@vitest/browser-playwright": "4.1.10",
-    "@vitest/coverage-v8": "4.1.10",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
-    "date-fns": "^4.4.0",
-    "eslint": "^10.8.1",
+    "@vitest/browser-playwright": "5.0.1",
+    "@vitest/coverage-v8": "5.0.1",
+    "eslint": "^10.11.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.4",
-    "eslint-plugin-storybook": "^10.5.7",
-    "globals": "^17.11.0",
-    "input-otp": "^1.4.2",
-    "lucide-react": "^1.31.0",
-    "react": "^19.2.8",
-    "react-day-picker": "^10.0.1",
-    "react-dom": "^19.2.8",
-    "react-hook-form": "^7.85.0",
-    "sonner": "^2.0.8",
-    "storybook": "^10.5.7",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.67.0",
-    "vite": "^8.2.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "eslint-plugin-storybook": "^10.6.0",
+    "globals": "^17.12.0",
+    "happy-dom": "^20.8.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "storybook": "^10.6.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vite": "^8.3.0",
     "vite-plugin-checker": "^0.14.5",
-    "vite-plugin-dts": "^5.0.3",
+    "vite-plugin-dts": "^5.1.1",
     "vite-plugin-eslint2": "^5.3.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "4.1.10",
-    "zod": "^4.4.3"
+    "vitest": "5.0.1"
   },
   "repository": {
     "type": "git",
@@ -612,7 +797,40 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@radix-ui/react-accordion": "^1.2.20",
+    "@radix-ui/react-alert-dialog": "^1.1.23",
+    "@radix-ui/react-avatar": "^1.2.6",
+    "@radix-ui/react-checkbox": "^1.3.11",
     "@radix-ui/react-collapsible": "^1.1.20",
-    "@tanstack/react-table": "^9.2.4"
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-dropdown-menu": "2.1.24",
+    "@radix-ui/react-label": "^2.1.15",
+    "@radix-ui/react-popover": "^1.1.23",
+    "@radix-ui/react-progress": "^1.1.16",
+    "@radix-ui/react-radio-group": "^1.4.7",
+    "@radix-ui/react-scroll-area": "^1.2.18",
+    "@radix-ui/react-select": "^2.3.7",
+    "@radix-ui/react-separator": "^1.1.15",
+    "@radix-ui/react-slider": "^1.4.7",
+    "@radix-ui/react-slot": "^1.3.3",
+    "@radix-ui/react-switch": "^1.3.7",
+    "@radix-ui/react-tabs": "^1.1.21",
+    "@radix-ui/react-toast": "^1.2.23",
+    "@radix-ui/react-toggle": "^1.1.18",
+    "@radix-ui/react-tooltip": "^1.2.16",
+    "@hookform/resolvers": "^5.9.1",
+    "@tanstack/react-table": "^9.2.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.4.0",
+    "input-otp": "^1.5.0",
+    "lucide-react": "^1.47.0",
+    "react-day-picker": "^10.0.1",
+    "react-hook-form": "^7.88.0",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.5"
   }
 }

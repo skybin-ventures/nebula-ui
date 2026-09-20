@@ -1,93 +1,120 @@
-/// <reference types="vitest/config" />
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import checker from "vite-plugin-checker";
-import tsconfigPaths from 'vite-tsconfig-paths';
-import eslint from 'vite-plugin-eslint2';
+import tsconfigPaths from "vite-tsconfig-paths";
+import eslint from "vite-plugin-eslint2";
 import tailwindcss from "@tailwindcss/vite";
-import { resolve } from "path";
-import { fileURLToPath } from "url";
-import path from 'node:path';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
-import dts from 'vite-plugin-dts';
+import { existsSync, readdirSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { playwright } from "@vitest/browser-playwright";
+import dts from "vite-plugin-dts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isStorybook = process.argv.some((arg) => arg.includes("storybook"));
+const srcDir = path.resolve(__dirname, "src");
+
+function collectLibEntries(): Record<string, string> {
+  const entries: Record<string, string> = {
+    index: path.resolve(srcDir, "index.ts"),
+    "hooks/useDebounce": path.resolve(srcDir, "hooks/useDebounce.ts"),
+    "hooks/useToggle": path.resolve(srcDir, "hooks/useToggle.ts"),
+    "hooks/useToast": path.resolve(srcDir, "hooks/useToast.ts"),
+    "hooks/useControllableState": path.resolve(srcDir, "hooks/useControllableState.ts"),
+    "utils/cn": path.resolve(srcDir, "utils/cn.ts"),
+    styles: path.resolve(srcDir, "styles-entry.ts"),
+  };
+
+  const componentsDir = path.resolve(srcDir, "components");
+  for (const name of readdirSync(componentsDir)) {
+    const indexFile = path.resolve(componentsDir, name, "index.ts");
+    if (existsSync(indexFile)) {
+      entries[`components/${name}/index`] = indexFile;
+    }
+  }
+
+  return entries;
+}
+
+const externalPackages = [
+  "react",
+  "react-dom",
+  "zod",
+  "react-hook-form",
+  "@hookform/resolvers",
+  "tailwindcss",
+  "lucide-react",
+  "class-variance-authority",
+  "tailwind-merge",
+  "clsx",
+  "cmdk",
+  "date-fns",
+  "react-day-picker",
+  "sonner",
+  "input-otp",
+  "@tanstack/react-table",
+  "@dnd-kit/core",
+  "@dnd-kit/sortable",
+  "@dnd-kit/utilities",
+  "@radix-ui/react-accordion",
+  "@radix-ui/react-alert-dialog",
+  "@radix-ui/react-avatar",
+  "@radix-ui/react-checkbox",
+  "@radix-ui/react-collapsible",
+  "@radix-ui/react-dialog",
+  "@radix-ui/react-dropdown-menu",
+  "@radix-ui/react-label",
+  "@radix-ui/react-popover",
+  "@radix-ui/react-progress",
+  "@radix-ui/react-radio-group",
+  "@radix-ui/react-scroll-area",
+  "@radix-ui/react-select",
+  "@radix-ui/react-separator",
+  "@radix-ui/react-slider",
+  "@radix-ui/react-slot",
+  "@radix-ui/react-switch",
+  "@radix-ui/react-tabs",
+  "@radix-ui/react-toast",
+  "@radix-ui/react-toggle",
+  "@radix-ui/react-tooltip",
+];
+
+function isExternal(id: string): boolean {
+  return externalPackages.some((pkg) => id === pkg || id.startsWith(`${pkg}/`));
+}
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    !isStorybook && checker({ typescript: true }),
-    !isStorybook && eslint({
-      emitError: false,
-      emitWarning: false,
-    }),
-    !isStorybook && dts({
-      include: ['src'],
-      outDirs: 'dist',
-      tsconfigPath: './tsconfig.app.json',
-      insertTypesEntry: true,
-      bundleTypes: false,
-    }),
-  ].filter(Boolean),
+    ...(isStorybook
+      ? []
+      : [
+          checker({ typescript: true }),
+          eslint({
+            emitError: false,
+            emitWarning: false,
+          }),
+          dts({
+            include: ["src"],
+            exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.stories.tsx"],
+            outDirs: "dist",
+            tsconfigPath: "./tsconfig.app.json",
+            insertTypesEntry: true,
+            bundleTypes: false,
+          }),
+        ]),
+  ],
   build: {
     lib: {
-      entry: {
-        index: resolve(__dirname, "src/index.ts"),
-        // Ensure Form barrel is emitted so `./components/Form` package export works
-        "components/Form/index": resolve(__dirname, "src/components/Form/index.ts"),
-      },
-      formats: ["es", "cjs"]
+      entry: collectLibEntries(),
+      formats: ["es", "cjs"],
+      cssFileName: "styles",
     },
     rollupOptions: {
-      external: [
-        "react",
-        "react-dom",
-        "react/jsx-runtime",
-        "react/jsx-dev-runtime",
-        "zod",
-        "react-hook-form", 
-        "@hookform/resolvers", 
-        "@hookform/resolvers/zod",
-        "@radix-ui/react-checkbox",
-        "@radix-ui/react-dialog",
-        "@radix-ui/react-label",
-        "@radix-ui/react-popover",
-        "@radix-ui/react-radio-group",
-        "@radix-ui/react-scroll-area",
-        "@radix-ui/react-select",
-        "@radix-ui/react-switch",
-        "@radix-ui/react-dropdown-menu",
-        "@radix-ui/react-separator",
-        "@radix-ui/react-slot",
-        "@radix-ui/react-avatar",
-        "@radix-ui/react-tabs",
-        "@radix-ui/react-toast",
-        "@radix-ui/react-toggle",
-        "@radix-ui/react-tooltip",
-        "@radix-ui/react-accordion",
-        "@radix-ui/react-alert-dialog",
-        "@radix-ui/react-progress",
-        "@radix-ui/react-slider",
-        "input-otp",
-        "cmdk",
-        "date-fns",
-        "react-day-picker",
-        "sonner",
-        "@tanstack/react-table",
-        "@dnd-kit/core",
-        "@dnd-kit/sortable",
-        "@dnd-kit/utilities",
-        "@radix-ui/react-collapsible",
-        "lucide-react",
-        "class-variance-authority",
-        "tailwind-merge",
-        "clsx",
-        "tailwindcss"
-      ],
+      external: isExternal,
       output: [
         {
           format: "es",
@@ -112,24 +139,24 @@ export default defineConfig({
           banner() {
             return "'use client';";
           },
-        }
+        },
       ],
     },
     sourcemap: true,
-    minify: false, // Disable minification for better tree shaking in consuming apps
+    minify: false,
     cssCodeSplit: false,
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src")
-    }
+      "@": srcDir,
+    },
   },
   test: {
     projects: [
       {
         test: {
           name: "unit",
-          include: ["src/**/*.test.ts"],
+          include: ["src/**/*.test.ts", "src/**/*.test.tsx", "tests/**/*.test.ts"],
           environment: "node",
         },
       },
@@ -153,4 +180,4 @@ export default defineConfig({
       },
     ],
   },
-} as any);
+});

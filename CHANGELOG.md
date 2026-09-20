@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.35] - 2026-09-20
+
+### Added
+- `DateRangePicker`, `MultiSelect`, `FileUpload`/`Dropzone`, `FormRepeater`, `Stepper`/`FormWizard`, `EmptyState`, `ErrorState`, `ConfirmDialog` with `useConfirm`, `CommandPalette`, and `FilterPanel`
+- `useControllableState` hook and consumer package export tests
+
+### Changed
+- UI runtime libraries (Radix, Sonner, cmdk, date-fns, react-day-picker, lucide-react, CVA, clsx, tailwind-merge, react-hook-form, zod) are regular dependencies — only `react` and `react-dom` remain peer dependencies
+- Compiled styles ship via `@skybin-tech/nebula-ui/styles.css`
+- README installation simplified to a single-package setup
+
+### Fixed
+- KanbanBoard drag overlay stale state
+- `DateTimePicker` `timeSet` initialization
+- `PhoneInput` controlled updates
+- `ToastProvider` timer cleanup and `useToast` subscription stability
+- `DataTable` typing without `any`
+- TypeScript 6 `baseUrl` deprecation in tsconfig
+
 ## [0.0.33] - 2026-09-06
 
 ### Fixed

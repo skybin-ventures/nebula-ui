@@ -191,24 +191,9 @@ export function PhoneInput<
   });
 
   const parsedValue = useMemo(() => parseE164(field.value ?? ""), [field.value]);
-  const [countryCode, setCountryCode] = useState(
-    parsedValue?.countryCode ?? defaultCountry
-  );
-  const [nationalNumber, setNationalNumber] = useState(parsedValue?.nationalNumber ?? "");
-
-  useEffect(() => {
-    const parsed = parseE164(field.value ?? "");
-    if (parsed) {
-      setCountryCode(parsed.countryCode);
-      setNationalNumber(parsed.nationalNumber);
-      return;
-    }
-
-    if (!field.value) {
-      setCountryCode(defaultCountry);
-      setNationalNumber("");
-    }
-  }, [field.value, defaultCountry]);
+  const [draftCountry, setDraftCountry] = useState<string | null>(null);
+  const countryCode = parsedValue?.countryCode ?? draftCountry ?? defaultCountry;
+  const nationalNumber = parsedValue?.nationalNumber ?? "";
 
   const fieldError = fieldState.error?.message;
   const errorMessage = customError ?? fieldError;
@@ -219,8 +204,7 @@ export function PhoneInput<
   const dialCode = getCountryDialCode(countryCode);
 
   const updateValue = (nextCountryCode: string, nextNationalNumber: string) => {
-    setCountryCode(nextCountryCode);
-    setNationalNumber(nextNationalNumber);
+    setDraftCountry(nextCountryCode);
     field.onChange(formatE164(nextCountryCode, nextNationalNumber));
   };
 

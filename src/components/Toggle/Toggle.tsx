@@ -1,1 +1,3 @@
-export { Toggle, toggleVariants } from "../../primitives/toggle"
+export { Toggle } from "../../primitives/toggle"
+// eslint-disable-next-line react-refresh/only-export-components
+export { toggleVariants } from "../../primitives/toggle"

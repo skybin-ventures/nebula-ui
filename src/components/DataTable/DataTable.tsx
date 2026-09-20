@@ -7,7 +7,14 @@ import {
   getPaginationRowModel,
   type LegacyColumnDef,
 } from "@tanstack/react-table/legacy"
-import { flexRender } from "@tanstack/react-table"
+import {
+  flexRender,
+  type ColumnVisibilityState,
+  type PaginationState,
+  type RowData,
+  type RowSelectionState,
+  type SortingState,
+} from "@tanstack/react-table"
 import { cn } from "@/utils"
 import { Button } from "@/primitives/button"
 import {
@@ -37,7 +44,7 @@ import {
   Settings2,
 } from "lucide-react"
 
-export interface DataTableProps<TData extends Record<string, any>> {
+export interface DataTableProps<TData extends RowData> {
   columns: LegacyColumnDef<TData, unknown>[]
   data: TData[]
   className?: string
@@ -48,42 +55,58 @@ export interface DataTableProps<TData extends Record<string, any>> {
   pageSize?: number
 }
 
-export function useDataTable<TData extends Record<string, any>>(props: DataTableProps<TData>) {
-  const [sorting, setSorting] = React.useState<Record<string, "asc" | "desc" | false>>({})
-  const [rowSelection, setRowSelection] = React.useState<Record<string, true>>({})
-  const [columnVisibility, setColumnVisibility] = React.useState<Record<string, boolean>>({})
+function getColumnId<TData extends RowData>(column: LegacyColumnDef<TData, unknown>, index: number): string {
+  if ("id" in column && typeof column.id === "string" && column.id.length > 0) {
+    return column.id
+  }
+
+  if ("accessorKey" in column && typeof column.accessorKey === "string") {
+    return column.accessorKey
+  }
+
+  return `column-${index}`
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useDataTable<TData extends RowData>(props: DataTableProps<TData>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
+  const [columnVisibility, setColumnVisibility] = React.useState<ColumnVisibilityState>({})
 
   const allColumnIds = React.useMemo(
-    () => props.columns.map((col) => col.id as string),
+    () => props.columns.map((col, index) => getColumnId(col, index)),
     [props.columns]
   )
 
+  const pagination: PaginationState | undefined = props.pageSize
+    ? { pageIndex: 0, pageSize: props.pageSize }
+    : undefined
+
   const table = useLegacyTable<TData>({
     data: props.data,
-    columns: props.columns as any,
+    columns: props.columns,
     getCoreRowModel: getCoreRowModel<TData>(),
     getSortedRowModel: props.enableSorting !== false ? getSortedRowModel<TData>() : undefined,
     getFilteredRowModel: getFilteredRowModel<TData>(),
     getPaginationRowModel: props.pageSize ? getPaginationRowModel<TData>() : undefined,
-    onSortingChange: setSorting as any,
-    onRowSelectionChange: setRowSelection as any,
-    onColumnVisibilityChange: setColumnVisibility as any,
+    onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
     enableSorting: props.enableSorting !== false,
     state: {
-      sorting: sorting as any,
+      sorting,
       rowSelection,
       columnVisibility,
     },
-    initialState: props.pageSize
-      ? ({ pagination: { pageSize: props.pageSize } } as any)
-      : undefined,
+    initialState: pagination ? { pagination } : undefined,
   })
 
   const selectedRows = table.getFilteredSelectedRowModel().rows.map((r) => r.original)
+  const onSelectionChange = props.onSelectionChange
 
   React.useEffect(() => {
-    props.onSelectionChange?.(selectedRows)
-  }, [selectedRows, props.onSelectionChange])
+    onSelectionChange?.(selectedRows)
+  }, [selectedRows, onSelectionChange])
 
   return { table, selectedRows, allColumnIds }
 }
@@ -94,7 +117,7 @@ function SortIndicator({ isSorted }: { isSorted: string | boolean | undefined })
   return <ChevronsUpDown className="h-4 w-4 opacity-50" />
 }
 
-export function DataTable<TData extends Record<string, any>>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   className,
