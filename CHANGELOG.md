@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.36] - 2026-09-20
+
+### Added
+- `DataGrid` with server-side AJAX pagination via `loadPage`, loading skeletons, and error retry
+- `useDataGrid` hook and `DataGridQuery` / `DataGridPage` / `DataGridLoader` types
+- Storybook stories and unit tests for client-side and AJAX pagination
+
+### Changed
+- Renamed `DataTable` to `DataGrid` (`DataTable` / `useDataTable` remain as deprecated aliases)
+- `./components/DataGrid` package subpath export added; `./components/DataTable` re-exports the new component
+
 ## [0.0.35] - 2026-09-20
 
 ### Added

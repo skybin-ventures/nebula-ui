@@ -1,6 +1,6 @@
 {
   "name": "@skybin-tech/nebula-ui",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "type": "module",
   "author": "Anwar <anwar@skybin.io>",
   "description": "Reusable React component library with form validation using shadcn/ui patterns, react-hook-form, and Zod",
@@ -398,6 +398,16 @@
         "default": "./dist/cjs/components/ConfirmDialog/index.cjs"
       }
     },
+    "./components/DataGrid": {
+      "import": {
+        "types": "./dist/components/DataGrid/index.d.ts",
+        "default": "./dist/components/DataGrid/index.js"
+      },
+      "require": {
+        "types": "./dist/components/DataGrid/index.d.ts",
+        "default": "./dist/cjs/components/DataGrid/index.cjs"
+      }
+    },
     "./components/DataTable": {
       "import": {
         "types": "./dist/components/DataTable/index.d.ts",
@@ -671,6 +681,9 @@
       ],
       "components/ConfirmDialog": [
         "./dist/components/ConfirmDialog/index.d.ts"
+      ],
+      "components/DataGrid": [
+        "./dist/components/DataGrid/index.d.ts"
       ],
       "components/DataTable": [
         "./dist/components/DataTable/index.d.ts"

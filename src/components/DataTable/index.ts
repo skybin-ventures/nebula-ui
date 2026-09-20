@@ -1,2 +1,14 @@
-export { useDataTable, DataTable } from "./DataTable"
-export type { DataTableProps } from "./DataTable"
+export {
+  DataGrid,
+  useDataGrid,
+  DataTable,
+  useDataTable,
+} from "../DataGrid"
+export type {
+  DataGridProps,
+  DataGridQuery,
+  DataGridPage,
+  DataGridLoader,
+  UseDataGridResult,
+  DataTableProps,
+} from "../DataGrid"

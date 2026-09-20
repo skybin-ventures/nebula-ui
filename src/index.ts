@@ -284,8 +284,15 @@ export {
 export { cn } from "./utils/cn"
 
 // ─── Tier 1 Composite Components ─────────────────────────────────────────────
-export { DataTable, useDataTable } from "./components/DataTable"
-export type { DataTableProps } from "./components/DataTable"
+export { DataGrid, useDataGrid, DataTable, useDataTable } from "./components/DataGrid"
+export type {
+  DataGridProps,
+  DataGridQuery,
+  DataGridPage,
+  DataGridLoader,
+  UseDataGridResult,
+  DataTableProps,
+} from "./components/DataGrid"
 
 export { KanbanBoard } from "./components/KanbanBoard"
 export type {
