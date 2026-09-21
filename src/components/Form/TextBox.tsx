@@ -261,12 +261,9 @@ function TextBoxInner<
       fullWidth={fullWidth}
       formConfig={formConfig}
     >
-      <div className="relative" style={{ position: "relative" }}>
+      <div className="relative">
         {prefix && (
-          <div
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)" }}
-          >
+          <div className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">
             {prefix}
           </div>
         )}
@@ -302,10 +299,7 @@ function TextBoxInner<
         />
 
         {(suffix || (allowClear && field.value) || showPasswordToggle) && (
-          <div
-            className="absolute right-1 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1"
-            style={{ position: "absolute", right: "0.25rem", top: "50%", transform: "translateY(-50%)", zIndex: 10 }}
-          >
+          <div className="absolute inset-y-0 right-1 z-10 flex items-center gap-1">
             {allowClear && field.value && (
               <button
                 type="button"

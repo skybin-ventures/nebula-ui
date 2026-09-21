@@ -36,7 +36,7 @@ export const Input = forwardRef<
   }
 
   return (
-    <div className="relative w-full" style={{ position: "relative", width: "100%" }}>
+    <div className="relative w-full">
       <InputPrimitive
         ref={ref}
         type={resolvedType}
@@ -44,10 +44,7 @@ export const Input = forwardRef<
         disabled={disabled}
         {...props}
       />
-      <div
-        className="absolute right-1 top-1/2 z-10 -translate-y-1/2"
-        style={{ position: "absolute", right: "0.25rem", top: "50%", transform: "translateY(-50%)", zIndex: 10 }}
-      >
+      <div className="absolute inset-y-0 right-1 z-10 flex items-center">
         <PasswordRevealToggle
           visible={passwordVisible}
           onToggle={() => setPasswordVisible((visible) => !visible)}

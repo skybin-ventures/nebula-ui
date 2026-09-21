@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.37] - 2026-09-21
+
+### Fixed
+- Password reveal toggle vertical alignment in `Input` and `TextBox` — replaced `top-1/2` + inline `translateY(-50%)` (double transform under Tailwind v4) with `inset-y-0 flex items-center`
+- Removed redundant inline positioning styles from `PasswordRevealToggle`
+
 ## [0.0.36] - 2026-09-20
 
 ### Added
