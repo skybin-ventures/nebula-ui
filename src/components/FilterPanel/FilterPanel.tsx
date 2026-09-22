@@ -90,7 +90,7 @@ export function FilterPanel({
               {field.type === "select" ? (
                 <select
                   id={field.id}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                  className="flex h-10 w-full rounded-md border border-input bg-card px-3 text-sm"
                   value={typeof filters[field.id] === "string" ? filters[field.id] as string : ""}
                   disabled={isDisabled}
                   onChange={(event) => update(field.id, event.target.value)}

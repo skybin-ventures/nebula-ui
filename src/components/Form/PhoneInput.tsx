@@ -221,7 +221,7 @@ export function PhoneInput<
     >
       <div
         className={cn(
-          "flex items-stretch overflow-hidden rounded-md border bg-background focus-within:ring-2 focus-within:ring-offset-2",
+          "flex items-stretch overflow-hidden rounded-md border border-input bg-card focus-within:ring-2 focus-within:ring-offset-2",
           phoneInputVariants({ size: effectiveSize, variant: effectiveVariant }),
           className
         )}
