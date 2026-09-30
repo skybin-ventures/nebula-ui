@@ -1,1 +1,1 @@
-export { Toaster } from "../../primitives/sonner"
+export { Toaster, toast } from "../../primitives/sonner"

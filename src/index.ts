@@ -238,7 +238,7 @@ export {
 export { Calendar } from "./components/Calendar"
 export type { CalendarProps } from "./components/Calendar"
 
-export { Toaster } from "./components/Sonner"
+export { Toaster, toast } from "./components/Sonner"
 
 export {
   ToastViewport,
@@ -256,7 +256,7 @@ export type { ToastProviderProps } from "./components/ToastProvider"
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 export { useToggle } from "./hooks/useToggle"
 export { useDebounce } from "./hooks/useDebounce"
-export { useToast, toast } from "./hooks/useToast"
+export { useToast, toast as radixToast } from "./hooks/useToast"
 
 // ─── Tooltip ─────────────────────────────────────────────────────────────────
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/Tooltip"
