@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.39] - 2026-10-12
+
+### Changed
+- Version bump for npm publish; no functional changes since 0.0.38
+
+## [0.0.38] - 2026-09-30
+
+### Changed
+- Text-like primitives (`textbox`, `textarea`, `select`, outline `button`) and related form controls use `bg-card` instead of `bg-background` for design-system surface tone
+- Disabled `select` / `textarea` / `textbox` use `disabled:bg-muted` with full opacity for a visible faded state
+- Export Sonner `toast` from the main package entry; rename Radix toast helper to `radixToast` to avoid name collision
+
 ## [0.0.37] - 2026-09-21
 
 ### Fixed
