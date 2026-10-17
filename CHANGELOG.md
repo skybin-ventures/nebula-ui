@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2026-10-12
+
+### Changed
+- Major version bump to 1.0.0 marking the component library's API as stable; the 0.0.34–0.0.40 line ships Command, DataTable/DataGrid, KanbanBoard, Sidebar, ToastProvider, and the remaining Tier 2/Tier 3 components
+
+## [0.0.40] - 2026-10-12
+
+### Changed
+- Dependency bumps across Radix UI, Storybook 10.6.2, Vite 8.3.4, Vitest 5.0.5, TanStack Table 9.3.1, lucide-react 1.59.0, react-day-picker 10.0.2, react-hook-form 7.90.0, zod 4.6.7, and dev tooling
+- TypeScript pinned back to 6.0.x — 7.x does not ship the JavaScript Compiler API that `unplugin-dts` needs for declaration generation
+
 ## [0.0.39] - 2026-10-12
 
 ### Changed
