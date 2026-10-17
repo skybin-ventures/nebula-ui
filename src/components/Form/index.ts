@@ -47,6 +47,30 @@ export type { RadioGroupProps, RadioItemProps, RadioOption } from "./Radio";
 export { FormSwitch } from "./FormSwitch";
 export type { FormSwitchProps } from "./FormSwitch";
 
+export { FormInputOTP } from "./FormInputOTP";
+export type { FormInputOTPProps } from "./FormInputOTP";
+
+export { FormSlider } from "./FormSlider";
+export type { FormSliderProps } from "./FormSlider";
+
+export { FormCurrencyInput } from "./FormCurrencyInput";
+export type { FormCurrencyInputProps } from "./FormCurrencyInput";
+
+export { FormPercentageInput } from "./FormPercentageInput";
+export type { FormPercentageInputProps } from "./FormPercentageInput";
+
+export { FormRating } from "./FormRating";
+export type { FormRatingProps } from "./FormRating";
+
+export { FormConsent } from "./FormConsent";
+export type { FormConsentProps } from "./FormConsent";
+
+export { FormPassword } from "./FormPassword";
+export type { FormPasswordProps } from "./FormPassword";
+
+export { FormAutocomplete } from "./FormAutocomplete";
+export type { FormAutocompleteProps, AutocompleteSuggestion } from "./FormAutocomplete";
+
 export { FieldLayout } from "./FieldLayout";
 export type { FieldLayoutProps } from "./FieldLayout";
 
@@ -57,15 +81,23 @@ export type { CountryPickerProps } from "./CountryPicker";
 export {
   FormConfigContext,
   defaultFormConfig,
+  defaultValidationMessages,
   buildZodSchemaFromRules,
   useFieldValidationRegistry,
 } from "./context";
 export type {
   FormConfig,
   FormContextValue,
+  FormValidationMessages,
   FieldValidationRules,
   FieldRegistration,
 } from "./context";
 
 // Hooks
-export { useFormConfig, useForm, useFormField, useFieldError } from "./hooks";
+export {
+  useFormConfig,
+  useForm,
+  useFormField,
+  useFieldError,
+  useFormShallow,
+} from "./hooks";

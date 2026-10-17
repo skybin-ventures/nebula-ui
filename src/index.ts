@@ -12,6 +12,14 @@ export {
   RadioGroup,
   RadioItem,
   FormSwitch,
+  FormInputOTP,
+  FormSlider,
+  FormCurrencyInput,
+  FormPercentageInput,
+  FormRating,
+  FormConsent,
+  FormPassword,
+  FormAutocomplete,
   FormConfigContext,
   defaultFormConfig,
   buildZodSchemaFromRules,
@@ -45,6 +53,15 @@ export type {
   RadioItemProps,
   RadioOption,
   FormSwitchProps,
+  FormInputOTPProps,
+  FormSliderProps,
+  FormCurrencyInputProps,
+  FormPercentageInputProps,
+  FormRatingProps,
+  FormConsentProps,
+  FormPasswordProps,
+  FormAutocompleteProps,
+  AutocompleteSuggestion,
   FormConfig,
   FormContextValue,
   FieldValidationRules,
@@ -240,31 +257,27 @@ export type { CalendarProps } from "./components/Calendar"
 
 export { Toaster, toast } from "./components/Sonner"
 
-export {
-  ToastViewport,
-  Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
-  ToastAction,
-} from "./components/Toast"
-
-// ─── ToastProvider (Sonner-based) ──────────────────────────────────────────
-export { ToastProvider as ToastProviderRoot, useToastContext } from "./components/ToastProvider"
-export type { ToastProviderProps } from "./components/ToastProvider"
-
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 export { useToggle } from "./hooks/useToggle"
 export { useDebounce } from "./hooks/useDebounce"
-export { useToast, toast as radixToast } from "./hooks/useToast"
 
 // ─── Tooltip ─────────────────────────────────────────────────────────────────
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/Tooltip"
 export type { TooltipContentProps } from "./components/Tooltip"
 
 // ─── Skeleton ────────────────────────────────────────────────────────────────
-export { Skeleton } from "./components/Skeleton"
-export type { SkeletonProps } from "./components/Skeleton"
+export {
+  Skeleton,
+  SkeletonText,
+  SkeletonTitle,
+  SkeletonAvatar,
+} from "./components/Skeleton"
+export type {
+  SkeletonProps,
+  SkeletonTextProps,
+  SkeletonTitleProps,
+  SkeletonAvatarProps,
+} from "./components/Skeleton"
 
 // ─── Accordion ───────────────────────────────────────────────────────────────
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./components/Accordion"
@@ -286,6 +299,8 @@ export { cn } from "./utils/cn"
 // ─── Tier 1 Composite Components ─────────────────────────────────────────────
 export { DataGrid, useDataGrid, DataTable, useDataTable } from "./components/DataGrid"
 export type {
+  ColumnDef,
+  ColumnDef as DataGridColumnDef,
   DataGridProps,
   DataGridQuery,
   DataGridPage,
@@ -308,6 +323,14 @@ export type {
   SidebarGroup,
 } from "./components/Sidebar"
 
+export { TreeView } from "./components/TreeView"
+export type {
+  TreeViewProps,
+  TreeSelectionMode,
+  TreeNode,
+  TreeNodeId,
+} from "./components/TreeView"
+
 export { DateRangePicker, FormDateRangePicker } from "./components/DateRangePicker"
 export type {
   DateRangePickerProps,
@@ -318,8 +341,13 @@ export type {
 export { MultiSelect, FormMultiSelect } from "./components/MultiSelect"
 export type { MultiSelectProps, FormMultiSelectProps } from "./components/MultiSelect"
 
-export { FileUpload, Dropzone, FormFileUpload } from "./components/FileUpload"
-export type { FileUploadProps, FormFileUploadProps } from "./components/FileUpload"
+export { FileUpload, Dropzone, FormFileUpload, defaultFileId } from "./components/FileUpload"
+export type {
+  FileUploadProps,
+  FormFileUploadProps,
+  FileUploadStatus,
+  FileUploadItemStatus,
+} from "./components/FileUpload"
 
 export { Repeater, FormRepeater } from "./components/FormRepeater"
 export type { RepeaterProps, RepeaterItem, FormRepeaterProps } from "./components/FormRepeater"
@@ -342,4 +370,118 @@ export type { CommandPaletteProps, CommandPaletteItem } from "./components/Comma
 export { FilterPanel } from "./components/FilterPanel"
 export type { FilterPanelProps, FilterField, FilterValue } from "./components/FilterPanel"
 
+export { TagInput, FormTagInput } from "./components/TagInput"
+export type { TagInputProps, FormTagInputProps } from "./components/TagInput"
+
+export { ColorPicker, FormColorPicker } from "./components/ColorPicker"
+export type { ColorPickerProps, FormColorPickerProps } from "./components/ColorPicker"
+
+export { SearchInput } from "./components/SearchInput"
+export type { SearchInputProps } from "./components/SearchInput"
+
+export { AvatarGroup } from "./components/AvatarGroup"
+export type { AvatarGroupProps, AvatarGroupItem } from "./components/AvatarGroup"
+
+export {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from "./components/NavigationMenu"
+
+export {
+  ChartCard,
+  LineTrend,
+  BarCompare,
+  DonutShare,
+  Sparkline,
+  AreaRange,
+} from "./components/Chart"
+export type {
+  ChartCardProps,
+  LineTrendProps,
+  LineTrendPoint,
+  BarCompareProps,
+  BarComparePoint,
+  DonutShareProps,
+  DonutShareSlice,
+  SparklineProps,
+  SparklinePoint,
+  AreaRangeProps,
+  AreaRangePoint,
+} from "./components/Chart"
+
 export { useControllableState } from "./hooks/useControllableState"
+
+export { NebulaTheme, useTheme } from "./components/Theme"
+export type {
+  NebulaThemeProps,
+  NebulaThemeContextValue,
+  ThemeMode,
+  ResolvedTheme,
+} from "./components/Theme"
+
+export { StatCard, Metric } from "./components/StatCard"
+export type { StatCardProps, MetricProps, StatTrend } from "./components/StatCard"
+
+export { Divider } from "./components/Divider"
+export type { DividerProps } from "./components/Divider"
+
+export { Section, SectionHeader } from "./components/Section"
+export type { SectionProps, SectionHeaderProps } from "./components/Section"
+
+export { KeyValue } from "./components/KeyValue"
+export type { KeyValueProps, KeyValueItem } from "./components/KeyValue"
+
+export { CodeBlock } from "./components/CodeBlock"
+export type { CodeBlockProps } from "./components/CodeBlock"
+
+export { JsonView } from "./components/JsonView"
+export type { JsonViewProps } from "./components/JsonView"
+
+export { TopNavigation } from "./components/TopNavigation"
+export type { TopNavigationProps, TopNavigationLink } from "./components/TopNavigation"
+
+export { MobileNav, BottomNav } from "./components/MobileNav"
+export type { MobileNavProps, BottomNavProps, MobileNavItem } from "./components/MobileNav"
+
+export { TabBar } from "./components/TabBar"
+export type { TabBarProps, TabBarItem } from "./components/TabBar"
+
+export { ModalForm } from "./components/ModalForm"
+export type { ModalFormProps } from "./components/ModalForm"
+
+export { StatusIndicator } from "./components/StatusIndicator"
+export type { StatusIndicatorProps } from "./components/StatusIndicator"
+
+export { LoadingSpinner } from "./components/LoadingSpinner"
+export type { LoadingSpinnerProps } from "./components/LoadingSpinner"
+
+export { ProgressBar } from "./components/ProgressBar"
+export type { ProgressBarProps } from "./components/ProgressBar"
+
+export {
+  NotificationProvider,
+  useNotification,
+  NotificationBell,
+} from "./components/Notification"
+export type {
+  NotificationItem,
+  NotificationContextValue,
+  NotificationProviderProps,
+  NotificationBellProps,
+} from "./components/Notification"
+
+export { SkipLink } from "./components/SkipLink"
+export type { SkipLinkProps } from "./components/SkipLink"
+
+export { ErrorBoundary } from "./components/ErrorBoundary"
+export type { ErrorBoundaryProps, ErrorBoundaryFallbackProps } from "./components/ErrorBoundary"
+
+export { SuspenseFallback } from "./components/SuspenseFallback"
+export type { SuspenseFallbackProps } from "./components/SuspenseFallback"

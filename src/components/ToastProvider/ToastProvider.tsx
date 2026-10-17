@@ -21,6 +21,9 @@ const positionClasses: Record<string, string> = {
   "bottom-center": "items-center",
 }
 
+/**
+ * @deprecated Prefer Sonner `Toaster` + `toast`. This radix-based provider is removed in 2.0.0.
+ */
 export function ToastProvider({
   children,
   duration = 4000,

@@ -56,6 +56,8 @@ export function useDataGrid<TData extends RowData>(props: DataGridProps<TData>):
     loadPage,
     enableSorting = true,
     enablePagination = true,
+    enableRowSelection = false,
+    getRowId,
     pageSize = 10,
     loading: loadingProp,
     errorMessage = "Failed to load data.",
@@ -140,27 +142,32 @@ export function useDataGrid<TData extends RowData>(props: DataGridProps<TData>):
     getFilteredRowModel: !isServerMode ? getFilteredRowModel<TData>() : undefined,
     getPaginationRowModel:
       !isServerMode && enablePagination ? getPaginationRowModel<TData>() : undefined,
+    getRowId,
     onSortingChange: setSorting,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: enableRowSelection ? setRowSelection : undefined,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: (updater) => {
       const next = resolvePaginationState(updater, pagination)
       setPageIndex(next.pageIndex)
     },
     enableSorting,
+    enableRowSelection,
     state: {
       sorting,
-      rowSelection,
+      rowSelection: enableRowSelection ? rowSelection : {},
       columnVisibility,
       pagination,
     },
   })
 
-  const selectedRows = table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+  const selectedRows = enableRowSelection
+    ? table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+    : []
 
   React.useEffect(() => {
+    if (!enableRowSelection) return
     onSelectionChange?.(selectedRows)
-  }, [selectedRows, onSelectionChange])
+  }, [enableRowSelection, selectedRows, onSelectionChange])
 
   const reload = React.useCallback(() => {
     markFetching()

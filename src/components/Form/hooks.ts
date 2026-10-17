@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from "react";
+import { useCallback, useContext, useSyncExternalStore } from "react";
 import {
   useFormContext as useRHFFormContext,
   useController,
@@ -60,4 +60,35 @@ export function useFieldError<
   const { form } = useFormConfig<TFieldValues>();
   const error = form.formState.errors[name];
   return error?.message as string | undefined;
+}
+
+/**
+ * Subscribe to form values without re-rendering on every keystroke when unused.
+ * Uses RHF `subscribe` + `getValues` via `useSyncExternalStore`.
+ * Prefer this over `useFormContext()` for large forms that only need a snapshot.
+ */
+export function useFormShallow<TFieldValues extends FieldValues = FieldValues>(): TFieldValues {
+  const { control, getValues, subscribe } = useRHFFormContext<TFieldValues>();
+
+  const subscribeStore = useCallback(
+    (onStoreChange: () => void) => {
+      if (typeof subscribe === "function") {
+        return subscribe({
+          formState: { values: true },
+          callback: onStoreChange,
+        });
+      }
+      const subscription = control._subjects.state.subscribe({
+        next: onStoreChange,
+      });
+      return () => subscription.unsubscribe();
+    },
+    [control, subscribe]
+  );
+
+  return useSyncExternalStore(
+    subscribeStore,
+    () => getValues() as TFieldValues,
+    () => getValues() as TFieldValues
+  );
 }

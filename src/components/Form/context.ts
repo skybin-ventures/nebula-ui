@@ -29,6 +29,35 @@ export interface FieldValidationRules {
 }
 
 /**
+ * Overridable validation message strings used by `buildZodSchemaFromRules`.
+ */
+export interface FormValidationMessages {
+  required: string;
+  email: string;
+  url: string;
+  invalidFormat: string;
+  invalidPhone: string;
+  invalidValue: string;
+  minLength: (min: number) => string;
+  maxLength: (max: number) => string;
+  minValue: (min: number) => string;
+  maxValue: (max: number) => string;
+}
+
+export const defaultValidationMessages: FormValidationMessages = {
+  required: "This field is required",
+  email: "Invalid email address",
+  url: "Invalid URL",
+  invalidFormat: "Invalid format",
+  invalidPhone: "Invalid phone number",
+  invalidValue: "Invalid value",
+  minLength: (min) => `Minimum ${min} characters required`,
+  maxLength: (max) => `Maximum ${max} characters allowed`,
+  minValue: (min) => `Minimum value is ${min}`,
+  maxValue: (max) => `Maximum value is ${max}`,
+};
+
+/**
  * Form configuration options
  */
 export interface FormConfig {
@@ -48,6 +77,13 @@ export interface FormConfig {
   disabled?: boolean;
   /** Colon after label */
   colon?: boolean;
+  /**
+   * When true, form fields receive `disabled` while submit is in flight
+   * and re-entrant submits are ignored.
+   */
+  disabledOnSubmit?: boolean;
+  /** Override default Zod validation messages */
+  messages?: Partial<FormValidationMessages>;
 }
 
 /**
@@ -70,7 +106,9 @@ export interface FormContextValue<TFieldValues extends FieldValues = FieldValues
   /** Unregister a field's validation rules */
   unregisterFieldValidation: (name: string) => void;
   /** Get current validation schema */
-  getValidationSchema: () => z.ZodObject<Record<string, z.ZodTypeAny>>;
+  getValidationSchema: (
+    messageOverrides?: Partial<FormValidationMessages>
+  ) => z.ZodObject<Record<string, z.ZodTypeAny>>;
   /** Trigger validation for a specific field */
   triggerValidation: (name: string) => Promise<boolean>;
 }
@@ -85,7 +123,8 @@ export const defaultFormConfig: FormConfig = {
   size: "md",
   layout: "vertical",
   disabled: false,
-  colon: true,
+  colon: false,
+  disabledOnSubmit: true,
 };
 
 /**
@@ -98,8 +137,14 @@ export const FormConfigContext = createContext<FormContextValue | null>(null);
  */
 export function buildZodSchemaFromRules(
   type: FieldRegistration["type"],
-  rules: FieldValidationRules
+  rules: FieldValidationRules,
+  messageOverrides?: Partial<FormValidationMessages>
 ): z.ZodTypeAny {
+  const messages: FormValidationMessages = {
+    ...defaultValidationMessages,
+    ...messageOverrides,
+  };
+
   // Helper to extract value and message
   const getValueAndMessage = <T>(
     rule: T | { value: T; message: string } | undefined,
@@ -116,17 +161,25 @@ export function buildZodSchemaFromRules(
   if (type === "string") {
     let schema = z.string();
 
+    const minLen =
+      typeof rules.minLength === "number"
+        ? rules.minLength
+        : (rules.minLength as { value: number } | undefined)?.value;
     const minLengthRule = getValueAndMessage(
       rules.minLength,
-      `Minimum ${typeof rules.minLength === "number" ? rules.minLength : (rules.minLength as { value: number })?.value} characters required`
+      messages.minLength(minLen ?? 0)
     );
     if (minLengthRule) {
       schema = schema.min(minLengthRule.value as number, minLengthRule.message);
     }
 
+    const maxLen =
+      typeof rules.maxLength === "number"
+        ? rules.maxLength
+        : (rules.maxLength as { value: number } | undefined)?.value;
     const maxLengthRule = getValueAndMessage(
       rules.maxLength,
-      `Maximum ${typeof rules.maxLength === "number" ? rules.maxLength : (rules.maxLength as { value: number })?.value} characters allowed`
+      messages.maxLength(maxLen ?? 0)
     );
     if (maxLengthRule) {
       schema = schema.max(maxLengthRule.value as number, maxLengthRule.message);
@@ -134,102 +187,112 @@ export function buildZodSchemaFromRules(
 
     if (rules.pattern !== undefined) {
       const patternRule = rules.pattern instanceof RegExp
-        ? { value: rules.pattern, message: "Invalid format" }
+        ? { value: rules.pattern, message: messages.invalidFormat }
         : rules.pattern;
       schema = schema.regex(patternRule.value, patternRule.message);
     }
 
     if (rules.email) {
-      const message = typeof rules.email === "string" ? rules.email : "Invalid email address";
+      const message = typeof rules.email === "string" ? rules.email : messages.email;
       schema = schema.email(message);
     }
 
     if (rules.url) {
-      const message = typeof rules.url === "string" ? rules.url : "Invalid URL";
+      const message = typeof rules.url === "string" ? rules.url : messages.url;
       schema = schema.url(message);
     }
 
     // Handle required - for strings, require non-empty
     if (rules.required) {
-      const message = typeof rules.required === "string" ? rules.required : "This field is required";
+      const message = typeof rules.required === "string" ? rules.required : messages.required;
       return finalizeSchema(
         z.preprocess(
           (value) => (value === undefined || value === null ? "" : value),
           schema.min(1, message)
         ),
-        rules
+        rules,
+        messages
       );
     }
 
-    return finalizeSchema(schema.optional(), rules);
+    return finalizeSchema(schema.optional(), rules, messages);
   }
 
   // Build number schema
   if (type === "number") {
     let schema = z.coerce.number();
 
-    const minRule = getValueAndMessage(
-      rules.min,
-      `Minimum value is ${typeof rules.min === "number" ? rules.min : (rules.min as { value: number })?.value}`
-    );
+    const minVal =
+      typeof rules.min === "number"
+        ? rules.min
+        : (rules.min as { value: number } | undefined)?.value;
+    const minRule = getValueAndMessage(rules.min, messages.minValue(minVal ?? 0));
     if (minRule) {
       schema = schema.min(minRule.value as number, minRule.message);
     }
 
-    const maxRule = getValueAndMessage(
-      rules.max,
-      `Maximum value is ${typeof rules.max === "number" ? rules.max : (rules.max as { value: number })?.value}`
-    );
+    const maxVal =
+      typeof rules.max === "number"
+        ? rules.max
+        : (rules.max as { value: number } | undefined)?.value;
+    const maxRule = getValueAndMessage(rules.max, messages.maxValue(maxVal ?? 0));
     if (maxRule) {
       schema = schema.max(maxRule.value as number, maxRule.message);
     }
 
     if (!rules.required) {
-      return finalizeSchema(schema.optional(), rules);
+      return finalizeSchema(schema.optional(), rules, messages);
     }
-    return finalizeSchema(schema, rules);
+    return finalizeSchema(schema, rules, messages);
   }
 
   // Build boolean schema
   if (type === "boolean") {
-    const schema = z.boolean();
+    const requiredMessage =
+      typeof rules.required === "string" ? rules.required : messages.required;
+
     if (rules.required) {
+      // Untouched checkboxes stay `undefined` in RHF while the UI shows unchecked.
+      // Coerce missing values to false so refine can emit the custom required message.
       return finalizeSchema(
-        schema.refine((val) => val === true, {
-          message: typeof rules.required === "string" ? rules.required : "This field is required",
-        }),
-        rules
+        z.preprocess(
+          (val) => (val === undefined ? false : val),
+          z.boolean().refine((val) => val === true, { message: requiredMessage })
+        ),
+        rules,
+        messages
       );
     }
-    return finalizeSchema(schema.optional(), rules);
+    return finalizeSchema(z.boolean().optional(), rules, messages);
   }
 
   // Build date / datetime schema
   if (type === "date" || type === "datetime") {
     const schema = z.coerce.date();
     if (!rules.required) {
-      return finalizeSchema(schema.optional(), rules);
+      return finalizeSchema(schema.optional(), rules, messages);
     }
-    return finalizeSchema(schema, rules);
+    return finalizeSchema(schema, rules, messages);
   }
 
   // Build array schema
   if (type === "array") {
     let schema = z.array(z.unknown());
     if (rules.required) {
-      const message = typeof rules.required === "string" ? rules.required : "This field is required";
+      const message = typeof rules.required === "string" ? rules.required : messages.required;
       schema = schema.min(1, message);
     }
-    return finalizeSchema(schema, rules);
+    return finalizeSchema(schema, rules, messages);
   }
 
   // Default fallback
-  return finalizeSchema(z.unknown(), rules);
+  return finalizeSchema(z.unknown(), rules, messages);
 }
 
 function applyCustomValidate(
   schema: z.ZodTypeAny,
-  rules: FieldValidationRules
+  rules: FieldValidationRules,
+  messages: FormValidationMessages
 ): z.ZodTypeAny {
   if (!rules.validate) {
     return schema;
@@ -246,16 +309,17 @@ function applyCustomValidate(
 
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: typeof result === "string" ? result : "Invalid value",
+      message: typeof result === "string" ? result : messages.invalidValue,
     });
   });
 }
 
 function finalizeSchema(
   schema: z.ZodTypeAny,
-  rules: FieldValidationRules
+  rules: FieldValidationRules,
+  messages: FormValidationMessages
 ): z.ZodTypeAny {
-  return applyCustomValidate(schema, rules);
+  return applyCustomValidate(schema, rules, messages);
 }
 
 /**
@@ -272,15 +336,22 @@ export function useFieldValidationRegistry() {
     fieldsRef.current.delete(name);
   }, []);
 
-  const getValidationSchema = useCallback(() => {
-    const shape: Record<string, z.ZodTypeAny> = {};
-    
-    fieldsRef.current.forEach((field) => {
-      shape[field.name] = buildZodSchemaFromRules(field.type, field.rules);
-    });
+  const getValidationSchema = useCallback(
+    (messageOverrides?: Partial<FormValidationMessages>) => {
+      const shape: Record<string, z.ZodTypeAny> = {};
 
-    return z.object(shape);
-  }, []);
+      fieldsRef.current.forEach((field) => {
+        shape[field.name] = buildZodSchemaFromRules(
+          field.type,
+          field.rules,
+          messageOverrides
+        );
+      });
+
+      return z.object(shape);
+    },
+    []
+  );
 
   return {
     registerFieldValidation,

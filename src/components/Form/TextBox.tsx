@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useId, useContext, useEffect, useState } from "react";
+import { useId, useContext, useLayoutEffect, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -8,6 +8,7 @@ import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
 import { PasswordRevealToggle } from "./PasswordRevealToggle";
+import { forwardFormRef } from "./forwardFormRef";
 import { TextBoxPrimitive } from "../../primitives/textbox";
 import { X } from "lucide-react";
 
@@ -23,7 +24,7 @@ const textBoxVariants = cva(
       variant: {
         default: "border-input focus-visible:ring-ring",
         error: "border-destructive focus-visible:ring-destructive",
-        success: "border-green-500 focus-visible:ring-green-500",
+        success: "border-success focus-visible:ring-success",
       },
     },
     defaultVariants: {
@@ -172,7 +173,7 @@ function TextBoxInner<
   const unregisterFieldValidation = formConfigContext?.unregisterFieldValidation;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (registerFieldValidation) {
       const rules: FieldValidationRules = {};
 
@@ -328,12 +329,6 @@ function TextBoxInner<
   );
 }
 
-// Use forwardRef with generic support
-export const TextBox = forwardRef(TextBoxInner) as <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(
-  props: TextBoxProps<TFieldValues, TName> & { ref?: React.ForwardedRef<HTMLInputElement> }
-) => React.ReactElement;
+export const TextBox = forwardFormRef<TextBoxProps, HTMLInputElement>(TextBoxInner);
 
 (TextBox as React.FC).displayName = "TextBox";

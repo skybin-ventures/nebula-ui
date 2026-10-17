@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useId, useMemo, useState } from "react";
+import { useContext, useLayoutEffect, useId, useMemo, useState } from "react";
 import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
@@ -24,7 +24,7 @@ const phoneInputVariants = cva("", {
     variant: {
       default: "border-input focus-within:ring-ring",
       error: "border-destructive focus-within:ring-destructive",
-      success: "border-green-500 focus-within:ring-green-500",
+      success: "border-success focus-within:ring-success",
     },
   },
   defaultVariants: {
@@ -151,7 +151,7 @@ export function PhoneInput<
   const registerFieldValidation = formConfigContext?.registerFieldValidation;
   const unregisterFieldValidation = formConfigContext?.unregisterFieldValidation;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (registerFieldValidation) {
       const rules: FieldValidationRules = {};
       if (required !== undefined) rules.required = required;

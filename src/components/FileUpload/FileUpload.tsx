@@ -6,6 +6,14 @@ import { cn } from "../../utils/cn";
 import { Button } from "../../primitives/button";
 import { useControllableState } from "../../hooks/useControllableState";
 
+export type FileUploadStatus = "queued" | "uploading" | "done" | "error";
+
+export interface FileUploadItemStatus {
+  status: FileUploadStatus;
+  percent?: number;
+  error?: string;
+}
+
 export interface FileUploadProps {
   value?: File[];
   defaultValue?: File[];
@@ -22,6 +30,14 @@ export interface FileUploadProps {
   emptyText?: string;
   error?: string;
   "aria-label"?: string;
+  /**
+   * Per-file upload status keyed by a stable file id (`name:size:lastModified` by default).
+   */
+  fileStatuses?: Record<string, FileUploadItemStatus>;
+  /** Called when a consumer wants to report progress for a file id. */
+  onFileProgress?: (fileId: string, percent: number) => void;
+  /** Override how file ids are derived for status maps. */
+  getFileId?: (file: File, index: number) => string;
 }
 
 function formatSize(bytes: number): string {
@@ -29,6 +45,17 @@ function formatSize(bytes: number): string {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+export function defaultFileId(file: File, index: number): string {
+  return `${file.name}:${file.size}:${file.lastModified}:${index}`;
+}
+
+const statusLabel: Record<FileUploadStatus, string> = {
+  queued: "Queued",
+  uploading: "Uploading",
+  done: "Done",
+  error: "Error",
+};
 
 export function FileUpload({
   value,
@@ -45,6 +72,9 @@ export function FileUpload({
   label = "Drop files here or click to browse",
   emptyText = "No files selected",
   error,
+  fileStatuses,
+  onFileProgress: _onFileProgress,
+  getFileId = defaultFileId,
   ...aria
 }: FileUploadProps) {
   const generatedId = useId();
@@ -52,6 +82,9 @@ export function FileUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useControllableState(value, defaultValue, onChange);
   const isDisabled = disabled || loading;
+
+  // Keep the callback in the public API for consumers driving uploads externally.
+  void _onFileProgress;
 
   const addFiles = (incoming: File[]) => {
     setFiles((current) => {
@@ -119,23 +152,57 @@ export function FileUpload({
         <p className="text-sm text-muted-foreground">{emptyText}</p>
       ) : (
         <ul className="space-y-2">
-          {files.map((file, index) => (
-            <li key={`${file.name}-${file.size}-${index}`} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
-              <span className="truncate">
-                {file.name} <span className="text-muted-foreground">({formatSize(file.size)})</span>
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                disabled={isDisabled}
-                aria-label={`Remove ${file.name}`}
-                onClick={() => setFiles((current) => current.filter((_, itemIndex) => itemIndex !== index))}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </li>
-          ))}
+          {files.map((file, index) => {
+            const fileId = getFileId(file, index);
+            const status = fileStatuses?.[fileId];
+            return (
+              <li key={fileId} className="rounded-md border px-3 py-2 text-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate">
+                    {file.name}{" "}
+                    <span className="text-muted-foreground">({formatSize(file.size)})</span>
+                  </span>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {status ? (
+                      <span
+                        className={cn(
+                          "text-xs text-muted-foreground",
+                          status.status === "error" && "text-destructive",
+                          status.status === "done" && "text-emerald-600"
+                        )}
+                      >
+                        {statusLabel[status.status]}
+                        {status.status === "uploading" && typeof status.percent === "number"
+                          ? ` ${Math.round(status.percent)}%`
+                          : null}
+                      </span>
+                    ) : null}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      disabled={isDisabled}
+                      aria-label={`Remove ${file.name}`}
+                      onClick={() => setFiles((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                {status?.status === "uploading" && typeof status.percent === "number" ? (
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full bg-primary transition-all"
+                      style={{ width: `${Math.max(0, Math.min(100, status.percent))}%` }}
+                    />
+                  </div>
+                ) : null}
+                {status?.status === "error" && status.error ? (
+                  <p className="mt-1 text-xs text-destructive">{status.error}</p>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

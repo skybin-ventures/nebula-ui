@@ -1,7 +1,8 @@
 'use client';
 
-import { useContext, useEffect, useId, useState } from "react";
+import { useContext, useLayoutEffect, useId, useState } from "react";
 import { format, startOfDay } from "date-fns";
+import { enUS, type Locale } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -35,7 +36,7 @@ const datePickerVariants = cva("w-full justify-start text-left font-normal", {
     variant: {
       default: "border-input",
       error: "border-destructive",
-      success: "border-green-500",
+      success: "border-success",
     },
   },
   defaultVariants: {
@@ -61,6 +62,10 @@ export interface DatePickerProps<
   control?: Control<TFieldValues>;
   required?: boolean | string;
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
+  /** date-fns locale for display formatting (default: enUS) */
+  locale?: Locale;
+  /** date-fns format string (default: "MMM d, yyyy") */
+  formatString?: string;
 }
 
 export function DatePicker<
@@ -82,6 +87,8 @@ export function DatePicker<
   control: externalControl,
   required,
   validate,
+  locale = enUS,
+  formatString = "MMM d, yyyy",
 }: DatePickerProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
@@ -94,7 +101,7 @@ export function DatePicker<
   const registerFieldValidation = formConfigContext?.registerFieldValidation;
   const unregisterFieldValidation = formConfigContext?.unregisterFieldValidation;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (registerFieldValidation) {
       const rules: FieldValidationRules = {};
       if (required !== undefined) rules.required = required;
@@ -164,12 +171,13 @@ export function DatePicker<
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedDate ? format(selectedDate, "PPP") : placeholder}
+            {selectedDate ? format(selectedDate, formatString, { locale }) : placeholder}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
+            locale={locale}
             selected={selectedDate}
             onSelect={(date) => {
               field.onChange(date ? startOfDay(date) : "");

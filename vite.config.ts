@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import dts from "vite-plugin-dts";
+import { visualizer } from "rollup-plugin-visualizer";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isStorybook = process.argv.some((arg) => arg.includes("storybook"));
@@ -78,6 +79,8 @@ const externalPackages = [
   "@radix-ui/react-toast",
   "@radix-ui/react-toggle",
   "@radix-ui/react-tooltip",
+  "@radix-ui/react-navigation-menu",
+  "recharts",
 ];
 
 function isExternal(id: string): boolean {
@@ -104,6 +107,12 @@ export default defineConfig({
             tsconfigPath: "./tsconfig.app.json",
             insertTypesEntry: true,
             bundleTypes: false,
+          }),
+          visualizer({
+            filename: "stats.html",
+            gzipSize: true,
+            brotliSize: true,
+            open: false,
           }),
         ]),
   ],
@@ -152,6 +161,24 @@ export default defineConfig({
     },
   },
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.stories.tsx",
+        "src/primitives/**",
+        "src/index.ts",
+      ],
+      thresholds: {
+        lines: 40,
+        functions: 40,
+        branches: 35,
+        statements: 40,
+      },
+    },
     projects: [
       {
         test: {

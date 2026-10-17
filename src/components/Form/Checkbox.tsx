@@ -1,14 +1,15 @@
 'use client';
 
-import { forwardRef, useId, useContext, useEffect } from "react";
-import type { ReactNode, ComponentPropsWithoutRef } from "react";
+import { useId, useContext, useLayoutEffect } from "react";
+import type { ReactNode, ComponentPropsWithoutRef, ElementRef } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
+import { FieldLayout } from "./FieldLayout";
 import { Checkbox as ShadcnCheckbox } from "../../primitives/checkbox";
-import { Label } from "../../primitives/label";
 import type * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { forwardFormRef } from "./forwardFormRef";
 
 const checkboxSizeVariants = cva(
   "",
@@ -22,26 +23,6 @@ const checkboxSizeVariants = cva(
     },
     defaultVariants: {
       size: "md",
-    },
-  }
-);
-
-const labelVariants = cva(
-  "text-sm font-medium cursor-pointer select-none",
-  {
-    variants: {
-      required: {
-        true: "after:content-['*'] after:ml-0.5 after:text-destructive",
-        false: "",
-      },
-      disabled: {
-        true: "cursor-not-allowed opacity-50",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      required: false,
-      disabled: false,
     },
   }
 );
@@ -123,7 +104,7 @@ function CheckboxInner<
   const control = externalControl ?? rhfContext?.control;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formConfigContext?.registerFieldValidation) {
       const rules: FieldValidationRules = {};
       
@@ -160,7 +141,15 @@ function CheckboxInner<
   const effectiveVariant = hasError ? "error" : variant;
 
   return (
-    <div className="space-y-1.5">
+    <FieldLayout
+      inputId={inputId}
+      label={typeof label === "string" ? label : undefined}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      formConfig={formConfig}
+    >
       <div className="flex items-center gap-2">
         <ShadcnCheckbox
           {...props}
@@ -184,45 +173,15 @@ function CheckboxInner<
             className
           )}
         />
-        
-        {label && (
-          <Label
-            htmlFor={inputId}
-            className={labelVariants({ required: !!required, disabled: effectiveDisabled })}
-          >
-            {label}
-          </Label>
-        )}
+        {label && typeof label !== "string" ? label : null}
       </div>
-
-      {showError && hasError && (
-        <p
-          id={`${inputId}-error`}
-          className="text-sm text-destructive ml-7"
-          role="alert"
-        >
-          {errorMessage}
-        </p>
-      )}
-      
-      {helperText && !hasError && (
-        <p
-          id={`${inputId}-helper`}
-          className="text-sm text-muted-foreground ml-7"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 
-// Use forwardRef with generic support
-export const Checkbox = forwardRef(CheckboxInner) as <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(
-  props: CheckboxProps<TFieldValues, TName> & { ref?: React.ForwardedRef<React.ElementRef<typeof CheckboxPrimitive.Root>> }
-) => React.ReactElement;
+export const Checkbox = forwardFormRef<
+  CheckboxProps,
+  ElementRef<typeof CheckboxPrimitive.Root>
+>(CheckboxInner);
 
 (Checkbox as React.FC).displayName = "Checkbox";

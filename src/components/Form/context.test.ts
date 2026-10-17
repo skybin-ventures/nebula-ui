@@ -43,6 +43,23 @@ describe("buildZodSchemaFromRules", () => {
     expect(schema.safeParse(true).success).toBe(true);
   });
 
+  it("accepts undefined for optional booleans", () => {
+    const schema = buildZodSchemaFromRules("boolean", {});
+    expect(schema.safeParse(undefined).success).toBe(true);
+    expect(schema.safeParse(false).success).toBe(true);
+  });
+
+  it("uses the custom required message when a boolean is undefined", () => {
+    const schema = buildZodSchemaFromRules("boolean", {
+      required: "You must accept the terms",
+    });
+    const result = schema.safeParse(undefined);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("You must accept the terms");
+    }
+  });
+
   it("builds a merged object schema from field rules", () => {
     const shape = {
       username: buildZodSchemaFromRules("string", { required: true, minLength: 3 }),

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, type ReactNode } from "react";
+import { useCallback, useMemo, useRef, type ReactNode } from "react";
 import {
   useForm,
   FormProvider as RHFFormProvider,
@@ -117,13 +117,17 @@ export function Form<
   } = useFieldValidationRegistry();
 
   // Stable resolver that reads from fieldsRef at validation time — no re-renders
-  // needed on field registration, and no race condition with useEffect timing.
+  // needed on field registration. Fields register via useLayoutEffect so rules
+  // are present before paint / submit in StrictMode.
+  const messagesRef = useRef(mergedConfig.messages);
+  messagesRef.current = mergedConfig.messages;
+
   const dynamicResolver = useCallback<Resolver<TFieldValues>>(
     async (vals, context, options) => {
       if (customResolver) {
         return customResolver(vals, context, options);
       }
-      const fieldSchema = getValidationSchema();
+      const fieldSchema = getValidationSchema(messagesRef.current);
       const mergedSchema = baseSchema instanceof z.ZodObject
         ? baseSchema.merge(fieldSchema)
         : baseSchema ?? fieldSchema;
@@ -144,6 +148,11 @@ export function Form<
   });
 
   const form = externalForm ?? internalForm;
+  const { isSubmitting } = form.formState;
+  const lockSubmit = mergedConfig.disabledOnSubmit ?? true;
+  const disableWhileSubmitting = lockSubmit && isSubmitting;
+  const effectiveDisabled = Boolean(mergedConfig.disabled) || disableWhileSubmitting;
+  const submitLockRef = useRef(false);
 
   // Trigger validation for a specific field
   const triggerValidation = useCallback(async (name: string) => {
@@ -152,9 +161,24 @@ export function Form<
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (onSubmit) {
-      form.handleSubmit(onSubmit, onError)(e);
-    }
+    if (!onSubmit) return;
+    if (lockSubmit && (isSubmitting || submitLockRef.current)) return;
+
+    if (lockSubmit) submitLockRef.current = true;
+
+    void form.handleSubmit(
+      async (data, event) => {
+        try {
+          await onSubmit(data, event);
+        } finally {
+          submitLockRef.current = false;
+        }
+      },
+      (errors, event) => {
+        submitLockRef.current = false;
+        onError?.(errors, event);
+      }
+    )(e);
   };
 
   const contextValue = useMemo<FormContextValue<TFieldValues>>(
@@ -170,8 +194,9 @@ export function Form<
       size: mergedConfig.size,
       layout: mergedConfig.layout,
       labelWidth: mergedConfig.labelWidth,
-      disabled: mergedConfig.disabled,
+      disabled: effectiveDisabled,
       colon: mergedConfig.colon,
+      disabledOnSubmit: mergedConfig.disabledOnSubmit,
     }),
     [
       form,
@@ -185,8 +210,9 @@ export function Form<
       mergedConfig.size,
       mergedConfig.layout,
       mergedConfig.labelWidth,
-      mergedConfig.disabled,
+      effectiveDisabled,
       mergedConfig.colon,
+      mergedConfig.disabledOnSubmit,
     ]
   );
 
@@ -197,6 +223,7 @@ export function Form<
           {...formProps}
           onSubmit={handleSubmit}
           noValidate
+          aria-busy={disableWhileSubmitting || undefined}
         >
           {children}
         </form>

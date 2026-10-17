@@ -2,11 +2,15 @@
 
 import { describe, expect, it } from "vitest"
 import { renderHook, act } from "@testing-library/react"
-import { useToast } from "./useToast"
+import { useRadixToast } from "./useToast"
 
-describe("useToast", () => {
+/**
+ * Radix toast helpers remain in-repo for internal primitives but are not
+ * part of the public 2.0 API. Sonner `toast` is the public surface.
+ */
+describe("useRadixToast (internal)", () => {
   it("keeps a stable subscription across state updates", () => {
-    const { result, rerender } = renderHook(() => useToast())
+    const { result, rerender } = renderHook(() => useRadixToast())
 
     act(() => {
       result.current.toast({ title: "Saved" })

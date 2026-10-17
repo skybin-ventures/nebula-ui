@@ -1,6 +1,7 @@
-'use client';
+"use client"
 
 import * as React from "react"
+import { toast as sonnerToast } from "sonner"
 import type { ToastActionElement, ToastProps } from "../primitives/toast"
 
 const TOAST_LIMIT = 1
@@ -90,7 +91,27 @@ function toast({ ...props }: Toast) {
   return { id, dismiss, update }
 }
 
-function useToast() {
+/**
+ * @deprecated Prefer Sonner `toast` from `@skybin-tech/nebula-ui`.
+ * This hook now proxies to Sonner; radix toast state is available via `useRadixToast` / `radixToast`.
+ */
+function useToast(): {
+  toasts: ToasterToast[]
+  toast: (message: string) => string | number
+  dismiss: (toastId?: string | number) => void
+} {
+  return {
+    toasts: [],
+    toast: (message: string) => sonnerToast(message),
+    dismiss: (toastId?: string | number) => {
+      if (toastId === undefined) sonnerToast.dismiss()
+      else sonnerToast.dismiss(toastId)
+    },
+  }
+}
+
+/** @deprecated Prefer Sonner `toast`. Kept for radix ToastProvider consumers. */
+function useRadixToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
@@ -108,4 +129,4 @@ function useToast() {
   }
 }
 
-export { useToast, toast }
+export { useToast, useRadixToast, toast }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useId } from "react";
+import { useContext, useLayoutEffect, useId } from "react";
 import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
@@ -18,7 +18,7 @@ const countrySelectVariants = cva("", {
     variant: {
       default: "border-input focus-visible:ring-ring",
       error: "border-destructive focus-visible:ring-destructive",
-      success: "border-green-500 focus-visible:ring-green-500",
+      success: "border-success focus-visible:ring-success",
     },
   },
   defaultVariants: {
@@ -85,7 +85,7 @@ export function CountrySelect<
   const registerFieldValidation = formConfigContext?.registerFieldValidation;
   const unregisterFieldValidation = formConfigContext?.unregisterFieldValidation;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (registerFieldValidation) {
       const rules: FieldValidationRules = {};
       if (required !== undefined) rules.required = required;

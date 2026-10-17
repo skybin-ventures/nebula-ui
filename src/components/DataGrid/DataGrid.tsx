@@ -110,8 +110,9 @@ export function DataGrid<TData extends RowData>({
   className,
   enableSorting = true,
   enableColumnVisibility = true,
-  enableRowSelection = true,
+  enableRowSelection = false,
   enablePagination = true,
+  getRowId,
   onSelectionChange,
   pageSize = 10,
   pageIndex,
@@ -143,6 +144,7 @@ export function DataGrid<TData extends RowData>({
     enableColumnVisibility,
     enableRowSelection,
     enablePagination,
+    getRowId,
     onSelectionChange,
     pageSize,
     pageIndex,
@@ -235,6 +237,9 @@ export function DataGrid<TData extends RowData>({
                       type="button"
                       className="flex items-center justify-center"
                       disabled={isLoading}
+                      aria-label="Select all rows"
+                      aria-checked={table.getIsAllRowsSelected()}
+                      role="checkbox"
                       onClick={() => table.toggleAllRowsSelected()}
                     >
                       {table.getIsAllRowsSelected() ? (
@@ -245,28 +250,39 @@ export function DataGrid<TData extends RowData>({
                     </button>
                   </TableHead>
                 ) : null}
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} style={{ display: header.column.getIsVisible() ? undefined : "none" }}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className={cn(
-                          "flex items-center gap-1",
-                          header.column.getCanSort() && !isLoading && "cursor-pointer select-none"
-                        )}
-                        onClick={
-                          enableSorting && !isLoading && header.column.getCanSort()
-                            ? () => header.column.toggleSorting()
-                            : undefined
-                        }
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {enableSorting && header.column.getCanSort() ? (
-                          <SortIndicator isSorted={header.column.getIsSorted()} />
-                        ) : null}
-                      </div>
-                    )}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  const sorted = header.column.getIsSorted()
+                  const canSort = enableSorting && header.column.getCanSort()
+                  const ariaSort =
+                    sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : canSort ? "none" : undefined
+
+                  return (
+                    <TableHead
+                      key={header.id}
+                      style={{ display: header.column.getIsVisible() ? undefined : "none" }}
+                      aria-sort={ariaSort}
+                    >
+                      {header.isPlaceholder ? null : canSort ? (
+                        <button
+                          type="button"
+                          className={cn(
+                            "flex items-center gap-1",
+                            !isLoading && "cursor-pointer select-none"
+                          )}
+                          disabled={isLoading}
+                          onClick={() => header.column.toggleSorting()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          <SortIndicator isSorted={sorted} />
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                        </div>
+                      )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -304,6 +320,9 @@ export function DataGrid<TData extends RowData>({
                       <button
                         type="button"
                         className="flex items-center justify-center"
+                        aria-label={`Select row ${row.id}`}
+                        aria-checked={row.getIsSelected()}
+                        role="checkbox"
                         onClick={() => row.toggleSelected()}
                       >
                         {row.getIsSelected() ? (

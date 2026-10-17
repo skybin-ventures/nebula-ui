@@ -1,14 +1,15 @@
 'use client';
 
-import { forwardRef, useId, useContext, useEffect } from "react";
-import type { ReactNode, ComponentPropsWithoutRef } from "react";
+import { useId, useContext, useLayoutEffect } from "react";
+import type { ReactNode, ComponentPropsWithoutRef, ElementRef } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
+import { FieldLayout } from "./FieldLayout";
 import { Switch as ShadcnSwitch } from "../../primitives/switch";
-import { Label } from "../../primitives/label";
 import type * as SwitchPrimitives from "@radix-ui/react-switch";
+import { forwardFormRef } from "./forwardFormRef";
 
 const switchSizeVariants = cva(
   "",
@@ -22,21 +23,6 @@ const switchSizeVariants = cva(
     },
     defaultVariants: {
       size: "md",
-    },
-  }
-);
-
-const labelVariants = cva(
-  "text-sm font-medium cursor-pointer select-none",
-  {
-    variants: {
-      disabled: {
-        true: "cursor-not-allowed opacity-50",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      disabled: false,
     },
   }
 );
@@ -123,7 +109,7 @@ function FormSwitchInner<
   const control = externalControl ?? rhfContext?.control;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formConfigContext?.registerFieldValidation) {
       const rules: FieldValidationRules = {};
 
@@ -158,7 +144,15 @@ function FormSwitchInner<
   const isChecked = field.value ?? false;
 
   return (
-    <div className="space-y-1.5">
+    <FieldLayout
+      inputId={inputId}
+      label={typeof label === "string" ? label : undefined}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      formConfig={formConfig}
+    >
       <div className="flex items-center gap-3">
         <ShadcnSwitch
           {...props}
@@ -168,6 +162,14 @@ function FormSwitchInner<
           onCheckedChange={(checked) => field.onChange(checked)}
           disabled={effectiveDisabled}
           aria-labelledby={label ? `${inputId}-label` : undefined}
+          aria-invalid={hasError || undefined}
+          aria-describedby={
+            hasError
+              ? `${inputId}-error`
+              : helperText
+                ? `${inputId}-helper`
+                : undefined
+          }
           className={cn(
             switchSizeVariants({ size: effectiveSize }),
             className
@@ -179,38 +181,14 @@ function FormSwitchInner<
             {isChecked ? checkedText : uncheckedText}
           </span>
         )}
-
-        {label && (
-          <Label
-            id={`${inputId}-label`}
-            htmlFor={inputId}
-            className={labelVariants({ disabled: effectiveDisabled })}
-          >
-            {label}
-          </Label>
-        )}
       </div>
-
-      {showError && hasError && (
-        <p className="text-sm text-destructive" role="alert">
-          {errorMessage}
-        </p>
-      )}
-
-      {helperText && !hasError && (
-        <p className="text-sm text-muted-foreground">
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 
-export const FormSwitch = forwardRef(FormSwitchInner) as <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(
-  props: FormSwitchProps<TFieldValues, TName> & { ref?: React.ForwardedRef<React.ElementRef<typeof SwitchPrimitives.Root>> }
-) => React.ReactElement;
+export const FormSwitch = forwardFormRef<
+  FormSwitchProps,
+  ElementRef<typeof SwitchPrimitives.Root>
+>(FormSwitchInner);
 
 (FormSwitch as React.FC).displayName = "FormSwitch";

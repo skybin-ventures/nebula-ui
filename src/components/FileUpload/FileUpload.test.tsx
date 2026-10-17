@@ -17,4 +17,16 @@ describe("FileUpload", () => {
     render(<FileUpload loading aria-label="Upload files" />)
     expect(screen.getByRole("button", { name: "Upload files" }).getAttribute("aria-busy")).toBe("true")
   })
+
+  it("shows per-file upload status", () => {
+    const file = new File(["hello"], "notes.txt", { type: "text/plain" })
+    const fileId = `${file.name}:${file.size}:${file.lastModified}:0`
+    render(
+      <FileUpload
+        value={[file]}
+        fileStatuses={{ [fileId]: { status: "uploading", percent: 42 } }}
+      />
+    )
+    expect(screen.getByText(/Uploading 42%/)).toBeTruthy()
+  })
 })

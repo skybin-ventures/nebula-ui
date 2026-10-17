@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { LegacyColumnDef } from "@tanstack/react-table/legacy"
+import type { ColumnDef } from "../types"
 import { DataGrid } from "../DataGrid"
 
 type Person = {
@@ -9,7 +9,7 @@ type Person = {
   role: string
 }
 
-const columns: LegacyColumnDef<Person, unknown>[] = [
+const columns: ColumnDef<Person, unknown>[] = [
   { accessorKey: "id", header: "ID" },
   { accessorKey: "name", header: "Name" },
   { accessorKey: "role", header: "Role" },
@@ -27,7 +27,7 @@ const meta = {
   args: {
     columns,
     pageSize: 5,
-    enableRowSelection: true,
+    enableRowSelection: false,
   },
 } satisfies Meta<typeof DataGrid>
 
@@ -37,6 +37,14 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     data: clientRows,
+  },
+}
+
+export const WithRowSelection: Story = {
+  args: {
+    data: clientRows,
+    enableRowSelection: true,
+    getRowId: (row) => (row as Person).id,
   },
 }
 

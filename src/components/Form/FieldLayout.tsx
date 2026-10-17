@@ -38,17 +38,25 @@ export function FieldLayout({
   children,
 }: FieldLayoutProps) {
   const layout = formConfig.layout ?? "vertical";
+  const size = formConfig.size ?? "md";
   const labelWidth = resolveLabelWidth(formConfig.labelWidth);
   const hasError = !!errorMessage;
   const showHelper = !!helperText && !hasError;
+  // Align label with input top padding for horizontal layout (sm/md/lg heights).
+  const horizontalLabelOffset =
+    size === "sm" ? "pt-1.5" : size === "lg" ? "pt-3" : "pt-2.5";
 
   const labelNode = label ? (
     <Label
+      id={`${inputId}-label`}
       htmlFor={inputId}
       className={cn(
-        labelVariants({ required: !!required }),
-        layout === "horizontal" && "mb-0 shrink-0 pt-2",
-        layout === "inline" && "mb-0 shrink-0"
+        labelVariants({
+          required: !!required,
+          layout: layout === "inline" ? "inline" : layout === "horizontal" ? "horizontal" : "vertical",
+        }),
+        layout === "horizontal" && cn("shrink-0", horizontalLabelOffset),
+        layout === "inline" && "shrink-0"
       )}
       style={layout === "horizontal" && labelWidth ? { width: labelWidth } : undefined}
     >

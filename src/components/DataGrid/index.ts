@@ -2,6 +2,7 @@ export { DataGrid } from "./DataGrid"
 export { useDataGrid } from "./useDataGrid"
 export { DataTable, useDataTable } from "./legacy"
 export type {
+  ColumnDef,
   DataGridProps,
   DataGridQuery,
   DataGridPage,

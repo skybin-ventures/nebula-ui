@@ -1,14 +1,13 @@
 'use client';
 
-import { forwardRef, useId, useContext, useEffect } from "react";
+import { forwardRef, useId, useContext, useLayoutEffect } from "react";
 import type { TextareaHTMLAttributes } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
-import { labelVariants } from "./variants";
+import { FieldLayout } from "./FieldLayout";
 import { Textarea } from "../../primitives/textarea";
-import { Label } from "../../primitives/label";
 
 const textAreaSizeVariants = cva(
   "",
@@ -22,7 +21,7 @@ const textAreaSizeVariants = cva(
       variant: {
         default: "border-input focus-visible:ring-ring",
         error: "border-destructive focus-visible:ring-destructive",
-        success: "border-green-500 focus-visible:ring-green-500",
+        success: "border-success focus-visible:ring-success",
       },
     },
     defaultVariants: {
@@ -128,7 +127,7 @@ function TextAreaInner<
   const control = externalControl ?? rhfContext?.control;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formConfigContext?.registerFieldValidation) {
       const rules: FieldValidationRules = {};
       
@@ -172,17 +171,16 @@ function TextAreaInner<
   const maxLengthValue = maxCount ?? (typeof maxLength === "number" ? maxLength : (maxLength as { value: number })?.value);
 
   return (
-    <div className={cn("space-y-1.5", fullWidth && "w-full")}>
-      {label && (
-        <Label
-          htmlFor={inputId}
-          className={labelVariants({ required: !!required })}
-        >
-          {label}
-          {formConfig.colon && ":"}
-        </Label>
-      )}
-      
+    <FieldLayout
+      inputId={inputId}
+      label={label}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      fullWidth={fullWidth}
+      formConfig={formConfig}
+    >
       <div className="relative">
         <Textarea
           {...props}
@@ -212,33 +210,14 @@ function TextAreaInner<
             className
           )}
         />
-        
+
         {showCount && (
           <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
             {currentLength}{maxCount ? `/${maxCount}` : ""}
           </div>
         )}
       </div>
-
-      {showError && hasError && (
-        <p
-          id={`${inputId}-error`}
-          className="text-sm text-destructive"
-          role="alert"
-        >
-          {errorMessage}
-        </p>
-      )}
-      
-      {helperText && !hasError && (
-        <p
-          id={`${inputId}-helper`}
-          className="text-sm text-muted-foreground"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 

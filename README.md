@@ -26,16 +26,19 @@ import "@skybin-tech/nebula-ui/styles.css";
 
 ### Toast notifications
 
-Use **Sonner** for app toasts:
+Use **Sonner** via `Toaster` and the `toast` helper:
 
 ```tsx
-import { Toaster } from "@skybin-tech/nebula-ui";
+import { Toaster, toast } from "@skybin-tech/nebula-ui";
 
 // in root layout
 <Toaster />
+
+// anywhere
+toast.success("Saved");
 ```
 
-Radix Toast primitives remain exported for advanced custom toast UIs, but Sonner is the recommended default.
+`ToastProvider` / radix `useToast` remain exported for compatibility but are deprecated — prefer `Toaster` + `toast`. See [docs/theming.md](docs/theming.md) for light/dark via `NebulaTheme`.
 
 ---
 
@@ -93,7 +96,7 @@ const baseSchema = z.object({ username: z.string(), email: z.string() });
 | `layout` | `"vertical" \| "horizontal" \| "inline"` | `"vertical"` | Layout direction |
 | `labelWidth` | `string \| number` | — | Label width for horizontal layout |
 | `disabled` | `boolean` | `false` | Disable all fields |
-| `colon` | `boolean` | `true` | Append `:` to labels |
+| `colon` | `boolean` | `false` | Append `:` to labels |
 | `showInlineErrors` | `boolean` | `true` | Show validation errors inline |
 | `validateOnBlur` | `boolean` | `true` | Validate on blur |
 | `validateOnChange` | `boolean` | `false` | Validate on change |
@@ -381,24 +384,23 @@ import { Separator } from "@skybin-tech/nebula-ui";
 
 ## Hooks
 
-### useDebounce
-
-Debounces a value, returning the latest value only after the specified delay has elapsed with no further changes.
+| Hook | Purpose |
+|------|---------|
+| `useDebounce` | Debounce a value |
+| `useToggle` | Boolean state + toggle |
+| `useControllableState` | Controlled/uncontrolled value helper |
+| `useConfirm` | Imperative confirm dialog (with `ConfirmProvider`) |
+| `useTheme` | Theme mode from `NebulaTheme` |
+| `useFormConfig` / `useFormField` / `useFieldError` | Form field helpers |
+| `useDataGrid` | DataGrid table state |
+| `toast` | Sonner toast API |
 
 ```tsx
-import { useDebounce } from "@skybin-tech/nebula-ui";
+import { useDebounce, useToggle, useTheme } from "@skybin-tech/nebula-ui";
 
 const debouncedSearch = useDebounce(searchTerm, 300);
-```
-
-### useToggle
-
-Returns a boolean state and a stable toggle function.
-
-```tsx
-import { useToggle } from "@skybin-tech/nebula-ui";
-
 const [isOpen, toggleOpen] = useToggle(false);
+const { resolvedTheme, setTheme } = useTheme();
 ```
 
 ---

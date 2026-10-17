@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [1.0.1] - 2026-10-18
+
+### Added
+- Form fields: `FormInputOTP`, `FormSlider`, `FormCurrencyInput`, `FormPercentageInput`, `FormRating`, `FormConsent`, `FormPassword`, `FormAutocomplete`, `TagInput`/`FormTagInput`, `ColorPicker`/`FormColorPicker`
+- `SearchInput`, `TreeView`, `AvatarGroup`, `NavigationMenu`, chart family (`ChartCard`, `LineTrend`, `BarCompare`, `DonutShare`, `Sparkline`, `AreaRange`)
+- Data display: `StatCard`/`Metric`, Skeleton presets, `Divider`, `Section`/`SectionHeader`, `KeyValue`, `CodeBlock`, `JsonView`
+- Layout/nav: `TopNavigation`, `MobileNav`/`BottomNav`, `TabBar`
+- Feedback: `ModalForm`, `StatusIndicator`, `LoadingSpinner`, `ProgressBar`, `useNotification`/`NotificationBell`
+- A11y: `SkipLink`, `ErrorBoundary`, `SuspenseFallback`
+- `NebulaTheme` + `useTheme()`, `FormConfig.messages`, `useFormShallow()`, FileUpload per-file status/`onFileProgress`
+- CI workflows, size-limit, Storybook a11y fail-on-violation; docs (`theming`, `forms`, migration notes)
+
+### Changed
+- `FormConfig.colon` defaults to `false`
+- Public toast surface is Sonner `Toaster` + `toast` only (radix `ToastProvider` / `useToast` removed from public API)
+- DataGrid: `enableRowSelection` defaults to `false`; import `ColumnDef` from the package (not `@tanstack/react-table/legacy`)
+- Form success borders use theme tokens; field registration uses `useLayoutEffect`; DatePicker locale/`formatString` support
+
+### Fixed
+- `FormSelect` clear → `undefined`; optional boolean schema; `useControllableState` StrictMode-safe; DataGrid a11y selection/sort
+
+### Removed
+- Dead `Button.css`; unused `--form-*` token set (replaced by `--success` / `--warning`)
+
 ## [1.0.0] - 2026-10-12
 
 ### Changed

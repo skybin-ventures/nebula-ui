@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useContext, useEffect } from "react";
+import { useId, useContext, useLayoutEffect } from "react";
 import type { ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -137,7 +137,7 @@ export function Select<
   const control = externalControl ?? rhfContext?.control;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formConfigContext?.registerFieldValidation) {
       const rules: FieldValidationRules = {};
       
@@ -187,11 +187,7 @@ export function Select<
       <ShadcnSelect
         value={field.value?.toString() ?? ""}
         onValueChange={(value) => {
-          if (value === "" && allowClear) {
-            field.onChange("");
-          } else {
-            field.onChange(value);
-          }
+          field.onChange(value === "" ? undefined : value);
         }}
         disabled={effectiveDisabled}
       >
@@ -208,7 +204,7 @@ export function Select<
           className={cn(
             selectSizeVariants({ size: effectiveSize }),
             effectiveVariant === "error" && "border-destructive focus:ring-destructive",
-            effectiveVariant === "success" && "border-green-500 focus:ring-green-500",
+            effectiveVariant === "success" && "border-success focus:ring-success",
             className
           )}
         >

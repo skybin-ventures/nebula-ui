@@ -2,14 +2,14 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
-import { type LegacyColumnDef } from "@tanstack/react-table/legacy"
+import type { ColumnDef } from "./types"
 import { DataGrid } from "./DataGrid"
 
 afterEach(cleanup)
 
 type Row = { id: string; name: string }
 
-const columns: LegacyColumnDef<Row, unknown>[] = [
+const columns: ColumnDef<Row, unknown>[] = [
   { accessorKey: "id", header: "ID" },
   { accessorKey: "name", header: "Name" },
 ]
@@ -89,5 +89,29 @@ describe("DataGrid", () => {
     await waitFor(() => {
       expect(screen.getByText("Could not load grid data")).toBeTruthy()
     })
+  })
+
+  it("defaults row selection off and exposes labeled selection controls when enabled", () => {
+    const data = [
+      { id: "1", name: "Row 1" },
+      { id: "2", name: "Row 2" },
+    ]
+
+    const { rerender } = render(<DataGrid columns={columns} data={data} enablePagination={false} />)
+    expect(screen.queryByRole("checkbox", { name: "Select all rows" })).toBeNull()
+
+    rerender(
+      <DataGrid
+        columns={columns}
+        data={data}
+        enablePagination={false}
+        enableRowSelection
+        getRowId={(row) => row.id}
+      />
+    )
+
+    expect(screen.getByRole("checkbox", { name: "Select all rows" })).toBeTruthy()
+    expect(screen.getByRole("checkbox", { name: "Select row 1" })).toBeTruthy()
+    expect(screen.getByRole("button", { name: /Name/ })).toBeTruthy()
   })
 })

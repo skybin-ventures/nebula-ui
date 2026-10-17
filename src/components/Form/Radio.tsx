@@ -1,11 +1,12 @@
 'use client';
 
-import { forwardRef, useId, useContext, createContext, useEffect } from "react";
+import { forwardRef, useId, useContext, createContext, useLayoutEffect } from "react";
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
+import { FieldLayout } from "./FieldLayout";
 import { RadioGroup as ShadcnRadioGroup, RadioGroupItem as ShadcnRadioGroupItem } from "../../primitives/radio-group";
 import { Label } from "../../primitives/label";
 import type * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
@@ -149,7 +150,7 @@ export function RadioGroup<
   const control = externalControl ?? rhfContext?.control;
 
   // Register validation rules with the form
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (formConfigContext?.registerFieldValidation) {
       const rules: FieldValidationRules = {};
       
@@ -192,24 +193,32 @@ export function RadioGroup<
   };
 
   return (
-    <div className={cn("space-y-2", className)}>
-      {label && (
-        <Label className={cn(
-          "block",
-          required && "after:content-['*'] after:ml-0.5 after:text-destructive"
-        )}>
-          {label}
-          {formConfig.colon && ":"}
-        </Label>
-      )}
-      
+    <FieldLayout
+      inputId={generatedId}
+      label={label}
+      required={!!required}
+      helperText={helperText}
+      errorMessage={showError ? errorMessage : undefined}
+      showError={showError}
+      formConfig={formConfig}
+    >
       <RadioGroupContext.Provider value={contextValue}>
         <ShadcnRadioGroup
+          id={generatedId}
           value={field.value?.toString()}
           onValueChange={(value) => field.onChange(value)}
           disabled={effectiveDisabled}
           aria-labelledby={label ? `${generatedId}-label` : undefined}
+          aria-invalid={hasError || undefined}
+          aria-describedby={
+            hasError
+              ? `${generatedId}-error`
+              : helperText
+                ? `${generatedId}-helper`
+                : undefined
+          }
           className={cn(
+            className,
             direction === "horizontal" && "flex flex-row gap-4",
             direction === "vertical" && "flex flex-col gap-2"
           )}
@@ -227,19 +236,7 @@ export function RadioGroup<
           ))}
         </ShadcnRadioGroup>
       </RadioGroupContext.Provider>
-
-      {showError && hasError && (
-        <p className="text-sm text-destructive" role="alert">
-          {errorMessage}
-        </p>
-      )}
-      
-      {helperText && !hasError && (
-        <p className="text-sm text-muted-foreground">
-          {helperText}
-        </p>
-      )}
-    </div>
+    </FieldLayout>
   );
 }
 

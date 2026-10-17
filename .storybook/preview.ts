@@ -9,6 +9,16 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    a11y: {
+      // Fail Storybook Vitest / CI when axe finds violations
+      test: "error",
+      config: {
+        rules: [
+          // Form secondary text uses muted opacity; keep as warn until tokens are audited
+          { id: "color-contrast", enabled: true },
+        ],
+      },
+    },
   },
 };
 

@@ -1,7 +1,8 @@
 'use client';
 
-import { useContext, useEffect, useId, useState } from "react";
+import { useContext, useLayoutEffect, useId, useState } from "react";
 import { format, startOfDay } from "date-fns";
+import { enUS, type Locale } from "date-fns/locale";
 import { CalendarIcon, Clock } from "lucide-react";
 import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -25,7 +26,7 @@ const dateTimePickerVariants = cva("w-full justify-start text-left font-normal",
     variant: {
       default: "border-input",
       error: "border-destructive",
-      success: "border-green-500",
+      success: "border-success",
     },
   },
   defaultVariants: {
@@ -52,6 +53,10 @@ export interface DateTimePickerProps<
   required?: boolean | string;
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
   minuteStep?: number;
+  /** date-fns locale for display formatting (default: enUS) */
+  locale?: Locale;
+  /** date-fns format string for the date portion (default: "MMM d, yyyy") */
+  formatString?: string;
 }
 
 function isSelectEventTarget(target: EventTarget | null): boolean {
@@ -78,6 +83,8 @@ export function DateTimePicker<
   required,
   validate,
   minuteStep = 5,
+  locale = enUS,
+  formatString = "MMM d, yyyy",
 }: DateTimePickerProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
@@ -91,7 +98,7 @@ export function DateTimePicker<
   const registerFieldValidation = formConfigContext?.registerFieldValidation;
   const unregisterFieldValidation = formConfigContext?.unregisterFieldValidation;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (registerFieldValidation) {
       const rules: FieldValidationRules = {};
       if (required !== undefined) rules.required = required;
@@ -177,7 +184,11 @@ export function DateTimePicker<
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {selectedDate
-              ? format(selectedDate, displayHasTime ? "PPP p" : "PPP")
+              ? format(
+                  selectedDate,
+                  displayHasTime ? `${formatString} p` : formatString,
+                  { locale }
+                )
               : placeholder}
           </Button>
         </PopoverTrigger>
@@ -197,6 +208,7 @@ export function DateTimePicker<
         >
           <Calendar
             mode="single"
+            locale={locale}
             selected={selectedDate}
             onSelect={(date) => {
               if (!date) {
