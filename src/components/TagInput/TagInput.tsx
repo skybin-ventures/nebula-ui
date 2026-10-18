@@ -10,6 +10,7 @@ export interface TagInputProps {
   value?: string[]
   defaultValue?: string[]
   onChange?: (value: string[]) => void
+  onBlur?: () => void
   placeholder?: string
   disabled?: boolean
   loading?: boolean
@@ -24,6 +25,7 @@ export function TagInput({
   value,
   defaultValue = [],
   onChange,
+  onBlur,
   placeholder = "Add a tag and press Enter",
   disabled = false,
   loading = false,
@@ -100,7 +102,10 @@ export function TagInput({
         className="min-w-[8rem] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
         onChange={(event) => setDraft(event.target.value)}
         onKeyDown={onKeyDown}
-        onBlur={() => addTag(draft)}
+        onBlur={() => {
+          addTag(draft)
+          onBlur?.()
+        }}
       />
     </div>
   )

@@ -38,4 +38,18 @@ describe("FormInputOTP", () => {
     fireEvent.click(screen.getByRole("button", { name: "Submit" }))
     await waitFor(() => expect(onSubmit).not.toHaveBeenCalled())
   })
+
+  it("allows submit when optional OTP is empty", async () => {
+    const onSubmit = vi.fn()
+
+    render(
+      <Form onSubmit={onSubmit} defaultValues={{ code: "" }} config={{ colon: false }}>
+        <FormInputOTP name="code" label="Code" length={6} />
+        <Button type="submit">Submit</Button>
+      </Form>
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+    await waitFor(() => expect(onSubmit).toHaveBeenCalled())
+  })
 })

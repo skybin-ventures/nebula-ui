@@ -65,11 +65,30 @@ export function FormInputOTP<
   useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {
-      minLength: { value: length, message: `Enter all ${length} digits` },
+      // Cap length always; full-length min only when required (optional empty
+      // "" is cleared by optional-string preprocess in buildZodSchemaFromRules).
       maxLength: length,
     }
-    if (required !== undefined) rules.required = required
-    if (validate !== undefined) rules.validate = validate
+    if (required !== undefined) {
+      rules.required = required
+      rules.minLength = { value: length, message: `Enter all ${length} digits` }
+    } else {
+      rules.validate = (value) => {
+        if (value === undefined || value === null || value === "") return true
+        if (typeof value === "string" && value.length === length) return true
+        return `Enter all ${length} digits`
+      }
+    }
+    if (validate !== undefined) {
+      const lengthGate = rules.validate
+      rules.validate = async (value) => {
+        if (typeof lengthGate === "function") {
+          const lengthResult = await lengthGate(value)
+          if (lengthResult !== true) return lengthResult
+        }
+        return validate(value)
+      }
+    }
     formConfigContext.registerFieldValidation({
       name: name as string,
       type: "string",
@@ -100,6 +119,7 @@ export function FormInputOTP<
         value={value}
         disabled={effectiveDisabled}
         containerClassName={className}
+        onBlur={field.onBlur}
         onChange={(next) => {
           field.onChange(next)
           if (next.length === length) onComplete?.(next)

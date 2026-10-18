@@ -25,10 +25,10 @@ describe("DateTimePicker display sync", () => {
     const withTime = new Date(2026, 8, 20, 14, 30, 0, 0)
     const { rerender } = render(<Harness value={dateOnly} />)
 
-    expect(screen.getByRole("button", { name: format(dateOnly, "MMM d, yyyy") })).toBeTruthy()
+    expect(screen.getByRole("button", { name: format(dateOnly, "PPP") })).toBeTruthy()
 
     rerender(<Harness value={withTime} />)
 
-    expect(screen.getByRole("button", { name: format(withTime, "MMM d, yyyy p") })).toBeTruthy()
+    expect(screen.getByRole("button", { name: format(withTime, "PPP p") })).toBeTruthy()
   })
 })

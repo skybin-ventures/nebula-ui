@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, useMemo, useState, type ComponentProps } from "react"
+import { useContext, useLayoutEffect, useId, useMemo, useState, type ComponentProps } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -33,6 +33,8 @@ export interface FormPasswordProps<
   minLength?: number
   placeholder?: string
   showStrength?: boolean
+  /** Defaults to `new-password`; use `current-password` for login forms. */
+  autoComplete?: ComponentProps<"input">["autoComplete"]
   ref?: ComponentProps<"input">["ref"]
 }
 
@@ -66,6 +68,7 @@ export function FormPassword<
   minLength,
   placeholder,
   showStrength = true,
+  autoComplete = "new-password",
   ref,
 }: FormPasswordProps<TFieldValues, TName>) {
   const generatedId = useId()
@@ -76,7 +79,7 @@ export function FormPassword<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {}
     if (required !== undefined) rules.required = required
@@ -114,7 +117,7 @@ export function FormPassword<
             id={inputId}
             name={field.name}
             type={visible ? "text" : "password"}
-            autoComplete="new-password"
+            autoComplete={autoComplete}
             disabled={effectiveDisabled}
             placeholder={placeholder}
             value={password}

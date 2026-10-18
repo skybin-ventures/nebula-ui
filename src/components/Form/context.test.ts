@@ -80,4 +80,29 @@ describe("buildZodSchemaFromRules", () => {
     expect(datetimeSchema.safeParse(instant).success).toBe(true);
     expect(datetimeSchema.safeParse(undefined).success).toBe(false);
   });
+
+  it("allows empty string for optional strings with minLength/pattern", () => {
+    const otp = buildZodSchemaFromRules("string", {
+      minLength: { value: 6, message: "Enter all 6 digits" },
+      maxLength: 6,
+    });
+    expect(otp.safeParse("").success).toBe(true);
+    expect(otp.safeParse(undefined).success).toBe(true);
+    expect(otp.safeParse("123").success).toBe(false);
+    expect(otp.safeParse("123456").success).toBe(true);
+
+    const color = buildZodSchemaFromRules("string", {
+      pattern: { value: /^#([0-9a-fA-F]{6})$/, message: "bad color" },
+    });
+    expect(color.safeParse("").success).toBe(true);
+    expect(color.safeParse("#ff0000").success).toBe(true);
+    expect(color.safeParse("red").success).toBe(false);
+  });
+
+  it("allows 0 for optional numbers without a min bound", () => {
+    const rating = buildZodSchemaFromRules("number", { max: 5 });
+    expect(rating.safeParse(0).success).toBe(true);
+    expect(rating.safeParse(undefined).success).toBe(true);
+    expect(rating.safeParse(6).success).toBe(false);
+  });
 });

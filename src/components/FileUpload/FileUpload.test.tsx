@@ -20,7 +20,7 @@ describe("FileUpload", () => {
 
   it("shows per-file upload status", () => {
     const file = new File(["hello"], "notes.txt", { type: "text/plain" })
-    const fileId = `${file.name}:${file.size}:${file.lastModified}:0`
+    const fileId = `${file.name}:${file.size}:${file.lastModified}`
     render(
       <FileUpload
         value={[file]}

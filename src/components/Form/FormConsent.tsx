@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, type ReactNode } from "react"
+import { useContext, useLayoutEffect, useId, type ReactNode } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -56,7 +56,7 @@ export function FormConsent<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {}
     if (required !== undefined) rules.required = required
@@ -72,6 +72,9 @@ export function FormConsent<
   const { field, fieldState } = useController<TFieldValues, TName>({ name, control })
   const errorMessage = customError ?? fieldState.error?.message
   const effectiveDisabled = disabled ?? formConfig.disabled
+  // When FieldLayout already owns the accessible name via `label`, keep the
+  // agreement body as a non-label container to avoid dual labelling.
+  const AgreementBody = label ? "div" : "label"
 
   return (
     <FieldLayout
@@ -96,9 +99,12 @@ export function FormConsent<
           }
           className="mt-0.5"
         />
-        <label htmlFor={inputId} className="text-sm leading-relaxed text-foreground">
+        <AgreementBody
+          {...(label ? {} : { htmlFor: inputId })}
+          className="text-sm leading-relaxed text-foreground"
+        >
           {children}
-        </label>
+        </AgreementBody>
       </div>
     </FieldLayout>
   )

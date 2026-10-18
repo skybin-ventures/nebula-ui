@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId } from "react"
+import { useContext, useLayoutEffect, useId } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -58,7 +58,7 @@ export function FormTagInput<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {}
     if (required !== undefined) rules.required = required
@@ -91,6 +91,7 @@ export function FormTagInput<
         id={inputId}
         value={tags}
         onChange={field.onChange}
+        onBlur={field.onBlur}
         placeholder={placeholder}
         disabled={effectiveDisabled}
         loading={loading}

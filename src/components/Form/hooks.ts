@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useSyncExternalStore } from "react";
+import { useCallback, useContext, useRef, useSyncExternalStore } from "react";
 import {
   useFormContext as useRHFFormContext,
   useController,
@@ -10,6 +10,20 @@ import {
   type UseControllerReturn,
 } from "react-hook-form";
 import { FormConfigContext, type FormContextValue, type FormConfig } from "./context";
+
+function shallowEqualValues(
+  previous: FieldValues,
+  next: FieldValues
+): boolean {
+  if (previous === next) return true;
+  const previousKeys = Object.keys(previous);
+  const nextKeys = Object.keys(next);
+  if (previousKeys.length !== nextKeys.length) return false;
+  for (const key of previousKeys) {
+    if (previous[key] !== next[key]) return false;
+  }
+  return true;
+}
 
 /**
  * Hook to access form configuration context
@@ -66,9 +80,14 @@ export function useFieldError<
  * Subscribe to form values without re-rendering on every keystroke when unused.
  * Uses RHF `subscribe` + `getValues` via `useSyncExternalStore`.
  * Prefer this over `useFormContext()` for large forms that only need a snapshot.
+ *
+ * Snapshots are referentially stable when field values are shallow-equal —
+ * RHF `getValues()` always returns a new object, which would otherwise break
+ * `useSyncExternalStore` and cause update loops.
  */
 export function useFormShallow<TFieldValues extends FieldValues = FieldValues>(): TFieldValues {
   const { control, getValues, subscribe } = useRHFFormContext<TFieldValues>();
+  const snapshotRef = useRef<TFieldValues | null>(null);
 
   const subscribeStore = useCallback(
     (onStoreChange: () => void) => {
@@ -86,9 +105,15 @@ export function useFormShallow<TFieldValues extends FieldValues = FieldValues>()
     [control, subscribe]
   );
 
-  return useSyncExternalStore(
-    subscribeStore,
-    () => getValues() as TFieldValues,
-    () => getValues() as TFieldValues
-  );
+  const getSnapshot = useCallback(() => {
+    const next = getValues() as TFieldValues;
+    const previous = snapshotRef.current;
+    if (previous && shallowEqualValues(previous, next)) {
+      return previous;
+    }
+    snapshotRef.current = next;
+    return next;
+  }, [getValues]);
+
+  return useSyncExternalStore(subscribeStore, getSnapshot, getSnapshot);
 }

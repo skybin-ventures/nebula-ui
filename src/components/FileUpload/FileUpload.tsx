@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, type ChangeEvent, type DragEvent, type KeyboardEvent } from "react";
+import { useId, useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent } from "react";
 import { Upload, X } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../../primitives/button";
@@ -12,6 +12,11 @@ export interface FileUploadItemStatus {
   status: FileUploadStatus;
   percent?: number;
   error?: string;
+}
+
+export interface FileUploadRejectReason {
+  file: File;
+  reason: "accept" | "maxSize" | "maxFiles";
 }
 
 export interface FileUploadProps {
@@ -38,6 +43,8 @@ export interface FileUploadProps {
   onFileProgress?: (fileId: string, percent: number) => void;
   /** Override how file ids are derived for status maps. */
   getFileId?: (file: File, index: number) => string;
+  /** Called when files are rejected by accept / maxSize / maxFiles rules. */
+  onReject?: (rejections: FileUploadRejectReason[]) => void;
 }
 
 function formatSize(bytes: number): string {
@@ -46,8 +53,33 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function defaultFileId(file: File, index: number): string {
-  return `${file.name}:${file.size}:${file.lastModified}:${index}`;
+/** Stable id — do not include list index (removal would renumber later keys). */
+export function defaultFileId(file: File, _index?: number): string {
+  return `${file.name}:${file.size}:${file.lastModified}`;
+}
+
+function fileMatchesAccept(file: File, accept?: string): boolean {
+  if (!accept || accept.trim() === "" || accept.trim() === "*") return true;
+
+  const tokens = accept
+    .split(",")
+    .map((token) => token.trim().toLowerCase())
+    .filter(Boolean);
+  if (tokens.length === 0) return true;
+
+  const fileName = file.name.toLowerCase();
+  const mime = (file.type || "").toLowerCase();
+
+  return tokens.some((token) => {
+    if (token.startsWith(".")) {
+      return fileName.endsWith(token);
+    }
+    if (token.endsWith("/*")) {
+      const prefix = token.slice(0, -1);
+      return mime.startsWith(prefix);
+    }
+    return mime === token;
+  });
 }
 
 const statusLabel: Record<FileUploadStatus, string> = {
@@ -75,23 +107,71 @@ export function FileUpload({
   fileStatuses,
   onFileProgress: _onFileProgress,
   getFileId = defaultFileId,
+  onReject,
   ...aria
 }: FileUploadProps) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useControllableState(value, defaultValue, onChange);
+  const [rejectionMessage, setRejectionMessage] = useState<string | null>(null);
   const isDisabled = disabled || loading;
 
   // Keep the callback in the public API for consumers driving uploads externally.
   void _onFileProgress;
 
   const addFiles = (incoming: File[]) => {
+    const rejections: FileUploadRejectReason[] = [];
+    const accepted: File[] = [];
+
+    for (const file of incoming) {
+      if (!fileMatchesAccept(file, accept)) {
+        rejections.push({ file, reason: "accept" });
+        continue;
+      }
+      if (maxSize !== undefined && file.size > maxSize) {
+        rejections.push({ file, reason: "maxSize" });
+        continue;
+      }
+      accepted.push(file);
+    }
+
     setFiles((current) => {
-      const merged = multiple ? [...current, ...incoming] : incoming.slice(0, 1);
-      const limited = maxFiles ? merged.slice(0, maxFiles) : merged;
-      return maxSize ? limited.filter((file) => file.size <= maxSize) : limited;
+      const room =
+        maxFiles !== undefined ? Math.max(0, maxFiles - current.length) : accepted.length;
+      const kept = multiple ? accepted.slice(0, room) : accepted.slice(0, 1);
+      const overflow = multiple ? accepted.slice(room) : accepted.slice(1);
+      for (const file of overflow) {
+        rejections.push({ file, reason: "maxFiles" });
+      }
+      const merged = multiple ? [...current, ...kept] : kept;
+      return merged;
     });
+
+    if (rejections.length > 0) {
+      onReject?.(rejections);
+      const parts: string[] = [];
+      if (rejections.some((item) => item.reason === "accept")) {
+        parts.push("Some files do not match the accepted types");
+      }
+      if (rejections.some((item) => item.reason === "maxSize")) {
+        parts.push(
+          maxSize !== undefined
+            ? `Some files exceed the ${formatSize(maxSize)} limit`
+            : "Some files are too large"
+        );
+      }
+      if (rejections.some((item) => item.reason === "maxFiles")) {
+        parts.push(
+          maxFiles !== undefined
+            ? `Only ${maxFiles} file${maxFiles === 1 ? "" : "s"} allowed`
+            : "Too many files"
+        );
+      }
+      setRejectionMessage(parts.join(". "));
+    } else {
+      setRejectionMessage(null);
+    }
   };
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +192,8 @@ export function FileUpload({
     }
   };
 
+  const alertMessage = error ?? rejectionMessage;
+
   return (
     <div className={cn("space-y-3", className)}>
       <div
@@ -120,7 +202,7 @@ export function FileUpload({
         aria-label={aria["aria-label"] ?? label}
         aria-disabled={isDisabled}
         aria-busy={loading || undefined}
-        aria-invalid={!!error}
+        aria-invalid={!!alertMessage}
         onClick={() => !isDisabled && inputRef.current?.click()}
         onKeyDown={onKeyDown}
         onDragOver={(event) => event.preventDefault()}
@@ -128,7 +210,7 @@ export function FileUpload({
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center rounded-md border border-dashed px-6 py-8 text-center text-sm",
           isDisabled && "cursor-not-allowed opacity-50",
-          error && "border-destructive text-destructive"
+          alertMessage && "border-destructive text-destructive"
         )}
       >
         <Upload className="mb-2 h-5 w-5" />
@@ -146,7 +228,7 @@ export function FileUpload({
         />
       </div>
 
-      {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
+      {alertMessage ? <p className="text-sm text-destructive" role="alert">{alertMessage}</p> : null}
 
       {files.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyText}</p>

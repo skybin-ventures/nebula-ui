@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, type ComponentProps } from "react"
+import { useContext, useLayoutEffect, useId, type ComponentProps } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -72,7 +72,7 @@ export function FormPercentageInput<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = { min, max }
     if (required !== undefined) rules.required = required

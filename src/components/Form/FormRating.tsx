@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, type KeyboardEvent } from "react"
+import { useContext, useLayoutEffect, useId, type KeyboardEvent } from "react"
 import { Star } from "lucide-react"
 import {
   useController,
@@ -60,10 +60,14 @@ export function FormRating<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
-    const rules: FieldValidationRules = { min: 1, max }
-    if (required !== undefined) rules.required = required
+    const rules: FieldValidationRules = { max }
+    if (required !== undefined) {
+      rules.required = required
+      // Required ratings must be at least 1 star; 0 means "unset".
+      rules.min = 1
+    }
     if (validate !== undefined) rules.validate = validate
     formConfigContext.registerFieldValidation({
       name: name as string,
@@ -75,16 +79,17 @@ export function FormRating<
 
   const { field, fieldState } = useController<TFieldValues, TName>({ name, control })
   const errorMessage = customError ?? fieldState.error?.message
-  const effectiveDisabled = (disabled ?? formConfig.disabled) || readOnly
+  const isDisabled = disabled ?? formConfig.disabled
+  const interactionLocked = isDisabled || readOnly
   const value = typeof field.value === "number" ? field.value : 0
 
   const setValue = (next: number) => {
-    if (effectiveDisabled) return
+    if (interactionLocked) return
     field.onChange(next)
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (effectiveDisabled) return
+    if (interactionLocked) return
     if (event.key === "ArrowRight" || event.key === "ArrowUp") {
       event.preventDefault()
       setValue(Math.min(max, (value || 0) + 1))
@@ -113,17 +118,14 @@ export function FormRating<
     >
       <div
         id={inputId}
-        role="slider"
-        tabIndex={effectiveDisabled ? -1 : 0}
-        aria-valuemin={1}
-        aria-valuemax={max}
-        aria-valuenow={value || undefined}
-        aria-valuetext={value ? `${value} of ${max}` : "No rating"}
+        role="radiogroup"
+        aria-label={typeof label === "string" ? label : "Rating"}
         aria-invalid={!!errorMessage}
         aria-describedby={
           errorMessage ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
         }
-        aria-disabled={effectiveDisabled || undefined}
+        aria-disabled={isDisabled || undefined}
+        aria-readonly={readOnly || undefined}
         onKeyDown={onKeyDown}
         onBlur={field.onBlur}
         className={cn("inline-flex items-center gap-1 outline-none", className)}
@@ -135,13 +137,16 @@ export function FormRating<
             <button
               key={star}
               type="button"
-              disabled={effectiveDisabled}
+              role="radio"
+              aria-checked={value === star}
+              tabIndex={readOnly ? -1 : value === star || (value === 0 && star === 1) ? 0 : -1}
+              disabled={isDisabled}
               aria-label={`${star} star${star === 1 ? "" : "s"}`}
               className={cn(
                 "rounded-sm p-0.5 text-muted-foreground transition-colors",
                 "hover:text-amber-500 focus-visible:ring-2 focus-visible:ring-ring",
                 active && "text-amber-500",
-                effectiveDisabled && "cursor-not-allowed opacity-60"
+                (isDisabled || readOnly) && "cursor-default opacity-60"
               )}
               onClick={() => setValue(star)}
             >

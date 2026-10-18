@@ -64,7 +64,7 @@ export interface DatePickerProps<
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
   /** date-fns locale for display formatting (default: enUS) */
   locale?: Locale;
-  /** date-fns format string (default: "MMM d, yyyy") */
+  /** date-fns format string (default: "PPP") */
   formatString?: string;
 }
 
@@ -88,7 +88,7 @@ export function DatePicker<
   required,
   validate,
   locale = enUS,
-  formatString = "MMM d, yyyy",
+  formatString = "PPP",
 }: DatePickerProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;

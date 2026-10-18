@@ -7,9 +7,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
+import { labelVariants } from "./variants";
 import { Switch as ShadcnSwitch } from "../../primitives/switch";
+import { Label } from "../../primitives/label";
 import type * as SwitchPrimitives from "@radix-ui/react-switch";
 import { forwardFormRef } from "./forwardFormRef";
+
 
 const switchSizeVariants = cva(
   "",
@@ -146,7 +149,7 @@ function FormSwitchInner<
   return (
     <FieldLayout
       inputId={inputId}
-      label={typeof label === "string" ? label : undefined}
+      // Keep the control label inline beside the switch (not above).
       required={!!required}
       helperText={helperText}
       errorMessage={showError ? errorMessage : undefined}
@@ -160,6 +163,7 @@ function FormSwitchInner<
           id={inputId}
           checked={isChecked}
           onCheckedChange={(checked) => field.onChange(checked)}
+          onBlur={field.onBlur}
           disabled={effectiveDisabled}
           aria-labelledby={label ? `${inputId}-label` : undefined}
           aria-invalid={hasError || undefined}
@@ -181,6 +185,27 @@ function FormSwitchInner<
             {isChecked ? checkedText : uncheckedText}
           </span>
         )}
+
+        {label ? (
+          typeof label === "string" ? (
+            <Label
+              id={`${inputId}-label`}
+              htmlFor={inputId}
+              className={cn(
+                labelVariants({
+                  required: !!required,
+                  layout: "inline",
+                }),
+                effectiveDisabled && "opacity-70"
+              )}
+            >
+              {label}
+              {formConfig.colon && ":"}
+            </Label>
+          ) : (
+            label
+          )
+        ) : null}
       </div>
     </FieldLayout>
   );

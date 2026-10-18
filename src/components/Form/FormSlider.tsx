@@ -76,6 +76,17 @@ export function FormSlider<
   const { field, fieldState } = useController<TFieldValues, TName>({ name, control })
   const errorMessage = customError ?? fieldState.error?.message
   const effectiveDisabled = disabled ?? formConfig.disabled
+
+  // Sliders always show a thumb position; keep RHF in sync with that position
+  // so submit payloads match what the user sees.
+  useLayoutEffect(() => {
+    if (typeof field.value !== "number") {
+      field.onChange(min)
+    }
+    // Intentionally only re-sync when the field becomes unset or min changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- field identity is unstable
+  }, [field.value, min, field.onChange])
+
   const numeric = typeof field.value === "number" ? field.value : min
 
   return (
@@ -102,6 +113,7 @@ export function FormSlider<
         }
         className={className}
         onValueChange={(next) => field.onChange(next[0] ?? min)}
+        onValueCommit={() => field.onBlur()}
       />
     </FieldLayout>
   )

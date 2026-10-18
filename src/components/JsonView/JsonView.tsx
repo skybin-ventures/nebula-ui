@@ -20,11 +20,13 @@ function Node({
   value,
   depth,
   defaultExpanded,
+  ancestors,
 }: {
   label?: string
   value: unknown
   depth: number
   defaultExpanded: boolean
+  ancestors: object[]
 }) {
   const expandable = Array.isArray(value) || isPlainObject(value)
   const [open, setOpen] = useState(defaultExpanded && depth < 2)
@@ -41,6 +43,21 @@ function Node({
     )
   }
 
+  if (ancestors.includes(value)) {
+    return (
+      <div className="font-mono text-sm leading-6 text-muted-foreground">
+        {label !== undefined ? (
+          <>
+            <span className="text-sky-700 dark:text-sky-300">"{label}"</span>
+            <span>: </span>
+          </>
+        ) : null}
+        [Circular]
+      </div>
+    )
+  }
+
+  const nextAncestors = [...ancestors, value]
   const entries = Array.isArray(value)
     ? value.map((item, index) => [String(index), item] as const)
     : Object.entries(value)
@@ -77,6 +94,7 @@ function Node({
               value={child}
               depth={depth + 1}
               defaultExpanded={defaultExpanded}
+              ancestors={nextAncestors}
             />
           ))}
           <div className="text-muted-foreground">{brackets[1]}</div>
@@ -103,7 +121,13 @@ export function JsonView({
 }: JsonViewProps) {
   return (
     <div className={cn("rounded-md border bg-card p-3", className)}>
-      <Node label={rootLabel} value={data} depth={0} defaultExpanded={defaultExpanded} />
+      <Node
+        label={rootLabel}
+        value={data}
+        depth={0}
+        defaultExpanded={defaultExpanded}
+        ancestors={[]}
+      />
     </div>
   )
 }

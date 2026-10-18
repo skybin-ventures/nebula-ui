@@ -7,9 +7,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
+import { labelVariants } from "./variants";
 import { Checkbox as ShadcnCheckbox } from "../../primitives/checkbox";
+import { Label } from "../../primitives/label";
 import type * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { forwardFormRef } from "./forwardFormRef";
+
 
 const checkboxSizeVariants = cva(
   "",
@@ -143,7 +146,7 @@ function CheckboxInner<
   return (
     <FieldLayout
       inputId={inputId}
-      label={typeof label === "string" ? label : undefined}
+      // Keep the control label inline beside the checkbox (not above).
       required={!!required}
       helperText={helperText}
       errorMessage={showError ? errorMessage : undefined}
@@ -160,6 +163,7 @@ function CheckboxInner<
           onBlur={field.onBlur}
           disabled={effectiveDisabled}
           aria-invalid={hasError}
+          aria-labelledby={label ? `${inputId}-label` : undefined}
           aria-describedby={
             hasError
               ? `${inputId}-error`
@@ -173,7 +177,26 @@ function CheckboxInner<
             className
           )}
         />
-        {label && typeof label !== "string" ? label : null}
+        {label ? (
+          typeof label === "string" ? (
+            <Label
+              id={`${inputId}-label`}
+              htmlFor={inputId}
+              className={cn(
+                labelVariants({
+                  required: !!required,
+                  layout: "inline",
+                }),
+                effectiveDisabled && "opacity-70"
+              )}
+            >
+              {label}
+              {formConfig.colon && ":"}
+            </Label>
+          ) : (
+            label
+          )
+        ) : null}
       </div>
     </FieldLayout>
   );

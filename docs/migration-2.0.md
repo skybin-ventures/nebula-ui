@@ -31,7 +31,7 @@ Removed from the public API:
 
 ### DataGrid
 
-- `enableRowSelection` already defaults to `false` (since 1.1.0).
+- `enableRowSelection` defaults to `true` (same as 1.0.0). Pass `enableRowSelection={false}` to opt out.
 - Import column types from nebula-ui, not `@tanstack/react-table/legacy`:
 
 ```tsx

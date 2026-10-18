@@ -91,27 +91,34 @@ describe("DataGrid", () => {
     })
   })
 
-  it("defaults row selection off and exposes labeled selection controls when enabled", () => {
+  it("defaults row selection on and hides selection controls when disabled", () => {
     const data = [
       { id: "1", name: "Row 1" },
       { id: "2", name: "Row 2" },
     ]
 
-    const { rerender } = render(<DataGrid columns={columns} data={data} enablePagination={false} />)
-    expect(screen.queryByRole("checkbox", { name: "Select all rows" })).toBeNull()
+    const { rerender } = render(
+      <DataGrid
+        columns={columns}
+        data={data}
+        enablePagination={false}
+        getRowId={(row) => row.id}
+      />
+    )
+    expect(screen.getByRole("checkbox", { name: "Select all rows" })).toBeTruthy()
+    expect(screen.getByRole("checkbox", { name: "Select row 1" })).toBeTruthy()
+    expect(screen.getByRole("button", { name: /Name/ })).toBeTruthy()
 
     rerender(
       <DataGrid
         columns={columns}
         data={data}
         enablePagination={false}
-        enableRowSelection
+        enableRowSelection={false}
         getRowId={(row) => row.id}
       />
     )
 
-    expect(screen.getByRole("checkbox", { name: "Select all rows" })).toBeTruthy()
-    expect(screen.getByRole("checkbox", { name: "Select row 1" })).toBeTruthy()
-    expect(screen.getByRole("button", { name: /Name/ })).toBeTruthy()
+    expect(screen.queryByRole("checkbox", { name: "Select all rows" })).toBeNull()
   })
 })

@@ -14,7 +14,6 @@ import { cn } from "../../utils/cn"
 import { Checkbox } from "../Checkbox"
 import { useControllableState } from "../../hooks/useControllableState"
 import {
-  buildParentMap,
   findNodeById,
   flattenVisibleNodes,
   getFocusableVisibleNodes,
@@ -77,7 +76,6 @@ export function TreeView({
 
   const expandedSet = useMemo(() => new Set(expanded), [expanded])
   const selectedSet = useMemo(() => new Set(selected), [selected])
-  const parentMap = useMemo(() => buildParentMap(nodes), [nodes])
 
   const visible = useMemo(
     () => flattenVisibleNodes(nodes, expandedSet),
@@ -215,12 +213,10 @@ export function TreeView({
           break
         }
         if (current.parentId) {
+          // Only move focus to a focusable parent — disabled ancestors are
+          // skipped so focus does not jump to the first tree node.
           const parent = focusable.find((item) => item.node.id === current.parentId)
           if (parent) focusNode(parent.node.id)
-          else {
-            const parentId = parentMap.get(current.node.id)
-            if (parentId) focusNode(parentId)
-          }
         }
         break
       }
@@ -233,8 +229,11 @@ export function TreeView({
         break
       }
       case " ": {
-        if (selectionMode === "none") break
         event.preventDefault()
+        if (selectionMode === "none") {
+          if (current.isBranch) toggleExpanded(current.node.id)
+          break
+        }
         selectNode(current.node.id)
         break
       }

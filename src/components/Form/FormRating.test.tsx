@@ -20,7 +20,7 @@ function Harness() {
 describe("FormRating", () => {
   it("sets rating when a star is clicked", () => {
     render(<Harness />)
-    fireEvent.click(screen.getByRole("button", { name: "3 stars" }))
+    fireEvent.click(screen.getByRole("radio", { name: "3 stars" }))
     expect(screen.getByTestId("value").textContent).toBe("3")
   })
 })

@@ -46,6 +46,14 @@ describe("buildParentMap", () => {
     expect(map.get("a1")).toBe("a")
     expect(map.get("b")).toBe("root")
   })
+
+  it("skips cyclic children without overflowing", () => {
+    const cyclic: TreeNode = { id: "c", label: "C" }
+    cyclic.children = [cyclic]
+    const map = buildParentMap([cyclic])
+    expect(map.get("c")).toBeNull()
+    expect(flattenVisibleNodes([cyclic], new Set(["c"]))).toHaveLength(1)
+  })
 })
 
 describe("findNodeById", () => {

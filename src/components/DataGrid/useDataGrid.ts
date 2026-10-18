@@ -56,7 +56,7 @@ export function useDataGrid<TData extends RowData>(props: DataGridProps<TData>):
     loadPage,
     enableSorting = true,
     enablePagination = true,
-    enableRowSelection = false,
+    enableRowSelection = true,
     getRowId,
     pageSize = 10,
     loading: loadingProp,
@@ -160,14 +160,23 @@ export function useDataGrid<TData extends RowData>(props: DataGridProps<TData>):
     },
   })
 
-  const selectedRows = enableRowSelection
-    ? table.getFilteredSelectedRowModel().rows.map((row) => row.original)
-    : []
+  const selectedRows = React.useMemo(
+    () =>
+      enableRowSelection
+        ? table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+        : [],
+    // rowSelection is the stable signal; table model is derived from it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- table identity changes each render
+    [enableRowSelection, rowSelection, tableData]
+  )
+
+  const onSelectionChangeRef = React.useRef(onSelectionChange)
+  onSelectionChangeRef.current = onSelectionChange
 
   React.useEffect(() => {
     if (!enableRowSelection) return
-    onSelectionChange?.(selectedRows)
-  }, [enableRowSelection, selectedRows, onSelectionChange])
+    onSelectionChangeRef.current?.(selectedRows)
+  }, [enableRowSelection, selectedRows])
 
   const reload = React.useCallback(() => {
     markFetching()

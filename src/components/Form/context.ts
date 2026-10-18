@@ -215,7 +215,16 @@ export function buildZodSchemaFromRules(
       );
     }
 
-    return finalizeSchema(schema.optional(), rules, messages);
+    // Optional strings: treat empty as unset so minLength/pattern/email do not
+    // reject untouched "" defaults (RHF string fields are rarely undefined).
+    return finalizeSchema(
+      z.preprocess(
+        (value) => (value === "" || value === null ? undefined : value),
+        schema.optional()
+      ),
+      rules,
+      messages
+    );
   }
 
   // Build number schema
@@ -241,7 +250,19 @@ export function buildZodSchemaFromRules(
     }
 
     if (!rules.required) {
-      return finalizeSchema(schema.optional(), rules, messages);
+      // Skip coerce for empty/unset so optional number fields (e.g. rating 0
+      // unset as undefined, or "" from inputs) are not forced to NaN.
+      return finalizeSchema(
+        z.preprocess(
+          (value) =>
+            value === undefined || value === null || value === ""
+              ? undefined
+              : value,
+          schema.optional()
+        ),
+        rules,
+        messages
+      );
     }
     return finalizeSchema(schema, rules, messages);
   }

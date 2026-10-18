@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, type ComponentProps } from "react"
+import { useContext, useLayoutEffect, useId, type ComponentProps } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -91,7 +91,7 @@ export function FormCurrencyInput<
   const control = externalControl ?? rhfContext?.control
   const symbol = currencySymbol(locale, currency)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {}
     if (required !== undefined) rules.required = required

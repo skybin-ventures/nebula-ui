@@ -55,7 +55,7 @@ export interface DateTimePickerProps<
   minuteStep?: number;
   /** date-fns locale for display formatting (default: enUS) */
   locale?: Locale;
-  /** date-fns format string for the date portion (default: "MMM d, yyyy") */
+  /** date-fns format string for the date portion (default: "PPP") */
   formatString?: string;
 }
 
@@ -84,7 +84,7 @@ export function DateTimePicker<
   validate,
   minuteStep = 5,
   locale = enUS,
-  formatString = "MMM d, yyyy",
+  formatString = "PPP",
 }: DateTimePickerProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;

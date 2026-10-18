@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react"
+import { useContext, useEffect, useLayoutEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import {
   useController,
@@ -86,7 +86,7 @@ export function FormAutocomplete<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {}
     if (required !== undefined) rules.required = required
@@ -122,6 +122,7 @@ export function FormAutocomplete<
     field.onChange(value)
     setOpen(false)
     setQuery("")
+    field.onBlur()
   }
 
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -160,7 +161,13 @@ export function FormAutocomplete<
       fullWidth={fullWidth}
       formConfig={formConfig}
     >
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next)
+          if (!next) field.onBlur()
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             id={inputId}
@@ -174,6 +181,7 @@ export function FormAutocomplete<
             }
             disabled={effectiveDisabled}
             onKeyDown={onTriggerKeyDown}
+            onBlur={field.onBlur}
             className={cn(
               "w-full justify-between font-normal",
               !selected && "text-muted-foreground",

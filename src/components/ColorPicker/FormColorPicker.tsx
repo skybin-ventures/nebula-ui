@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useId } from "react"
+import { useContext, useLayoutEffect, useId } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -56,7 +56,7 @@ export function FormColorPicker<
   const rhfContext = useRHFFormContext<TFieldValues>()
   const control = externalControl ?? rhfContext?.control
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!formConfigContext?.registerFieldValidation) return
     const rules: FieldValidationRules = {
       pattern: { value: HEX_PATTERN, message: "Enter a valid hex color (#rrggbb)" },
@@ -74,6 +74,7 @@ export function FormColorPicker<
   const { field, fieldState } = useController<TFieldValues, TName>({ name, control })
   const errorMessage = customError ?? fieldState.error?.message
   const effectiveDisabled = disabled ?? formConfig.disabled
+  const colorValue = typeof field.value === "string" ? field.value : ""
 
   return (
     <FieldLayout
@@ -88,8 +89,9 @@ export function FormColorPicker<
     >
       <ColorPicker
         id={inputId}
-        value={typeof field.value === "string" ? field.value : "#000000"}
+        value={colorValue}
         onChange={field.onChange}
+        onBlur={field.onBlur}
         swatches={swatches}
         disabled={effectiveDisabled}
         className={className}

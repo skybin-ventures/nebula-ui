@@ -4,7 +4,7 @@ import { Search, X } from "lucide-react"
 import { cn } from "../../utils/cn"
 import { useControllableState } from "../../hooks/useControllableState"
 import { useDebounce } from "../../hooks/useDebounce"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 export interface SearchInputProps {
   value?: string
@@ -33,10 +33,17 @@ export function SearchInput({
 }: SearchInputProps) {
   const [query, setQuery] = useControllableState(value, defaultValue, onChange)
   const debounced = useDebounce(query, debounceMs)
+  const onSearchChangeRef = useRef(onSearchChange)
+  onSearchChangeRef.current = onSearchChange
+  const skipInitial = useRef(true)
 
   useEffect(() => {
-    onSearchChange?.(debounced)
-  }, [debounced, onSearchChange])
+    if (skipInitial.current) {
+      skipInitial.current = false
+      return
+    }
+    onSearchChangeRef.current?.(debounced)
+  }, [debounced])
 
   return (
     <div

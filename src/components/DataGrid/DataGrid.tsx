@@ -110,7 +110,7 @@ export function DataGrid<TData extends RowData>({
   className,
   enableSorting = true,
   enableColumnVisibility = true,
-  enableRowSelection = false,
+  enableRowSelection = true,
   enablePagination = true,
   getRowId,
   onSelectionChange,

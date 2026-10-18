@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useState, type ReactNode } from "react"
 import { Menu } from "lucide-react"
 import { cn } from "../../utils/cn"
 import { Button } from "../../primitives/button"
@@ -93,9 +93,13 @@ export function MobileNav({
   className,
   children,
 }: MobileNavProps) {
+  const [open, setOpen] = useState(false)
+
+  const close = () => setOpen(false)
+
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <Sheet>
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button type="button" variant="outline" size="icon" aria-label={triggerLabel}>
             <Menu className="h-4 w-4" />
@@ -113,7 +117,12 @@ export function MobileNav({
               )
               if (item.href) {
                 return (
-                  <a key={item.key} href={item.href} className={classNameItem}>
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    className={classNameItem}
+                    onClick={close}
+                  >
                     {item.icon}
                     {item.label}
                   </a>
@@ -124,7 +133,10 @@ export function MobileNav({
                   key={item.key}
                   type="button"
                   className={cn(classNameItem, "text-left")}
-                  onClick={item.onClick}
+                  onClick={() => {
+                    item.onClick?.()
+                    close()
+                  }}
                 >
                   {item.icon}
                   {item.label}
