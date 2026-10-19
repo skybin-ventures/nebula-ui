@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Chore
+- Release workflow uses manual `workflow_dispatch` with `NPM_TOKEN` (optional dry-run); `repository.url` points at `skybin-ventures/nebula-ui`
+
 ## [1.0.3] - 2026-10-19
 
 ### Changed

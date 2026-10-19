@@ -1,13 +1,15 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and test only; skip npm publish
+        type: boolean
+        default: false
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   publish:
@@ -26,7 +28,9 @@ jobs:
       - run: pnpm exec tsc -b
       - run: pnpm test
       - run: pnpm build:lib
-      - run: npm publish --provenance --access public
+      - name: Publish to npm
+        if: ${{ !inputs.dry_run }}
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: actions/upload-artifact@v4
