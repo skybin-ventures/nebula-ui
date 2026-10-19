@@ -55,7 +55,7 @@ export interface ComboboxProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   required?: boolean | string;
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
 }

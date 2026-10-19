@@ -17,4 +17,6 @@ function Toaster({ ...props }: ToasterProps) {
   )
 }
 
-export { Toaster, toast }
+export { Toaster }
+// eslint-disable-next-line react-refresh/only-export-components -- toast API from sonner
+export { toast }

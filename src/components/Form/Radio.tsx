@@ -78,7 +78,7 @@ export interface RadioGroupProps<
   /** Layout direction */
   direction?: "horizontal" | "vertical";
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   /** Children (alternative to options prop) */
   children?: ReactNode;
   /** Disabled state */

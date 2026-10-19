@@ -49,7 +49,7 @@ export interface PhoneInputProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   defaultCountry?: string;
   priorityCountries?: string[];
   /** Field is required (`true` or custom error message string) */

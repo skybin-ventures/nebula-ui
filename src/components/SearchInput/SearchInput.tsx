@@ -34,8 +34,11 @@ export function SearchInput({
   const [query, setQuery] = useControllableState(value, defaultValue, onChange)
   const debounced = useDebounce(query, debounceMs)
   const onSearchChangeRef = useRef(onSearchChange)
-  onSearchChangeRef.current = onSearchChange
   const skipInitial = useRef(true)
+
+  useEffect(() => {
+    onSearchChangeRef.current = onSearchChange
+  })
 
   useEffect(() => {
     if (skipInitial.current) {

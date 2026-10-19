@@ -30,7 +30,7 @@ export interface FormInputOTPProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues>
+  control?: Control<TFieldValues, any, any>
   required?: boolean | string
   onComplete?: (value: string) => void
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>

@@ -4,7 +4,7 @@ import {
   type ReactElement,
   type Ref,
 } from "react"
-import type { FieldPath, FieldValues } from "react-hook-form"
+import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
 type FormFieldRender<TProps, TRef> = (
   props: TProps,
@@ -14,6 +14,9 @@ type FormFieldRender<TProps, TRef> = (
 /**
  * Typed `forwardRef` for generic form fields — keeps `TFieldValues` / `TName`
  * inference at the call site without an inline `as <T, TName>()` cast.
+ *
+ * `control` is remapped to `Control<TFieldValues, any, any>` so RHF 7.90
+ * `useForm<T>()` controls are assignable (third generic + FieldValues variance).
  */
 export function forwardFormRef<TProps extends { name: string }, TRef>(
   render: FormFieldRender<TProps, TRef>
@@ -21,7 +24,11 @@ export function forwardFormRef<TProps extends { name: string }, TRef>(
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >(
-  props: Omit<TProps, "name"> & { name: TName; ref?: Ref<TRef> }
+  props: Omit<TProps, "name" | "control"> & {
+    name: TName
+    control?: Control<TFieldValues, any, any>
+    ref?: Ref<TRef>
+  }
 ) => ReactElement | null {
   return forwardRef(render as never) as never
 }

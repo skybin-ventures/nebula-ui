@@ -42,7 +42,7 @@ export interface CountrySelectProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   include?: string[];
   exclude?: string[];
   priorityCountries?: string[];

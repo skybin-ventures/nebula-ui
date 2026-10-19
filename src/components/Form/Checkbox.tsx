@@ -46,7 +46,7 @@ export interface CheckboxProps<
   /** Custom error message (overrides form error) */
   error?: string;
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   /** Variant style */
   variant?: "default" | "error";
   

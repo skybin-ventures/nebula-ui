@@ -83,6 +83,7 @@ export function NotificationProvider({
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- provider + hook pair
 export function useNotification(): NotificationContextValue {
   const ctx = useContext(NotificationContext)
   if (!ctx) {

@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-10-19
+
+### Changed
+- Ref-during-render patterns replaced with `useEffect` ref syncs in `Form`, `useControllableState`, `useDataGrid`, and `SearchInput`; derived-state-during-render corrections in `TreeView` and `FormAutocomplete` remove StrictMode ref-write warnings
+
+### Fixed
+- `react-refresh/only-export-components` violations resolved — cva style helpers (`navigationMenuTriggerStyle`), the Sonner `toast` API, `defaultFileId`, and provider/hook pairs are exported outside component files
+- `defaultFileId` second parameter is now a real `index` argument instead of an unused `_index`
+
+### Chore
+- eslint `react-refresh` rule configured with `allowConstantExport` and `forwardFormRef`/`forwardRef`/`memo` HOCs
+- `*.tgz` added to `.gitignore`
+
+## [1.0.2] - 2026-10-18
+
+### Fixed
+- Form field `control` props accept RHF 7.90 `Control<T, any, TTransformed>` (`Control<TFieldValues, any, any>`)
+- `forwardFormRef` remaps `control` onto the call-site `TFieldValues` so typed `useForm` controls type-check in consumers
+
 ## [1.0.1] - 2026-10-18
 
 ### Added

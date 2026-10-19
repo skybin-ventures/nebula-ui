@@ -20,4 +20,10 @@ export default defineConfig([globalIgnores(['dist']), {
     ecmaVersion: 2020,
     globals: globals.browser,
   },
+  rules: {
+    'react-refresh/only-export-components': [
+      'error',
+      { allowConstantExport: true, extraHOCs: ['forwardRef', 'memo', 'forwardFormRef'] },
+    ],
+  },
 }, ...storybook.configs["flat/recommended"]])

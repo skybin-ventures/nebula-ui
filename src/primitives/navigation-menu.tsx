@@ -107,7 +107,6 @@ const NavigationMenuIndicator = React.forwardRef<
 NavigationMenuIndicator.displayName = NavigationMenuPrimitive.Indicator.displayName
 
 export {
-  navigationMenuTriggerStyle,
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
@@ -117,3 +116,5 @@ export {
   NavigationMenuIndicator,
   NavigationMenuViewport,
 }
+// eslint-disable-next-line react-refresh/only-export-components -- cva style helper
+export { navigationMenuTriggerStyle }

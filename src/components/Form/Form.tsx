@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef, type ReactNode } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
 import {
   useForm,
   FormProvider as RHFFormProvider,
@@ -120,7 +120,9 @@ export function Form<
   // needed on field registration. Fields register via useLayoutEffect so rules
   // are present before paint / submit in StrictMode.
   const messagesRef = useRef(mergedConfig.messages);
-  messagesRef.current = mergedConfig.messages;
+  useLayoutEffect(() => {
+    messagesRef.current = mergedConfig.messages;
+  });
 
   const dynamicResolver = useCallback<Resolver<TFieldValues>>(
     async (vals, context, options) => {

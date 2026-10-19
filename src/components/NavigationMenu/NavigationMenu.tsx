@@ -1,7 +1,6 @@
 "use client"
 
 export {
-  navigationMenuTriggerStyle,
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
@@ -11,3 +10,5 @@ export {
   NavigationMenuIndicator,
   NavigationMenuViewport,
 } from "../../primitives/navigation-menu"
+// eslint-disable-next-line react-refresh/only-export-components -- cva style helper
+export { navigationMenuTriggerStyle } from "../../primitives/navigation-menu"

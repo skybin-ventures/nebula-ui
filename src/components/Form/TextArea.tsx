@@ -58,7 +58,7 @@ export interface TextAreaProps<
   /** Maximum character count (for display) */
   maxCount?: number;
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   
   // Validation props
   /** Field is required */

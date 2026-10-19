@@ -46,7 +46,7 @@ export interface FormSwitchProps<
   /** Custom error message (overrides form error) */
   error?: string;
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues>;
+  control?: Control<TFieldValues, any, any>;
   /** Text to show when checked */
   checkedText?: ReactNode;
   /** Text to show when unchecked */

@@ -90,6 +90,7 @@ export function NebulaTheme({
   return <NebulaThemeContext.Provider value={value}>{children}</NebulaThemeContext.Provider>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- provider + hook pair
 export function useTheme(): NebulaThemeContextValue {
   const ctx = useContext(NebulaThemeContext)
   if (!ctx) {

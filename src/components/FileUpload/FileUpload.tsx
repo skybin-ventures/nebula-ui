@@ -54,7 +54,9 @@ function formatSize(bytes: number): string {
 }
 
 /** Stable id — do not include list index (removal would renumber later keys). */
-export function defaultFileId(file: File, _index?: number): string {
+// eslint-disable-next-line react-refresh/only-export-components -- shared id helper for FileUpload consumers
+export function defaultFileId(file: File, index?: number): string {
+  void index
   return `${file.name}:${file.size}:${file.lastModified}`;
 }
 

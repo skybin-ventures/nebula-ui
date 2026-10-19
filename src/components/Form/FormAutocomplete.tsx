@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect, useLayoutEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react"
+import { useContext, useLayoutEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 import {
   useController,
@@ -42,7 +42,7 @@ export interface FormAutocompleteProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues>
+  control?: Control<TFieldValues, any, any>
   required?: boolean | string
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>
   /** External suggestions (filtered by the consumer or shown as-is). */
@@ -80,7 +80,13 @@ export function FormAutocomplete<
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [highlight, setHighlight] = useState(0)
+  const [highlightResetKey, setHighlightResetKey] = useState(`${open}:${query}`)
   const listRef = useRef<HTMLDivElement>(null)
+  const nextHighlightResetKey = `${open}:${query}`
+  if (nextHighlightResetKey !== highlightResetKey) {
+    setHighlightResetKey(nextHighlightResetKey)
+    setHighlight(0)
+  }
   const formConfigContext = useContext(FormConfigContext)
   const formConfig: FormConfig = formConfigContext ?? {}
   const rhfContext = useRHFFormContext<TFieldValues>()
@@ -113,10 +119,6 @@ export function FormAutocomplete<
   }, [suggestions, query])
 
   const selected = suggestions.find((item) => item.value === field.value)
-
-  useEffect(() => {
-    setHighlight(0)
-  }, [query, open])
 
   const pick = (value: string) => {
     field.onChange(value)

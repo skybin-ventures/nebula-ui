@@ -89,11 +89,13 @@ export function TreeView({
   const [focusedId, setFocusedId] = useState<TreeNodeId | null>(null)
   const itemRefs = useRef(new Map<TreeNodeId, HTMLDivElement>())
   const shouldMoveDomFocus = useRef(false)
-
-  useEffect(() => {
-    if (focusedId && focusable.some((item) => item.node.id === focusedId)) return
-    setFocusedId(focusable[0]?.node.id ?? null)
-  }, [focusable, focusedId])
+  const nextFocusedId =
+    focusedId && focusable.some((item) => item.node.id === focusedId)
+      ? focusedId
+      : (focusable[0]?.node.id ?? null)
+  if (nextFocusedId !== focusedId) {
+    setFocusedId(nextFocusedId)
+  }
 
   useEffect(() => {
     if (!focusedId || !shouldMoveDomFocus.current) return

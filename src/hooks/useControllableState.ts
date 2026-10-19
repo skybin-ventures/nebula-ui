@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export function useControllableState<T>(
   value: T | undefined,
@@ -9,7 +9,9 @@ export function useControllableState<T>(
   const isControlled = value !== undefined
   const current = isControlled ? value : uncontrolled
   const currentRef = useRef(current)
-  currentRef.current = current
+  useEffect(() => {
+    currentRef.current = current
+  })
 
   const setValue = useCallback(
     (next: T | ((previous: T) => T)) => {

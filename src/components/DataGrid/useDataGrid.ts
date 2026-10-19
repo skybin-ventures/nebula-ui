@@ -171,7 +171,9 @@ export function useDataGrid<TData extends RowData>(props: DataGridProps<TData>):
   )
 
   const onSelectionChangeRef = React.useRef(onSelectionChange)
-  onSelectionChangeRef.current = onSelectionChange
+  React.useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange
+  })
 
   React.useEffect(() => {
     if (!enableRowSelection) return
