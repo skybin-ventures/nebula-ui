@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Chore
 - Release workflow uses manual `workflow_dispatch` with `NPM_TOKEN` (optional dry-run); `repository.url` points at `skybin-ventures/nebula-ui`
-- Release runs `build:lib` before tests so package-export checks see `dist/`
+- CI and Release run `build:lib` before tests so package-export checks see `dist/`
 
 ## [1.0.3] - 2026-10-19
 
