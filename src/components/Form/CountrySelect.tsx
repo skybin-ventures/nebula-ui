@@ -1,7 +1,8 @@
 'use client';
 
 import { useContext, useLayoutEffect, useId } from "react";
-import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
+import { useController, useFormContext as useRHFFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context";
@@ -42,7 +43,7 @@ export interface CountrySelectProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues, any, any>;
+  control?: FormControl<TFieldValues>;
   include?: string[];
   exclude?: string[];
   priorityCountries?: string[];

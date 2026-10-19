@@ -5,10 +5,10 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import {
   useController,
   useFormContext as useRHFFormContext,
-  type Control,
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
+import type { FormControl } from "./formControl"
 import { cn } from "../../utils/cn"
 import { Button } from "../../primitives/button"
 import {
@@ -42,7 +42,7 @@ export interface FormAutocompleteProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues, any, any>
+  control?: FormControl<TFieldValues>
   required?: boolean | string
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>
   /** External suggestions (filtered by the consumer or shown as-is). */

@@ -4,10 +4,10 @@ import { useContext, useLayoutEffect, useId, useMemo, useState, type ComponentPr
 import {
   useController,
   useFormContext as useRHFFormContext,
-  type Control,
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
+import type { FormControl } from "./formControl"
 import { cn } from "../../utils/cn"
 import { TextBoxPrimitive } from "../../primitives/textbox"
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context"
@@ -27,7 +27,7 @@ export interface FormPasswordProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues, any, any>
+  control?: FormControl<TFieldValues>
   required?: boolean | string
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>
   minLength?: number

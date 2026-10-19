@@ -1,7 +1,8 @@
 'use client';
 
 import { useContext, useLayoutEffect, useId, useMemo, useState } from "react";
-import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
+import { useController, useFormContext as useRHFFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import {
@@ -49,7 +50,7 @@ export interface PhoneInputProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues, any, any>;
+  control?: FormControl<TFieldValues>;
   defaultCountry?: string;
   priorityCountries?: string[];
   /** Field is required (`true` or custom error message string) */

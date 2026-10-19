@@ -4,10 +4,10 @@ import { useContext, useLayoutEffect, useId } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
-  type Control,
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
+import type { FormControl } from "../Form/formControl"
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "../Form/context"
 import { FieldLayout } from "../Form/FieldLayout"
 import { ColorPicker, HEX_PATTERN } from "./ColorPicker"
@@ -26,7 +26,7 @@ export interface FormColorPickerProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues, any, any>
+  control?: FormControl<TFieldValues>
   required?: boolean | string
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>
 }

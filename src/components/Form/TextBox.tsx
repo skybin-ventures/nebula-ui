@@ -2,7 +2,8 @@
 
 import { useId, useContext, useLayoutEffect, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
+import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath } from "react-hook-form";
+import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
@@ -70,7 +71,7 @@ export interface TextBoxProps<
    */
   passwordToggle?: boolean;
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues, any, any>;
+  control?: FormControl<TFieldValues>;
   
   // Validation props
   /** Field is required */

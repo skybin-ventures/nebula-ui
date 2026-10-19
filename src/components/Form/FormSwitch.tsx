@@ -2,7 +2,8 @@
 
 import { useId, useContext, useLayoutEffect } from "react";
 import type { ReactNode, ComponentPropsWithoutRef, ElementRef } from "react";
-import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath, type Control } from "react-hook-form";
+import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath } from "react-hook-form";
+import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
@@ -46,7 +47,7 @@ export interface FormSwitchProps<
   /** Custom error message (overrides form error) */
   error?: string;
   /** External control (for use outside Form) */
-  control?: Control<TFieldValues, any, any>;
+  control?: FormControl<TFieldValues>;
   /** Text to show when checked */
   checkedText?: ReactNode;
   /** Text to show when unchecked */

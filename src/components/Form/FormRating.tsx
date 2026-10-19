@@ -5,10 +5,10 @@ import { Star } from "lucide-react"
 import {
   useController,
   useFormContext as useRHFFormContext,
-  type Control,
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
+import type { FormControl } from "./formControl"
 import { cn } from "../../utils/cn"
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context"
 import { FieldLayout } from "./FieldLayout"
@@ -26,7 +26,7 @@ export interface FormRatingProps<
   disabled?: boolean
   className?: string
   id?: string
-  control?: Control<TFieldValues, any, any>
+  control?: FormControl<TFieldValues>
   required?: boolean | string
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>
   /** Maximum rating (star count). Default 5. */

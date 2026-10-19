@@ -2,7 +2,8 @@
 
 import { useContext, useLayoutEffect, useId, useMemo, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useController, useFormContext as useRHFFormContext, type Control, type FieldPath, type FieldValues } from "react-hook-form";
+import { useController, useFormContext as useRHFFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { Button } from "../../primitives/button";
@@ -55,7 +56,7 @@ export interface ComboboxProps<
   disabled?: boolean;
   className?: string;
   id?: string;
-  control?: Control<TFieldValues, any, any>;
+  control?: FormControl<TFieldValues>;
   required?: boolean | string;
   validate?: (value: unknown) => boolean | string | Promise<boolean | string>;
 }

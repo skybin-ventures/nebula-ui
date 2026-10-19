@@ -93,6 +93,8 @@ export type {
   FieldRegistration,
 } from "./context";
 
+export type { FormControl } from "./formControl";
+
 // Hooks
 export {
   useFormConfig,
