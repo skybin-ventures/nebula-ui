@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## 2026-10-20
+- Docs: add cursor-plan.md summarizing shipped 1.0.1 components and 1.1 planning context
 
 ### Fixed
 - Form `Control<T, any, any>` props moved to a shared `FormControl` type so CI eslint `no-explicit-any` passes
