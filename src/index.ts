@@ -370,6 +370,27 @@ export type { CommandPaletteProps, CommandPaletteItem } from "./components/Comma
 export { FilterPanel } from "./components/FilterPanel"
 export type { FilterPanelProps, FilterField, FilterValue } from "./components/FilterPanel"
 
+export {
+  ColumnVisibilityPopover,
+  ColumnsMenu,
+  ColumnVisibilityButton,
+  ColumnVisibilityItem,
+  useColumnVisibility,
+  DEFAULT_COLUMN_VISIBILITY_STORAGE_PREFIX,
+  loadColumnPreferences,
+  saveColumnPreferences,
+  resolveStorageKey,
+} from "./components/ColumnVisibility"
+export type {
+  ColumnVisibilityPopoverProps,
+  ColumnVisibilityButtonProps,
+  ColumnVisibilityItemProps,
+  ColumnDefinition,
+  ColumnVisibilityState,
+  ColumnVisibilityStored,
+  UseColumnVisibilityOptions,
+} from "./components/ColumnVisibility"
+
 export { TagInput, FormTagInput } from "./components/TagInput"
 export type { TagInputProps, FormTagInputProps } from "./components/TagInput"
 

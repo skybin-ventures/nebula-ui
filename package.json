@@ -1,6 +1,6 @@
 {
   "name": "@skybin-tech/nebula-ui",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "type": "module",
   "author": "Anwar <anwar@skybin.io>",
   "description": "Reusable React component library with form validation using shadcn/ui patterns, react-hook-form, and Zod",
@@ -580,6 +580,16 @@
         "default": "./dist/cjs/components/ColorPicker/index.cjs"
       }
     },
+    "./components/ColumnVisibility": {
+      "import": {
+        "types": "./dist/components/ColumnVisibility/index.d.ts",
+        "default": "./dist/components/ColumnVisibility/index.js"
+      },
+      "require": {
+        "types": "./dist/components/ColumnVisibility/index.d.ts",
+        "default": "./dist/cjs/components/ColumnVisibility/index.cjs"
+      }
+    },
     "./components/NavigationMenu": {
       "import": {
         "types": "./dist/components/NavigationMenu/index.d.ts",
@@ -957,6 +967,9 @@
       ],
       "components/ColorPicker": [
         "./dist/components/ColorPicker/index.d.ts"
+      ],
+      "components/ColumnVisibility": [
+        "./dist/components/ColumnVisibility/index.d.ts"
       ],
       "components/NavigationMenu": [
         "./dist/components/NavigationMenu/index.d.ts"

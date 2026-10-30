@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2026-10-30
+
+### Added
+- `ColumnVisibilityPopover` / `ColumnsMenu` + `useColumnVisibility`: compact ThreadX-style Columns show/hide + drag reorder, with `{ order, visible }` localStorage persistence and legacy visible-only array migration
+
+## [1.0.4] - 2026-10-30
+
+### Changed
+- Table density: `TableHead` uses `px-3 py-2.5` (was `h-12 px-4`); `TableCell` uses `px-3 py-2` (was `p-4`) for compact data grids
+
 ## 2026-10-20
 - Docs: add cursor-plan.md summarizing shipped 1.0.1 components and 1.1 planning context
 
