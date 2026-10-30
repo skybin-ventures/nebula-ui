@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react"
 import {
   DEFAULT_COLUMN_VISIBILITY_STORAGE_PREFIX,
   loadColumnPreferences,
@@ -9,8 +9,11 @@ import {
 import type {
   ColumnDefinition,
   ColumnVisibilityState,
+  ColumnVisibilityStored,
   UseColumnVisibilityOptions,
 } from "./types"
+
+const subscribeNoop = () => () => {}
 
 function resolveDefaultVisible<TKey extends string>(columns: ColumnDefinition<TKey>[]): TKey[] {
   const important = columns.filter((column) => column.important).map((column) => column.key)
@@ -34,6 +37,23 @@ function moveItem<T>(items: T[], fromIndex: number, toIndex: number): T[] {
   return next
 }
 
+function resolvePreferences<TKey extends string>(
+  storageKey: string | undefined,
+  allKeys: TKey[],
+  defaultVisible: TKey[],
+  storagePrefix: string,
+  allowStorage: boolean,
+): ColumnVisibilityStored<TKey> {
+  if (!storageKey || !allowStorage) {
+    return {
+      order: [...allKeys],
+      visible: [...defaultVisible],
+    }
+  }
+
+  return loadColumnPreferences(storageKey, allKeys, defaultVisible, storagePrefix)
+}
+
 export function useColumnVisibility<TKey extends string>(
   columns: ColumnDefinition<TKey>[],
   options?: UseColumnVisibilityOptions,
@@ -43,74 +63,81 @@ export function useColumnVisibility<TKey extends string>(
   const storageKey = options?.storageKey
   const storagePrefix = options?.storagePrefix ?? DEFAULT_COLUMN_VISIBILITY_STORAGE_PREFIX
 
-  const [columnOrder, setColumnOrder] = useState<TKey[]>(allKeys)
-  const [visibleColumns, setVisibleColumns] = useState<TKey[]>(defaultVisible)
-  const [hydrated, setHydrated] = useState(!storageKey)
+  // false on SSR / first server snapshot; true in the browser so we can read localStorage.
+  const allowStorage = useSyncExternalStore(subscribeNoop, () => true, () => false)
+
+  const configKey = [
+    storageKey ?? "",
+    storagePrefix,
+    allKeys.join("|"),
+    defaultVisible.join("|"),
+    allowStorage ? "1" : "0",
+  ].join("::")
+
+  const [preferences, setPreferences] = useState(() =>
+    resolvePreferences(storageKey, allKeys, defaultVisible, storagePrefix, allowStorage),
+  )
+  const [seenConfigKey, setSeenConfigKey] = useState(configKey)
   const [isOpen, setIsOpen] = useState(false)
 
-  const allKeysSignature = allKeys.join("|")
-  const defaultVisibleSignature = defaultVisible.join("|")
+  // Reset when columns / storage config change (or when the client becomes storage-capable).
+  if (seenConfigKey !== configKey) {
+    setSeenConfigKey(configKey)
+    setPreferences(resolvePreferences(storageKey, allKeys, defaultVisible, storagePrefix, allowStorage))
+  }
 
   useEffect(() => {
-    if (!storageKey) {
-      setColumnOrder(allKeys)
-      setVisibleColumns(defaultVisible)
-      setHydrated(true)
-      return
-    }
-
-    const loaded = loadColumnPreferences(storageKey, allKeys, defaultVisible, storagePrefix)
-    setColumnOrder(loaded.order)
-    setVisibleColumns(loaded.visible)
-    setHydrated(true)
-    // Signatures avoid resetting on array identity churn while still reacting to key/default changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional signature deps
-  }, [allKeysSignature, defaultVisibleSignature, storageKey, storagePrefix])
-
-  useEffect(() => {
-    if (!storageKey || !hydrated) return
+    if (!storageKey) return
     saveColumnPreferences(
       storageKey,
       {
-        order: columnOrder,
-        visible: visibleColumns,
+        order: preferences.order,
+        visible: preferences.visible,
       },
       storagePrefix,
     )
-  }, [columnOrder, hydrated, storageKey, storagePrefix, visibleColumns])
+  }, [preferences, storageKey, storagePrefix])
 
   const toggle = (key: TKey) => {
-    setVisibleColumns((current) => {
-      if (current.includes(key)) {
-        return current.length === 1 ? current : current.filter((column) => column !== key)
-      }
+    setPreferences((current) => {
+      const visible = current.visible.includes(key)
+        ? current.visible.length === 1
+          ? current.visible
+          : current.visible.filter((column) => column !== key)
+        : current.order.filter((columnKey) => columnKey === key || current.visible.includes(columnKey))
 
-      const next = new Set([...current, key])
-      return columnOrder.filter((columnKey) => next.has(columnKey))
+      return { order: current.order, visible }
     })
   }
 
   const reorder = (fromIndex: number, toIndex: number) => {
-    setColumnOrder((current) => {
-      const nextOrder = moveItem(current, fromIndex, toIndex)
-      setVisibleColumns((visible) => nextOrder.filter((key) => visible.includes(key)))
-      return nextOrder
+    setPreferences((current) => {
+      const order = moveItem(current.order, fromIndex, toIndex)
+      return {
+        order,
+        visible: order.filter((key) => current.visible.includes(key)),
+      }
     })
   }
 
+  const columnOrder = preferences.order
+  const visibleColumns = preferences.order.filter((key) => preferences.visible.includes(key))
+
   return {
     columnOrder,
-    visibleColumns: columnOrder.filter((key) => visibleColumns.includes(key)),
-    hiddenColumnCount: Math.max(allKeys.length - visibleColumns.length, 0),
+    visibleColumns,
+    hiddenColumnCount: Math.max(allKeys.length - preferences.visible.length, 0),
     isOpen,
     open: () => setIsOpen(true),
     close: () => setIsOpen(false),
     toggle,
     reorder,
     reset: () => {
-      setColumnOrder(allKeys)
-      setVisibleColumns(defaultVisible)
+      setPreferences({
+        order: [...allKeys],
+        visible: [...defaultVisible],
+      })
     },
-    isVisible: (key) => visibleColumns.includes(key),
+    isVisible: (key) => preferences.visible.includes(key),
   }
 }

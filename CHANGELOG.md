@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.6] - 2026-10-30
+
+### Fixed
+- `useColumnVisibility` no longer calls `setState` inside `useEffect` (CI `react-hooks/set-state-in-effect`); loads prefs via `useSyncExternalStore` + render-time reset when column/storage config changes
+
 ## [1.0.5] - 2026-10-30
 
 ### Added
