@@ -5,11 +5,16 @@ import { cn } from "../../utils/cn";
 import { Label } from "../../primitives/label";
 import { labelVariants } from "./variants";
 import type { FormConfig } from "./context";
+import { FieldHelpIcon } from "./FieldHelpIcon";
 
 export interface FieldLayoutProps {
   inputId: string;
   label?: string;
   required?: boolean;
+  /** Tooltip copy shown on the label help icon (icon appears only when set). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   helperText?: string;
   errorMessage?: string;
   showError?: boolean;
@@ -30,6 +35,8 @@ export function FieldLayout({
   inputId,
   label,
   required,
+  help,
+  helpIcon,
   helperText,
   errorMessage,
   showError = true,
@@ -60,8 +67,20 @@ export function FieldLayout({
       )}
       style={layout === "horizontal" && labelWidth ? { width: labelWidth } : undefined}
     >
-      {label}
-      {formConfig.colon && ":"}
+      {help ? (
+        <span className="inline-flex items-center gap-1.5">
+          <span>
+            {label}
+            {formConfig.colon && ":"}
+          </span>
+          <FieldHelpIcon help={help} icon={helpIcon} />
+        </span>
+      ) : (
+        <>
+          {label}
+          {formConfig.colon && ":"}
+        </>
+      )}
     </Label>
   ) : null;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useId, useContext, useLayoutEffect } from "react";
-import type { TextareaHTMLAttributes } from "react";
+import type {  TextareaHTMLAttributes , ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath } from "react-hook-form";
 import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
@@ -48,6 +48,10 @@ export interface TextAreaProps<
   label?: string;
   /** Helper text displayed below the textarea */
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   /** Whether to show the error message */
   showError?: boolean;
   /** Custom error message (overrides form error) */
@@ -96,6 +100,8 @@ function TextAreaInner<
     name,
     label,
     helperText,
+    help,
+    helpIcon,
     showError = true,
     error: customError,
     size,
@@ -177,6 +183,8 @@ function TextAreaInner<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       fullWidth={fullWidth}

@@ -70,6 +70,10 @@ export interface RadioGroupProps<
   label?: string;
   /** Helper text displayed below the radio group */
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   /** Whether to show the error message */
   showError?: boolean;
   /** Custom error message (overrides form error) */
@@ -126,6 +130,8 @@ export function RadioGroup<
   name,
   label,
   helperText,
+    help,
+    helpIcon,
   showError = true,
   error: customError,
   size,
@@ -199,6 +205,8 @@ export function RadioGroup<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       formConfig={formConfig}

@@ -91,7 +91,7 @@ export interface FormConfig {
  */
 export interface FieldRegistration {
   name: string;
-  type: "string" | "number" | "boolean" | "date" | "datetime" | "array";
+  type: "string" | "number" | "boolean" | "date" | "datetime" | "array" | "object";
   rules: FieldValidationRules;
 }
 
@@ -304,6 +304,35 @@ export function buildZodSchemaFromRules(
       schema = schema.min(1, message);
     }
     return finalizeSchema(schema, rules, messages);
+  }
+
+  // Build object schema — for range-shaped values such as { from, to }.
+  if (type === "object") {
+    const schema = z.record(z.string(), z.unknown());
+    if (rules.required) {
+      const message = typeof rules.required === "string" ? rules.required : messages.required;
+      // An empty range object means "nothing picked"; coerce unset/empty to {}
+      // so the refine emits the required message instead of Zod's type error.
+      return finalizeSchema(
+        z.preprocess(
+          (value) => (value && typeof value === "object" ? value : {}),
+          schema.refine((value) => Object.keys(value).length > 0, { message })
+        ),
+        rules,
+        messages
+      );
+    }
+    return finalizeSchema(
+      z.preprocess(
+        (value) =>
+          value && typeof value === "object" && Object.keys(value).length === 0
+            ? undefined
+            : value,
+        schema.optional()
+      ),
+      rules,
+      messages
+    );
   }
 
   // Default fallback

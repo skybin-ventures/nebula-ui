@@ -25,8 +25,11 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec tsc -b
+      # Build dist/ first so the consumer type-check project
+      # (tsconfig.consumer.json) resolves @skybin-tech/nebula-ui against the
+      # emitted declarations, matching how a real consumer imports the package.
       - run: pnpm build:lib
+      - run: pnpm exec tsc -b
       - run: pnpm test
       - name: Publish to npm
         if: ${{ !inputs.dry_run }}

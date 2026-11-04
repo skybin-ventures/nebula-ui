@@ -51,6 +51,10 @@ export interface TextBoxProps<
   label?: string;
   /** Helper text displayed below the input */
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   /** Whether to show the error message */
   showError?: boolean;
   /** Custom error message (overrides form error) */
@@ -125,6 +129,8 @@ function TextBoxInner<
     name,
     label,
     helperText,
+    help,
+    helpIcon,
     showError = true,
     error: customError,
     size,
@@ -258,6 +264,8 @@ function TextBoxInner<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       fullWidth={fullWidth}

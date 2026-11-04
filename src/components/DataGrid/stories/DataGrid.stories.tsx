@@ -27,7 +27,6 @@ const meta = {
   args: {
     columns,
     pageSize: 5,
-    enableRowSelection: false,
   },
 } satisfies Meta<typeof DataGrid>
 
@@ -40,10 +39,10 @@ export const Default: Story = {
   },
 }
 
-export const WithRowSelection: Story = {
+export const WithoutRowSelection: Story = {
   args: {
     data: clientRows,
-    enableRowSelection: true,
+    enableRowSelection: false,
     getRowId: (row) => (row as Person).id,
   },
 }

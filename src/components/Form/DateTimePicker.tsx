@@ -1,6 +1,7 @@
 'use client';
 
 import { useContext, useLayoutEffect, useId, useState } from "react";
+import type { ReactNode } from "react";
 import { format, startOfDay } from "date-fns";
 import { enUS, type Locale } from "date-fns/locale";
 import { CalendarIcon, Clock } from "lucide-react";
@@ -43,6 +44,10 @@ export interface DateTimePickerProps<
   name: TName;
   label?: string;
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   showError?: boolean;
   error?: string;
   fullWidth?: boolean;
@@ -71,6 +76,8 @@ export function DateTimePicker<
   name,
   label,
   helperText,
+    help,
+    helpIcon,
   showError = true,
   error: customError,
   size,
@@ -157,6 +164,8 @@ export function DateTimePicker<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       fullWidth={fullWidth}

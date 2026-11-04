@@ -32,7 +32,7 @@ export interface DataGridProps<TData extends RowData> {
   className?: string
   enableSorting?: boolean
   enableColumnVisibility?: boolean
-  /** Defaults to false — opt in for multi-select tables. */
+  /** Defaults to `true` — pass `enableRowSelection={false}` to render a plain table without selection checkboxes. */
   enableRowSelection?: boolean
   enablePagination?: boolean
   /** Stable row id for selection across pages (server mode). */

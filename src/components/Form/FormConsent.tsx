@@ -22,6 +22,10 @@ export interface FormConsentProps<
   children: ReactNode
   label?: string
   helperText?: string
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   showError?: boolean
   error?: string
   disabled?: boolean
@@ -40,6 +44,8 @@ export function FormConsent<
   children,
   label,
   helperText,
+    help,
+    helpIcon,
   showError = true,
   error: customError,
   disabled,
@@ -82,6 +88,8 @@ export function FormConsent<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       formConfig={formConfig}

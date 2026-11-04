@@ -67,7 +67,7 @@ export function FormDateRangePicker<
 
     registerFieldValidation({
       name: name as string,
-      type: "array",
+      type: "object",
       rules,
     });
 

@@ -8,6 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
+import { FieldHelpIcon } from "./FieldHelpIcon";
 import { labelVariants } from "./variants";
 import { Checkbox as ShadcnCheckbox } from "../../primitives/checkbox";
 import { Label } from "../../primitives/label";
@@ -42,6 +43,10 @@ export interface CheckboxProps<
   label?: ReactNode;
   /** Helper text displayed below the checkbox */
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after a string label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   /** Whether to show the error message */
   showError?: boolean;
   /** Custom error message (overrides form error) */
@@ -81,6 +86,8 @@ function CheckboxInner<
     name,
     label,
     helperText,
+    help,
+    helpIcon,
     showError = true,
     error: customError,
     size,
@@ -191,8 +198,20 @@ function CheckboxInner<
                 effectiveDisabled && "opacity-70"
               )}
             >
-              {label}
-              {formConfig.colon && ":"}
+              {help ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <span>
+                    {label}
+                    {formConfig.colon && ":"}
+                  </span>
+                  <FieldHelpIcon help={help} icon={helpIcon} />
+                </span>
+              ) : (
+                <>
+                  {label}
+                  {formConfig.colon && ":"}
+                </>
+              )}
             </Label>
           ) : (
             label

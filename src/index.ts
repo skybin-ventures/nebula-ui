@@ -22,10 +22,12 @@ export {
   FormAutocomplete,
   FormConfigContext,
   defaultFormConfig,
+  defaultValidationMessages,
   buildZodSchemaFromRules,
   useFieldValidationRegistry,
   useFormConfig,
   useForm,
+  useFormShallow,
   useFormField,
   useFieldError,
   CountrySelect,
@@ -39,6 +41,8 @@ export {
   TimePicker,
   Combobox,
   FormCombobox,
+  FieldLayout,
+  FieldHelpIcon,
 } from "./components/Form"
 
 export { Select as FormSelect } from "./components/Form/Select"
@@ -77,6 +81,8 @@ export type {
   TimePickerProps,
   ComboboxProps,
   FormComboboxProps,
+  FieldLayoutProps,
+  FieldHelpIconProps,
 } from "./components/Form"
 
 export type { SelectProps as FormSelectProps, SelectOption } from "./components/Form/Select"

@@ -13,6 +13,12 @@ dist-ssr
 *.local
 *.tgz
 
+# Build-visualizer output
+stats.html
+
+# Local publish helper (contains a token placeholder)
+.npmrc.publish
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

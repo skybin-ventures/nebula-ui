@@ -1,6 +1,7 @@
 'use client';
 
 import { useContext, useLayoutEffect, useId } from "react";
+import type { ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldPath, type FieldValues } from "react-hook-form";
 import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
@@ -35,6 +36,10 @@ export interface CountrySelectProps<
   name: TName;
   label?: string;
   helperText?: string;
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   showError?: boolean;
   error?: string;
   fullWidth?: boolean;
@@ -59,6 +64,8 @@ export function CountrySelect<
   name,
   label,
   helperText,
+    help,
+    helpIcon,
   showError = true,
   error: customError,
   size,
@@ -128,6 +135,8 @@ export function CountrySelect<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       fullWidth={fullWidth}

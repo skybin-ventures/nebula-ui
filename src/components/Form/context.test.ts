@@ -105,4 +105,27 @@ describe("buildZodSchemaFromRules", () => {
     expect(rating.safeParse(undefined).success).toBe(true);
     expect(rating.safeParse(6).success).toBe(false);
   });
+
+  it("accepts range-shaped objects for object fields", () => {
+    const required = buildZodSchemaFromRules("object", { required: true });
+    const range = { from: new Date(), to: new Date() };
+
+    expect(required.safeParse(range).success).toBe(true);
+    expect(required.safeParse({}).success).toBe(false);
+    expect(required.safeParse(undefined).success).toBe(false);
+
+    const optional = buildZodSchemaFromRules("object", {});
+    expect(optional.safeParse(range).success).toBe(true);
+    expect(optional.safeParse({}).success).toBe(true);
+    expect(optional.safeParse(undefined).success).toBe(true);
+  });
+
+  it("uses the required message for a missing object value", () => {
+    const schema = buildZodSchemaFromRules("object", { required: "Pick a date range" });
+    const result = schema.safeParse({});
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("Pick a date range");
+    }
+  });
 });

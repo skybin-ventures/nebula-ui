@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useLayoutEffect, useId, type ComponentProps } from "react"
+import {  useContext, useLayoutEffect, useId, type ComponentProps , type ReactNode } from "react"
 import {
   useController,
   useFormContext as useRHFFormContext,
@@ -20,6 +20,10 @@ export interface FormCurrencyInputProps<
   name: TName
   label?: string
   helperText?: string
+  /** Tooltip copy for the label help icon (shown after the label). */
+  help?: string;
+  /** Optional icon override for the label help control; defaults to lucide Info. */
+  helpIcon?: ReactNode;
   showError?: boolean
   error?: string
   fullWidth?: boolean
@@ -66,6 +70,8 @@ export function FormCurrencyInput<
   name,
   label,
   helperText,
+    help,
+    helpIcon,
   showError = true,
   error: customError,
   fullWidth = true,
@@ -120,6 +126,8 @@ export function FormCurrencyInput<
       label={label}
       required={!!required}
       helperText={helperText}
+      help={help}
+      helpIcon={helpIcon}
       errorMessage={showError ? errorMessage : undefined}
       showError={showError}
       fullWidth={fullWidth}

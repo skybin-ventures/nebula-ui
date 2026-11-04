@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.7] - 2026-11-04
+
+### Added
+- `FieldHelpIcon`: label-adjacent help trigger (Tooltip + lucide `Info`, with an `icon` override) exported from the package root
+- `help` / `helpIcon` props on `FieldLayout`, `Checkbox`, `FormSwitch`, `TextArea`, and the `Form*` fields (TextBox, Combobox, CountrySelect, DatePicker, DateTimePicker, PhoneInput, Select, FormConsent, FormAutocomplete, and the currency/percentage/password/rating/slider inputs) — a string rendered as a tooltip icon after the label
+- `type: "object"` support in `buildZodSchemaFromRules` for range-shaped values (`{ from, to }`), so `FormDateRangePicker` (now registered as `"object"`) validates correctly; `defaultValidationMessages` and `useFormShallow` re-exported from the package root
+- A consumer type-validation fixture (`tests/consumer/consumer-types.tsx` + `tsconfig.consumer.json`) compile-checked by `tsc -b` against the built `dist` declarations, exercising the public entry + subpaths (RHF `control` wiring, `DataGrid`/`useDataGrid` columns, `Toaster`/`toast`, `useDebounce`, `cn`)
+- Unit tests for `FormTagInput`, `FormColorPicker`, and `FormDateRangePicker`
+
+### Changed
+- `DataGrid` row-selection default documented as opt-in: `types.ts` comment and stories now state `enableRowSelection` defaults to `true`; pass `enableRowSelection={false}` for a plain table (restored in 1.0.2)
+- CI and Release run `build:lib` before `tsc -b` so the consumer type-check project can resolve the package's own built declarations on a fresh clone
+- Bumped `react-hook-form` to 7.91, `@hookform/resolvers` to 7.0.2, `lucide-react` to 1.68, plus dev tooling (Storybook 10.6.5, Vitest 5.1.0, size-limit 14.3); version `1.0.6` → `1.0.7`
+
 ## [1.0.6] - 2026-10-30
 
 ### Fixed
@@ -41,6 +55,9 @@ All notable changes to this project will be documented in this file.
 - `*.tgz` added to `.gitignore`
 
 ## [1.0.2] - 2026-10-18
+
+### Changed
+- DataGrid: `enableRowSelection` default restored to `true` (it had been briefly flipped to `false` in 1.0.1). Docs aligned: `types.ts` comment and DataGrid stories now state the default is on; pass `enableRowSelection={false}` for a plain table
 
 ### Fixed
 - Form field `control` props accept RHF 7.90 `Control<T, any, TTransformed>` (`Control<TFieldValues, any, any>`)

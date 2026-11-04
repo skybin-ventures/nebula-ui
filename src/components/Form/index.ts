@@ -74,6 +74,9 @@ export type { FormAutocompleteProps, AutocompleteSuggestion } from "./FormAutoco
 export { FieldLayout } from "./FieldLayout";
 export type { FieldLayoutProps } from "./FieldLayout";
 
+export { FieldHelpIcon } from "./FieldHelpIcon";
+export type { FieldHelpIconProps } from "./FieldHelpIcon";
+
 export { CountryPicker } from "./CountryPicker";
 export type { CountryPickerProps } from "./CountryPicker";
 
