@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [1.0.7] - 2026-11-04
 
 ### Added
@@ -16,20 +19,32 @@ All notable changes to this project will be documented in this file.
 - CI and Release run `build:lib` before `tsc -b` so the consumer type-check project can resolve the package's own built declarations on a fresh clone
 - Bumped `react-hook-form` to 7.91, `@hookform/resolvers` to 7.0.2, `lucide-react` to 1.68, plus dev tooling (Storybook 10.6.5, Vitest 5.1.0, size-limit 14.3); version `1.0.6` → `1.0.7`
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [1.0.6] - 2026-10-30
 
 ### Fixed
 - `useColumnVisibility` no longer calls `setState` inside `useEffect` (CI `react-hooks/set-state-in-effect`); loads prefs via `useSyncExternalStore` + render-time reset when column/storage config changes
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [1.0.5] - 2026-10-30
 
 ### Added
 - `ColumnVisibilityPopover` / `ColumnsMenu` + `useColumnVisibility`: compact ThreadX-style Columns show/hide + drag reorder, with `{ order, visible }` localStorage persistence and legacy visible-only array migration
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [1.0.4] - 2026-10-30
 
 ### Changed
 - Table density: `TableHead` uses `px-3 py-2.5` (was `h-12 px-4`); `TableCell` uses `px-3 py-2` (was `p-4`) for compact data grids
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## 2026-10-20
 - Docs: add cursor-plan.md summarizing shipped 1.0.1 components and 1.1 planning context
@@ -40,6 +55,9 @@ All notable changes to this project will be documented in this file.
 ### Chore
 - Release workflow uses manual `workflow_dispatch` with `NPM_TOKEN` (optional dry-run); `repository.url` points at `skybin-ventures/nebula-ui`
 - CI and Release run `build:lib` before tests so package-export checks see `dist/`
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [1.0.3] - 2026-10-19
 
@@ -54,6 +72,9 @@ All notable changes to this project will be documented in this file.
 - eslint `react-refresh` rule configured with `allowConstantExport` and `forwardFormRef`/`forwardRef`/`memo` HOCs
 - `*.tgz` added to `.gitignore`
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [1.0.2] - 2026-10-18
 
 ### Changed
@@ -62,6 +83,9 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Form field `control` props accept RHF 7.90 `Control<T, any, TTransformed>` (`Control<TFieldValues, any, any>`)
 - `forwardFormRef` remaps `control` onto the call-site `TFieldValues` so typed `useForm` controls type-check in consumers
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [1.0.1] - 2026-10-18
 
@@ -87,10 +111,16 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Dead `Button.css`; unused `--form-*` token set (replaced by `--success` / `--warning`)
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [1.0.0] - 2026-10-12
 
 ### Changed
 - Major version bump to 1.0.0 marking the component library's API as stable; the 0.0.34–0.0.40 line ships Command, DataTable/DataGrid, KanbanBoard, Sidebar, ToastProvider, and the remaining Tier 2/Tier 3 components
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.40] - 2026-10-12
 
@@ -98,10 +128,16 @@ All notable changes to this project will be documented in this file.
 - Dependency bumps across Radix UI, Storybook 10.6.2, Vite 8.3.4, Vitest 5.0.5, TanStack Table 9.3.1, lucide-react 1.59.0, react-day-picker 10.0.2, react-hook-form 7.90.0, zod 4.6.7, and dev tooling
 - TypeScript pinned back to 6.0.x — 7.x does not ship the JavaScript Compiler API that `unplugin-dts` needs for declaration generation
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.39] - 2026-10-12
 
 ### Changed
 - Version bump for npm publish; no functional changes since 0.0.38
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.38] - 2026-09-30
 
@@ -110,11 +146,17 @@ All notable changes to this project will be documented in this file.
 - Disabled `select` / `textarea` / `textbox` use `disabled:bg-muted` with full opacity for a visible faded state
 - Export Sonner `toast` from the main package entry; rename Radix toast helper to `radixToast` to avoid name collision
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.37] - 2026-09-21
 
 ### Fixed
 - Password reveal toggle vertical alignment in `Input` and `TextBox` — replaced `top-1/2` + inline `translateY(-50%)` (double transform under Tailwind v4) with `inset-y-0 flex items-center`
 - Removed redundant inline positioning styles from `PasswordRevealToggle`
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.36] - 2026-09-20
 
@@ -126,6 +168,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Renamed `DataTable` to `DataGrid` (`DataTable` / `useDataTable` remain as deprecated aliases)
 - `./components/DataGrid` package subpath export added; `./components/DataTable` re-exports the new component
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.35] - 2026-09-20
 
@@ -146,22 +191,34 @@ All notable changes to this project will be documented in this file.
 - `DataTable` typing without `any`
 - TypeScript 6 `baseUrl` deprecation in tsconfig
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.33] - 2026-09-06
 
 ### Fixed
 - Password reveal toggle hit target enlarged with `z-index` so clicks reliably toggle visibility
 - `TextBoxPrimitive` applies `type` after prop spread so password reveal cannot be overridden
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.32] - 2026-09-06
 
 ### Fixed
 - Password reveal toggle positioning no longer depends on consumer Tailwind content scanning (inline position styles)
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.31] - 2026-09-06
 
 ### Added
 - Built-in password reveal toggle on `TextBox` and `Input` when `type="password"` (opt out with `passwordToggle={false}`)
 - `PasswordRevealToggle` exported for reuse
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [Unreleased] - 2026-09-01
 
@@ -172,6 +229,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Normalize `DatePicker` values with `startOfDay` for consistent date-only handling
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.30] - 2026-08-13
 
 ### Changed
@@ -179,6 +239,9 @@ All notable changes to this project will be documented in this file.
 - Dev toolchain: ESLint 9→10, Storybook 10.5.5→10.5.7, Vite 8.1.5→8.2.1, lucide-react 1.27→1.31, react-hook-form 7.83→7.85, and related type/plugin patches
 - `vite-plugin-dts`: use v5 `outDirs` / `bundleTypes` options (replaces `outDir` / `rollupTypes`)
 - Allow `globals@17.11.0` in `pnpm-workspace.yaml` `minimumReleaseAgeExclude`
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.29] - 2026-07-28
 
@@ -193,6 +256,9 @@ All notable changes to this project will be documented in this file.
 - Harden Form context/Select/TextBox registration and Pagination button wiring
 - Export additional primitives and components from the main barrel
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.28] - 2026-07-11
 
 ### Added
@@ -201,6 +267,9 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Form `Select` was declared in types but missing from the published JS bundle because it was not imported by the main entry
 - `./components/Form` package export pointed at `Form.js` only; barrel `index.js` is now emitted and exported so subpath imports resolve `FormSelect`, `TextBox`, and other form fields
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.27] - 2026-07-05
 
@@ -213,10 +282,16 @@ All notable changes to this project will be documented in this file.
 - **Calendar**: updated `classNames` keys to react-day-picker v10 API (`caption` → `month_caption`, `nav_button_*` → `button_previous`/`button_next`, `table` → `month_grid`, `head_row/cell` → `weekdays/weekday`, `row` → `week`, `cell` → `day`, `day` → `day_button`, `day_*` modifiers → bare names)
 - **deps**: removed unused devDependencies (`@chromatic-com/storybook`, `glob`, `@types/glob`, `esbuild`, `playwright`, `vite-plugin-eslint`); pinned `vitest`/`@vitest/browser-playwright`/`@vitest/coverage-v8` to `4.1.9` to resolve peer dependency conflict with `@storybook/addon-vitest`; sorted `@radix-ui` entries alphabetically
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.26] - 2026-06-16
 
 ### Changed
 - `package.json` — bump Storybook 10.2→10.4, Vite 7→8, Vitest 4.1.0→4.1.9, Tailwind 4.2→4.3, Radix UI dev deps, lucide-react, react-day-picker 9→10, zod 3→4, and related toolchain packages; `@radix-ui/react-tabs` 1.1.13→1.1.15
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.25] - 2026-04-27
 
@@ -230,6 +305,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - `package.json` — added `@radix-ui/react-tooltip` and `@radix-ui/react-accordion` to peer deps and dev deps
 - `vite.config.ts` — new Radix packages externalised for proper tree-shaking
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [Unreleased] — New primitives; expanded barrel exports; Form field updates; hooks
 
@@ -252,6 +330,9 @@ All notable changes to this project will be documented in this file.
 - Barrel (`src/index.ts`) — `Checkbox` form export renamed to `FormCheckbox`; standalone `Checkbox` now the default `Checkbox` export; `Select` form export removed from Form group (raw primitives exported separately)
 - `package.json` — updated peer dependencies and dev tooling
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.24] - 2026-04-25
 
 ### Added
@@ -263,6 +344,9 @@ All notable changes to this project will be documented in this file.
 
 - Barrel export of `Checkbox` now points to the standalone primitive wrapper (most common use case); form-integrated version is still available as `FormCheckbox`
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.23] - 2026-04-25
 
 ### Fixed
@@ -270,11 +354,17 @@ All notable changes to this project will be documented in this file.
 - Export raw `Select` root + all sub-parts (`SelectGroup`, `SelectValue`, `SelectTrigger`, `SelectContent`, `SelectLabel`, `SelectItem`, `SelectSeparator`) from barrel for standalone (non-form) use
 - Remove duplicate `Select` export from Form barrel entry to avoid conflict
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.22] - 2026-04-25
 
 ### Fixed
 
 - Emit `'use client'` on all output files (primitives + components + hooks) — fixes cmdk and other third-party primitives that lack the directive
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.21] - 2026-04-25
 
@@ -282,11 +372,17 @@ All notable changes to this project will be documented in this file.
 
 - Rollup `banner` function now emits `'use client';` at the top of all built component and hook files — fixes Next.js App Router RSC compatibility where Vite was stripping the directive from source files
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.20] - 2026-04-25
 
 ### Fixed
 
 - Added `'use client'` directives to all Form components (`Form`, `Select`, `Checkbox`, `Radio`, `Switch`, `TextArea`, `TextBox`, `context`, `hooks`) and hooks (`useToast`, `useToggle`, `useDebounce`) — required for Next.js App Router RSC compatibility
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.19] - 2026-04-25
 
@@ -303,6 +399,9 @@ All notable changes to this project will be documented in this file.
 - **Toast**: `Toast`, `ToastProvider`, `ToastViewport`, `ToastTitle`, `ToastDescription`, `ToastAction`, `ToastClose`
 - **useToast**: `useToast` hook and `toast` helper for imperative toast dispatch
 - New peer dependencies: `@radix-ui/react-dialog`, `@radix-ui/react-popover`, `@radix-ui/react-scroll-area`, `@radix-ui/react-toggle`, `@radix-ui/react-toast`, `cmdk`, `date-fns`, `react-day-picker`, `sonner`
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.17] - 2026-04-03
 
@@ -324,6 +423,9 @@ All notable changes to this project will be documented in this file.
 - Added `dts()` plugin to `vite.config.ts` with `rollupTypes: false` targeting `tsconfig.app.json`
 - Added `@radix-ui/react-tabs` to `rollupOptions.external` in `vite.config.ts` so it is not bundled
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.14] - 2026-03-22
 
 ### Added
@@ -340,6 +442,9 @@ All notable changes to this project will be documented in this file.
 
 - **TextBox primitive**: Renamed `primitives/input.tsx` → `primitives/textbox.tsx`; export renamed `Input` → `TextBoxPrimitive` to match project naming conventions.
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.13] - 2026-03-17
 
 ### Added
@@ -353,6 +458,9 @@ All notable changes to this project will be documented in this file.
 - **Button**: Refactored to wrap `ButtonPrimitive` instead of rendering a raw `<button>`. Variant/size names (`primary`→`default`, `danger`→`destructive`, `md`→`default`) are mapped internally, keeping the existing public API unchanged.
 - **Button**: Loading overlay now uses `position: absolute` so the button dimensions stay stable while loading.
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.12] - 2026-03-17
 
 ### Fixed
@@ -360,17 +468,26 @@ All notable changes to this project will be documented in this file.
 - **Button**: Wrapped with `React.forwardRef` so refs are forwarded to the underlying `<button>` element — required for Radix UI's `asChild`/`Slot` pattern (e.g. `DropdownMenuTrigger`, `DialogTrigger`).
 - **Button**: Removed `cursor-pointer` Tailwind utility from the `cva` base class and replaced with an inline `style={{ cursor: 'pointer' }}` to avoid silent breakage in Tailwind v4 consumers that don't configure a custom `@source` for `node_modules`.
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.11] - 2026-03-17
 
 ### Fixed
 
 - **vite.config.ts**: Added `react/jsx-dev-runtime` to `rollupOptions.external` so Vite/Rollup no longer inlines a CJS shim for it in the ESM output. Without this entry, the lazy `require()` wrapper pattern injected by Rollup caused Turbopack to reject the build with "dynamic usage of require is not supported".
 
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
 ## [0.0.10] - 2026-03-17
 
 ### Fixed
 
 - **package.json**: Removed the `./styles.css` export (`./dist/nebula-ui.css`) which was never generated by the build. Styling is now entirely the consumer's responsibility via their own Tailwind setup.
+
+## [Unreleased]
+- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
 ## [0.0.9] - 2026-03-17
 
