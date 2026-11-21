@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-- Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+## [2025-01-15]
+
+### Changed
+- Reordered devDependencies: moved `@size-limit/file`, `rollup-plugin-visualizer`, `size-limit` above `vitest` in the block.
+
+### Added
+- `turbo` devDependency (`^2.11.13`) and `turbo.json` pipeline config with `build:lib` (dependsOn `^build`, outputs `dist/**`), `build`, `test`, `lint`, and `size` tasks.
 
 ## [1.0.7] - 2026-11-04
 
