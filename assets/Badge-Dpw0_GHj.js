@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./badge-DtSz0Cm2.js";function i(e){return(0,a.jsx)(r,{...e})}var a;function o(){return(o=e((()=>{n(),a=t(),i.displayName=`Badge`,i.__docgenInfo={description:``,methods:[],displayName:`Badge`,composes:[`VariantProps`]}})))()}export{o as n,i as t};

@@ -1,9 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./cn-BksUxDMQ.js";function i({href:e=`#main-content`,children:t=`Skip to content`,className:n,ref:i}){return(0,a.jsx)(`a`,{ref:i,href:e,className:r(`sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50`,`focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium`,`focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring`,n),children:t})}var a;function o(){return(o=e((()=>{n(),a=t(),i.displayName=`SkipLink`,i.__docgenInfo={description:``,methods:[],displayName:`SkipLink`,props:{href:{required:!1,tsType:{name:`string`},description:``,defaultValue:{value:`"#main-content"`,computed:!1}},children:{required:!1,tsType:{name:`ReactNode`},description:``,defaultValue:{value:`"Skip to content"`,computed:!1}},className:{required:!1,tsType:{name:`string`},description:``},ref:{required:!1,tsType:{name:`ComponentProps["ref"]`,raw:`ComponentProps<"a">["ref"]`},description:``}}}})))()}var s,c,l,u;function d(){return(d=e((()=>{o(),s=t(),c={title:`Components/SkipLink`,component:i},l={render:()=>(0,s.jsxs)(`div`,{children:[(0,s.jsx)(i,{}),(0,s.jsx)(`p`,{className:`text-sm text-muted-foreground`,children:`Tab to reveal the skip link.`}),(0,s.jsx)(`main`,{id:`main-content`,tabIndex:-1,children:`Main content`})]})},u=[`Default`],l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
-  render: () => <div>\r
-      <SkipLink />\r
-      <p className="text-sm text-muted-foreground">Tab to reveal the skip link.</p>\r
-      <main id="main-content" tabIndex={-1}>\r
-        Main content\r
-      </main>\r
-    </div>
-}`,...l.parameters?.docs?.source}}}})))()}d();export{l as Default,u as __namedExportsOrder,c as default};

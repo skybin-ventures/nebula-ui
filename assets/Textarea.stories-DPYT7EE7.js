@@ -1,7 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{f as t}from"./iframe-DeOB6YXf.js";import{t as n}from"./jsx-runtime-MKhVqBIO.js";import{n as r,t as i}from"./textarea-COCf31og.js";import{n as a,t as o}from"./Label--25EUmCX.js";var s,c,l;function u(){return(u=e((()=>{s=t(),r(),c=n(),l=(0,s.forwardRef)((e,t)=>(0,c.jsx)(i,{ref:t,...e})),l.displayName=`Textarea`,l.__docgenInfo={description:``,methods:[],displayName:`Textarea`}})))()}var d,f,p,m;function h(){return(h=e((()=>{u(),a(),d=n(),f={title:`Inputs/Textarea`,parameters:{layout:`centered`}},p={render:()=>(0,d.jsxs)(`div`,{className:`w-96 space-y-2`,children:[(0,d.jsx)(o,{htmlFor:`bio`,children:`Bio`}),(0,d.jsx)(l,{id:`bio`,rows:4,placeholder:`Tell us about yourself…`}),(0,d.jsx)(l,{disabled:!0,placeholder:`Disabled`})]})},m=[`Default`],p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
-  render: () => <div className="w-96 space-y-2">\r
-      <Label htmlFor="bio">Bio</Label>\r
-      <Textarea id="bio" rows={4} placeholder="Tell us about yourself…" />\r
-      <Textarea disabled placeholder="Disabled" />\r
-    </div>
-}`,...p.parameters?.docs?.source}}}})))()}h();export{p as Default,m as __namedExportsOrder,f as default};
