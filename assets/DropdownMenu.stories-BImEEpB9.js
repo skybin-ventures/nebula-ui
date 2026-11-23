@@ -1,0 +1,22 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{f as t}from"./iframe-DeOB6YXf.js";import{t as n}from"./jsx-runtime-MKhVqBIO.js";import{n as r,t as i}from"./Button-mFzRuj6K.js";import{a,c as o,d as s,g as c,h as l,i as u,l as d,m as f,n as p,o as m,p as h,r as g,t as _,u as v}from"./dropdown-menu-DxRVYWDz.js";function y(e){return(0,S.jsx)(_,{...e})}function b(e){return(0,S.jsx)(s,{...e})}var x,S,C,w,T,E,D,O,k,A,j,M,N;function P(){return(P=e((()=>{x=t(),c(),S=n(),C=(0,x.forwardRef)((e,t)=>(0,S.jsx)(l,{ref:t,...e})),C.displayName=`DropdownMenuTrigger`,w=(0,x.forwardRef)((e,t)=>(0,S.jsx)(u,{ref:t,...e})),w.displayName=`DropdownMenuGroup`,T=(0,x.forwardRef)((e,t)=>(0,S.jsx)(o,{ref:t,...e})),T.displayName=`DropdownMenuRadioGroup`,E=(0,x.forwardRef)((e,t)=>(0,S.jsx)(g,{ref:t,...e})),E.displayName=`DropdownMenuContent`,D=(0,x.forwardRef)((e,t)=>(0,S.jsx)(h,{ref:t,...e})),D.displayName=`DropdownMenuSubContent`,O=(0,x.forwardRef)((e,t)=>(0,S.jsx)(f,{ref:t,...e})),O.displayName=`DropdownMenuSubTrigger`,k=(0,x.forwardRef)((e,t)=>(0,S.jsx)(a,{ref:t,...e})),k.displayName=`DropdownMenuItem`,A=(0,x.forwardRef)((e,t)=>(0,S.jsx)(p,{ref:t,...e})),A.displayName=`DropdownMenuCheckboxItem`,j=(0,x.forwardRef)((e,t)=>(0,S.jsx)(d,{ref:t,...e})),j.displayName=`DropdownMenuRadioItem`,M=(0,x.forwardRef)((e,t)=>(0,S.jsx)(m,{ref:t,...e})),M.displayName=`DropdownMenuLabel`,N=(0,x.forwardRef)((e,t)=>(0,S.jsx)(v,{ref:t,...e})),N.displayName=`DropdownMenuSeparator`,b.displayName=`DropdownMenuShortcut`,y.__docgenInfo={description:``,methods:[],displayName:`DropdownMenu`},C.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuTrigger`},w.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuGroup`},T.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuRadioGroup`},E.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuContent`},D.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuSubContent`},O.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuSubTrigger`},k.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuItem`},A.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuCheckboxItem`},j.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuRadioItem`},M.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuLabel`},N.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuSeparator`},b.__docgenInfo={description:``,methods:[],displayName:`DropdownMenuShortcut`}})))()}var F,I,L,R;function z(){return(z=e((()=>{P(),r(),F=n(),I={title:`Menu/DropdownMenu`,parameters:{layout:`centered`}},L={render:()=>(0,F.jsxs)(y,{children:[(0,F.jsx)(C,{asChild:!0,children:(0,F.jsx)(i,{variant:`outline`,children:`Open menu`})}),(0,F.jsxs)(E,{children:[(0,F.jsx)(M,{children:`Account`}),(0,F.jsxs)(k,{children:[`Profile `,(0,F.jsx)(b,{children:`⌘P`})]}),(0,F.jsx)(k,{children:`Billing`}),(0,F.jsx)(N,{}),(0,F.jsx)(A,{checked:!0,children:`Dark mode`}),(0,F.jsxs)(T,{value:`us`,children:[(0,F.jsx)(j,{value:`us`,children:`United States`}),(0,F.jsx)(j,{value:`in`,children:`India`})]}),(0,F.jsx)(N,{}),(0,F.jsx)(k,{children:`Log out`})]})]})},R=[`Default`],L.parameters={...L.parameters,docs:{...L.parameters?.docs,source:{originalSource:`{
+  render: () => <DropdownMenu>\r
+      <DropdownMenuTrigger asChild>\r
+        <Button variant="outline">Open menu</Button>\r
+      </DropdownMenuTrigger>\r
+      <DropdownMenuContent>\r
+        <DropdownMenuLabel>Account</DropdownMenuLabel>\r
+        <DropdownMenuItem>\r
+          Profile <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>\r
+        </DropdownMenuItem>\r
+        <DropdownMenuItem>Billing</DropdownMenuItem>\r
+        <DropdownMenuSeparator />\r
+        <DropdownMenuCheckboxItem checked>Dark mode</DropdownMenuCheckboxItem>\r
+        <DropdownMenuRadioGroup value="us">\r
+          <DropdownMenuRadioItem value="us">United States</DropdownMenuRadioItem>\r
+          <DropdownMenuRadioItem value="in">India</DropdownMenuRadioItem>\r
+        </DropdownMenuRadioGroup>\r
+        <DropdownMenuSeparator />\r
+        <DropdownMenuItem>Log out</DropdownMenuItem>\r
+      </DropdownMenuContent>\r
+    </DropdownMenu>
+}`,...L.parameters?.docs?.source}}}})))()}z();export{L as Default,R as __namedExportsOrder,I as default};

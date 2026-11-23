@@ -1,8 +1,0 @@
-export { Skeleton } from "./Skeleton"
-export type { SkeletonProps } from "./Skeleton"
-export { SkeletonText } from "./SkeletonText"
-export type { SkeletonTextProps } from "./SkeletonText"
-export { SkeletonTitle } from "./SkeletonTitle"
-export type { SkeletonTitleProps } from "./SkeletonTitle"
-export { SkeletonAvatar } from "./SkeletonAvatar"
-export type { SkeletonAvatarProps } from "./SkeletonAvatar"

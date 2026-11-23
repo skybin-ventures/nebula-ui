@@ -1,0 +1,17 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{f as t}from"./iframe-DeOB6YXf.js";import{t as n}from"./jsx-runtime-MKhVqBIO.js";import{n as r,t as i}from"./cn-BksUxDMQ.js";import{n as a,t as o}from"./Button-mFzRuj6K.js";function s({error:e,reset:t}){return(0,l.jsxs)(`div`,{role:`alert`,className:`flex flex-col items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-6`,children:[(0,l.jsxs)(`div`,{children:[(0,l.jsx)(`h2`,{className:`text-base font-semibold`,children:`Something went wrong`}),(0,l.jsx)(`p`,{className:`mt-1 text-sm text-muted-foreground`,children:e.message||`An unexpected error occurred.`})]}),(0,l.jsx)(o,{type:`button`,variant:`outline`,size:`sm`,onClick:t,children:`Try again`})]})}var c,l,u;function d(){return(d=e((()=>{c=t(),r(),a(),l=n(),u=class extends c.Component{state={error:null};static getDerivedStateFromError(e){return{error:e}}componentDidCatch(e,t){this.props.onError?.(e,t)}reset=()=>{this.setState({error:null})};render(){let{error:e}=this.state,{children:t,fallback:n,className:r}=this.props;return e?typeof n==`function`?n({error:e,reset:this.reset}):n||(0,l.jsx)(`div`,{className:i(r),children:(0,l.jsx)(s,{error:e,reset:this.reset})}):t}},u.__docgenInfo={description:``,methods:[{name:`reset`,docblock:null,modifiers:[],params:[],returns:null}],displayName:`ErrorBoundary`,props:{children:{required:!0,tsType:{name:`ReactNode`},description:``},fallback:{required:!1,tsType:{name:`union`,raw:`ReactNode | ((props: ErrorBoundaryFallbackProps) => ReactNode)`,elements:[{name:`ReactNode`},{name:`unknown`}]},description:``},onError:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(error: Error, info: ErrorInfo) => void`,signature:{arguments:[{type:{name:`Error`},name:`error`},{type:{name:`ErrorInfo`},name:`info`}],return:{name:`void`}}},description:``},className:{required:!1,tsType:{name:`string`},description:``}}}})))()}function f({armed:e}){if(e)throw Error(`Demo failure`);return(0,m.jsx)(`p`,{className:`text-sm`,children:`All good.`})}var p,m,h,g,_;function v(){return(v=e((()=>{p=t(),d(),a(),m=n(),h={title:`Components/ErrorBoundary`,component:u},g={render:function(){let[e,t]=(0,p.useState)(!1),[n,r]=(0,p.useState)(0);return(0,m.jsxs)(`div`,{className:`space-y-3`,children:[(0,m.jsx)(o,{size:`sm`,onClick:()=>t(!0),children:`Trigger error`}),(0,m.jsx)(u,{onError:()=>t(!1),children:(0,m.jsx)(f,{armed:e})},n),(0,m.jsx)(o,{size:`sm`,variant:`outline`,onClick:()=>r(e=>e+1),children:`Remount`})]})}},_=[`Default`],g.parameters={...g.parameters,docs:{...g.parameters?.docs,source:{originalSource:`{
+  render: function Render() {
+    const [armed, setArmed] = useState(false);
+    const [key, setKey] = useState(0);
+    return <div className="space-y-3">\r
+        <Button size="sm" onClick={() => setArmed(true)}>\r
+          Trigger error\r
+        </Button>\r
+        <ErrorBoundary key={key} onError={() => setArmed(false)}>\r
+          <Explosive armed={armed} />\r
+        </ErrorBoundary>\r
+        <Button size="sm" variant="outline" onClick={() => setKey(k => k + 1)}>\r
+          Remount\r
+        </Button>\r
+      </div>;
+  }
+}`,...g.parameters?.docs?.source}}}})))()}v();export{g as Default,_ as __namedExportsOrder,h as default};
