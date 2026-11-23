@@ -1,8 +1,12 @@
 /** @vitest-environment happy-dom */
 
-import { describe, expect, it } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { afterEach, describe, expect, it } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
 import { MultiSelect } from "./MultiSelect"
+
+// No `globals` in this repo's vitest config, so RTL's auto-cleanup isn't
+// registered — tear down the document between tests to avoid cross-test leaks.
+afterEach(cleanup)
 
 const options = [
   { label: "Alpha", value: "a" },

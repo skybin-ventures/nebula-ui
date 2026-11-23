@@ -17,7 +17,8 @@ describe("Tabs", () => {
       </Tabs>
     )
     expect(screen.getByText("Content A")).toBeTruthy()
-    fireEvent.click(screen.getByRole("tab", { name: "Tab B" }))
+    // Radix TabsTrigger activates on mousedown (part of a real click sequence), not click.
+    fireEvent.mouseDown(screen.getByRole("tab", { name: "Tab B" }))
     expect(screen.getByText("Content B")).toBeTruthy()
     cleanup()
   })

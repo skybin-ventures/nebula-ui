@@ -14,7 +14,8 @@ describe("Tooltip", () => {
     render(
       <TooltipProvider>
         <Tooltip defaultOpen>
-          <TooltipTrigger>
+          {/* asChild: Radix renders its own <button> trigger by default, which would nest a second button. */}
+          <TooltipTrigger asChild>
             <button type="button">Target</button>
           </TooltipTrigger>
           <TooltipContent>Tooltip text</TooltipContent>

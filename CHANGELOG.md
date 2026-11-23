@@ -2,8 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.8] - 2026-11-23
 - Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
+
+### Changed
+- Upgraded runtime dependencies: `@hookform/resolvers` 7.0.2 → 7.0.8, `lucide-react` 1.68 → 1.78, `react-hook-form` 7.91 → 7.92, `recharts` 3.10 → 3.11, `tailwind-merge` 3.7.0 → 3.7.1, `tailwindcss` 4.3.4 → 4.3.5
+- Upgraded dev tooling: `vite` 8.3.5 → 8.3.8, `vitest` / `@vitest/*` 5.1.0 → 5.1.1, `storybook` + all `@storybook/*` addons 10.6.5 → 10.6.8, `eslint` 10.14 → 10.15, `typescript-eslint` 8.72 → 8.73, `eslint-plugin-react-refresh` 0.5.7 → 0.5.8, `eslint-plugin-storybook` 10.6.5 → 10.6.8, `rollup-plugin-visualizer` 7.1.1 → 7.1.3, `@tailwindcss/vite` 4.3.4 → 4.3.5, and `vite-plugin-checker` 0.14 → 1.0 (major, no API changes needed)
+- Normalized `@radix-ui/react-dropdown-menu` to a caret range (`^2.2.1`); extended `pnpm-workspace.yaml` `minimumReleaseAgeExclude` for the newly introduced versions
+- `typescript` kept at `~6.0.3`: latest is 7.0.2 (major), but `typescript-eslint` 8.73 peers `typescript >=4.8.4 <6.1.0`, so 7.x is not the latest compatible version
+- All base packages (Radix, Sonner, etc.) remain transitive `dependencies` — a single `pnpm add @skybin-tech/nebula-ui` install still pulls everything; `peerDependencies` are only `react` / `react-dom`
+
+### Added
+- Stories for the last uncovered components: ColumnVisibility, DataTable, KanbanBoard, Popover, Select, Sidebar, Sonner, Table, Theme, Toast, ToastProvider
+- Storybook gh-pages deployment: `.github/workflows/storybook.yml` builds Storybook on push to `main` and publishes `storybook-static/` to the `gh-pages` branch
+
+### Fixed
+- `Tabs` test simulates the Radix `TabsTrigger` activation path (`mousedown`) instead of a plain click; `Tooltip` test renders its trigger with `asChild` so Radix does not nest a second button; `MultiSelect` test registers `cleanup()` (repo vitest config has no `globals`, so RTL auto-cleanup was never running and DOM leaked across tests)
 
 ### Added
 - `FormSelect` (`Select` from `/components/Form`): new `searchable` prop (+ `searchPlaceholder` / `emptyText`) that renders the field as a cmdk command palette (type-to-filter, like `Combobox` / `MultiSelect`) instead of the Radix dropdown; custom `children` still use the Radix dropdown
