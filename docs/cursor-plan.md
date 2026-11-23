@@ -1,7 +1,7 @@
 # Cursor Plan — nebula-ui (v1.0.1 → v1.1)
 
 Synced 2026-10-18 against `src/`, `CHANGELOG.md`, `package.json`, `README.md`,
-and `docs/migration-2.0.md`.
+and `docs/migration-1.0.1.md`.
 
 ## What shipped in 1.0.1 (already done, don't redo)
 
@@ -18,7 +18,7 @@ Recharts wrappers (`LineTrend`, `BarCompare`, `DonutShare`, `Sparkline`,
 
 **Tooling:** CI workflows, `size-limit`, Storybook a11y fail-on-violation,
 `vitest.workspace.ts` in `tsconfig.node.json` include, docs (`theming`,
-`forms`, `migration-2.0`).
+`forms`, `migration-1.0.1`).
 
 **Form system:** `FormConfig.colon` defaults to `false`, Sonner is the only
 public toast surface, `DataGrid.enableRowSelection` defaults to `false`,
@@ -324,7 +324,7 @@ already render those inside `ChartCard`.
 
 `README.md` still has hand-maintained prop tables. That's how they drifted
 into the state you already fixed. The 1.0.1 doc set covers `theming`,
-`forms`, and `migration-2.0` — the general API surface isn't generated.
+`forms`, and `migration-1.0.1` — the general API surface isn't generated.
 
 **Order of effort:**
 
@@ -349,7 +349,7 @@ Once you're generating docs (3.1), enforce completeness:
 
 ### 3.3 Split the docs folder further
 
-`docs/` has `theming.md`, `forms.md`, `migration-2.0.md`. Add:
+`docs/` has `theming.md`, `forms.md`, `migration-1.0.1.md`. Add:
 
 - `installation.md` — install + peer version matching (move the README
   section that talks about React 18 vs 19 and RHF/Zod version alignment)
@@ -363,7 +363,7 @@ Once you're generating docs (3.1), enforce completeness:
 
 ## Deferred — out of scope for 1.x
 
-**Breaking, target 2.0.0** (already in `docs/migration-2.0.md`):
+**Breaking, target 2.0.0** (already in `docs/migration-1.0.1.md`):
 
 - Rename `RadioGroup.direction` (controls item grid, not label position, but
   shares a name with `formConfig.layout`)

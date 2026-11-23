@@ -32,3 +32,17 @@ export const Default: Story = {
     ],
   },
 };
+
+export const CheckboxRows: Story = {
+  args: {
+    name: "role",
+    label: "Role",
+    placeholder: "Select role",
+    selectionVariant: "checkbox",
+    options: [
+      { label: "Admin", value: "admin" },
+      { label: "Manager", value: "manager" },
+      { label: "Employee", value: "employee" },
+    ],
+  },
+};

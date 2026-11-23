@@ -130,6 +130,28 @@ export const LargeSize: Story = {
   },
 };
 
+export const Searchable: Story = {
+  args: {
+    name: 'field',
+    label: 'Country',
+    options: countryOptions,
+    placeholder: 'Search a country',
+    searchable: true,
+    searchPlaceholder: 'Filter countries...',
+  },
+};
+
+export const SearchableWithClear: Story = {
+  args: {
+    name: 'field',
+    label: 'Country',
+    options: countryOptions,
+    placeholder: 'Search a country',
+    searchable: true,
+    allowClear: true,
+  },
+};
+
 export const AllSizes: Story = {
   args: {
     name: 'field',

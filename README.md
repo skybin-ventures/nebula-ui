@@ -38,7 +38,7 @@ import { Toaster, toast } from "@skybin-tech/nebula-ui";
 toast.success("Saved");
 ```
 
-`ToastProvider` / radix `useToast` remain exported for compatibility but are deprecated — prefer `Toaster` + `toast`. See [docs/theming.md](docs/theming.md) for light/dark via `NebulaTheme`.
+The legacy Radix toast surface (`ToastProvider`, `useToast`, and the Radix `Toast*` primitives) was removed from the public API in 1.0.1 — `Toaster` + `toast` is the only supported toast API. See [docs/theming.md](docs/theming.md) for light/dark via `NebulaTheme`.
 
 ---
 
@@ -167,6 +167,52 @@ import { Form, FormSelect } from "@skybin-tech/nebula-ui";
   <SelectItem value="user">User</SelectItem>
 </FormSelect>
 ```
+
+By default `FormSelect` renders Radix's accessible dropdown. For a **searchable**
+command-palette experience (type to filter, like `Combobox` / `MultiSelect`),
+pass `searchable` with an `options` array:
+
+```tsx
+<FormSelect
+  name="country"
+  label="Country"
+  required
+  searchable
+  searchPlaceholder="Filter countries..."
+  options={[{ label: "USA", value: "us" }, { label: "Canada", value: "ca" }]}
+/>
+```
+
+`searchable` honors `placeholder`, `allowClear`, `size`, and error styling. Custom
+`children` always use the Radix dropdown regardless. If you just want a single
+searchable value without the `Form*` wrapper, use the standalone `Combobox`.
+
+---
+
+### MultiSelect
+
+Searchable multi-value picker. The `selectionVariant` prop controls how the
+selected values look in the trigger and how the dropdown options render:
+
+| Variant | Trigger | Dropdown rows |
+|---|---|---|
+| `tags` (default) | removable badge chips | check icon |
+| `comma` | plain comma-separated labels | check icon |
+| `checkbox` | "N selected" count | square checkbox icons |
+| `list` | collapsible list of checkbox rows (shows first two, "+N" chip) | square checkbox icons |
+
+```tsx
+<MultiSelect
+  options={[{ label: "Design", value: "design" }, { label: "Eng", value: "eng" }]}
+  selectionVariant="checkbox"
+/>
+
+// Inside a Form — `FormMultiSelect` passes `selectionVariant` through
+<FormMultiSelect name="tags" label="Tags" options={options} selectionVariant="list" />
+```
+
+`Combobox` accepts the same `selectionVariant` prop to render its dropdown rows
+as checkbox-style squares (the single-value trigger is unaffected).
 
 ---
 
@@ -379,6 +425,28 @@ import { Separator } from "@skybin-tech/nebula-ui";
 <Separator />
 <Separator orientation="vertical" />
 ```
+
+---
+
+## Component inventory
+
+Every component below is exported from the package root and has its own subpath export (e.g. `@skybin-tech/nebula-ui/components/MultiSelect`). Standalone components accept `value` / `onChange`; form-wrapped `Form*` variants work inside `<Form>`.
+
+**Data & tables** — `DataGrid` (TanStack Table grid with sorting, pagination, column visibility via `useDataGrid` / `useColumnVisibility`; `DataTable` / `useDataTable` are legacy aliases), `Table` (presentational primitives), `Pagination` (+`Content` / `Item` / `Link` / `Next` / `Previous` / `Ellipsis`), `FilterPanel`, `StatCard`, `KeyValue`, `JsonView`, `TreeView`.
+
+**Charts** — `ChartCard`, `LineTrend`, `AreaRange`, `BarCompare`, `DonutShare`, `Sparkline` (recharts-based, all in the `Chart` namespace).
+
+**Selection & input (standalone)** — `MultiSelect` (+`FormMultiSelect`), `TagInput` (+`FormTagInput`), `Select` / `Combobox` / `FormCombobox`, `SearchInput`, `Slider` (+`FormSlider`), `ColorPicker` (+`FormColorPicker`), `FileUpload`, `DatePicker` / `DateTimePicker` / `TimePicker` (+`Form*`), `InputOTP` (+`FormInputOTP`), `Progress` / `ProgressBar`.
+
+**Workflow & navigation** — `Stepper` (+`FormRepeater` / `Repeater` for repeating field groups), `KanbanBoard` (dnd-kit), `Sidebar`, `TopNavigation`, `MobileNav`, `TabBar`, `CommandPalette` / `Command` (cmdk), `Breadcrumb`, `NavigationMenu`, `SkipLink`.
+
+**Feedback & status** — `Alert`, `ErrorBoundary`, `ErrorState`, `EmptyState`, `LoadingSpinner`, `Notification`, `Skeleton`, `StatusIndicator`, `SuspenseFallback`, `Toaster` / `toast` (Sonner).
+
+**Overlays & containers** — `Dialog` / `ModalForm`, `ConfirmDialog` (+`useConfirm`), `Sheet`, `AlertDialog`, `Tooltip`, `Popover`, `DropdownMenu`, `Card`, `Section`, `Divider`, `Accordion`, `ScrollArea`.
+
+**Forms (detailed docs above)** — `Form`, `TextBox`, `TextArea`, `FormCheckbox` / `Checkbox`, `RadioGroup`, `FormSwitch`, `FormSelect`, `CountrySelect` / `FormCountrySelect`, `PhoneInput` / `FormPhoneInput`, `FormPassword`, `FormConsent`, `FormRating`, `FormCurrencyInput`, `FormPercentageInput`, `FormAutocomplete`, `FieldLayout`, `FieldHelpIcon`.
+
+**Theming** — `NebulaTheme` (+`useTheme`) for light / dark / system; see [docs/theming.md](docs/theming.md).
 
 ---
 

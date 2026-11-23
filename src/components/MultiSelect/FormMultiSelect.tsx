@@ -5,7 +5,7 @@ import { useController, useFormContext as useRHFFormContext, type FieldPath, typ
 import type { FormControl } from "../Form/formControl"
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "../Form/context";
 import { FieldLayout } from "../Form/FieldLayout";
-import { MultiSelect } from "./MultiSelect";
+import { MultiSelect, type MultiSelectSelectionVariant } from "./MultiSelect";
 import type { SelectOption } from "../Form/Select";
 
 export interface FormMultiSelectProps<
@@ -20,6 +20,8 @@ export interface FormMultiSelectProps<
   error?: string;
   fullWidth?: boolean;
   placeholder?: string;
+  /** Display + dropdown style for the selection (tags / comma / checkbox / list). */
+  selectionVariant?: MultiSelectSelectionVariant;
   disabled?: boolean;
   loading?: boolean;
   className?: string;
@@ -41,6 +43,7 @@ export function FormMultiSelect<
   error: customError,
   fullWidth = true,
   placeholder,
+  selectionVariant,
   disabled,
   loading,
   className,
@@ -101,6 +104,7 @@ export function FormMultiSelect<
         value={selected}
         onChange={field.onChange}
         placeholder={placeholder}
+        selectionVariant={selectionVariant}
         disabled={disabled ?? formConfig.disabled}
         loading={loading}
         className={className}

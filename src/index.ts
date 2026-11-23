@@ -345,7 +345,11 @@ export type {
 } from "./components/DateRangePicker"
 
 export { MultiSelect, FormMultiSelect } from "./components/MultiSelect"
-export type { MultiSelectProps, FormMultiSelectProps } from "./components/MultiSelect"
+export type {
+  MultiSelectProps,
+  FormMultiSelectProps,
+  MultiSelectSelectionVariant,
+} from "./components/MultiSelect"
 
 export { FileUpload, Dropzone, FormFileUpload, defaultFileId } from "./components/FileUpload"
 export type {

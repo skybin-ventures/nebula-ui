@@ -76,7 +76,7 @@ Confirmed present under `src/components/` as of 1.0.6:
   (`lines/functions 40, branches 35, statements 40`).
 - **Bundle-size budget:** `size-limit` (`pnpm size`) + `rollup-plugin-visualizer`
   (`stats.html`), `Button.css` and the unused `--form-*` token set are gone.
-- **Docs:** `docs/` now has `forms.md`, `theming.md`, `migration-2.0.md`,
+- **Docs:** `docs/` now has `forms.md`, `theming.md`, `migration-1.0.1.md`,
   `cursor-plan.md`.
 - **Type checking:** `tsconfig.node.json` includes `eslint.config.js`,
   `.storybook/**`, `tests/**`, `vitest.shims.d.ts`, `vitest.workspace.ts`,

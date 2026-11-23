@@ -2,7 +2,7 @@
 
 import { useContext, useLayoutEffect, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Square, SquareCheck } from "lucide-react";
 import { useController, useFormContext as useRHFFormContext, type FieldPath, type FieldValues } from "react-hook-form";
 import type { FormControl } from "./formControl"
 import { cva, type VariantProps } from "class-variance-authority";
@@ -20,6 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popove
 import { FormConfigContext, type FieldValidationRules, type FormConfig } from "./context";
 import { FieldLayout } from "./FieldLayout";
 import type { SelectOption } from "./Select";
+import type { MultiSelectSelectionVariant } from "../MultiSelect";
 
 const comboboxVariants = cva("w-full justify-between font-normal", {
   variants: {
@@ -58,6 +59,12 @@ export interface ComboboxProps<
   searchPlaceholder?: string;
   emptyText?: string;
   options?: SelectOption[];
+  /**
+   * Dropdown row style, shared with `MultiSelect`: `checkbox` / `list`
+   * render square checkbox-style rows; `tags` (default) / `comma` keep the
+   * classic check-icon rows. The trigger always shows the single chosen label.
+   */
+  selectionVariant?: MultiSelectSelectionVariant;
   disabled?: boolean;
   className?: string;
   id?: string;
@@ -84,6 +91,7 @@ export function Combobox<
   searchPlaceholder = "Search...",
   emptyText = "No option found.",
   options = [],
+  selectionVariant = "tags",
   disabled,
   className,
   id: providedId,
@@ -142,6 +150,7 @@ export function Combobox<
   const effectiveSize = size ?? formConfig.size ?? "md";
   const effectiveDisabled = disabled ?? formConfig.disabled;
   const effectiveVariant = hasError ? "error" : variant;
+  const checkboxRows = selectionVariant === "checkbox" || selectionVariant === "list";
 
   return (
     <FieldLayout
@@ -199,14 +208,22 @@ export function Combobox<
                       setOpen(false);
                     }}
                   >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        field.value?.toString() === option.value.toString()
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
+                    {checkboxRows ? (
+                      field.value?.toString() === option.value.toString() ? (
+                        <SquareCheck className="mr-2 h-4 w-4 text-primary" />
+                      ) : (
+                        <Square className="mr-2 h-4 w-4 text-muted-foreground" />
+                      )
+                    ) : (
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          field.value?.toString() === option.value.toString()
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                    )}
                     {option.label}
                   </CommandItem>
                 ))}

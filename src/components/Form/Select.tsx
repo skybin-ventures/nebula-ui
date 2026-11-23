@@ -1,13 +1,24 @@
 'use client';
 
-import { useId, useContext, useLayoutEffect } from "react";
+import { useId, useContext, useLayoutEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useController, useFormContext as useRHFFormContext, type FieldValues, type FieldPath } from "react-hook-form";
 import type { FormControl } from "./formControl"
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 import { FormConfigContext, type FormConfig, type FieldValidationRules } from "../Form/context";
 import { FieldLayout } from "./FieldLayout";
+import { Button } from "../../primitives/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../../primitives/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover";
 import {
   Select as ShadcnSelect,
   SelectContent,
@@ -62,6 +73,16 @@ export interface SelectProps<
   options?: SelectOption[];
   /** Placeholder text */
   placeholder?: string;
+  /**
+   * Render the select as a searchable command palette (like `Combobox` /
+   * `MultiSelect`) instead of the Radix dropdown. Ignored when `children`
+   * are supplied — custom children always use the Radix dropdown.
+   */
+  searchable?: boolean;
+  /** Search box placeholder (searchable mode only) */
+  searchPlaceholder?: string;
+  /** Empty-state copy when no option matches the search (searchable mode only) */
+  emptyText?: string;
   /** Allow clear selection */
   allowClear?: boolean;
   /** External control (for use outside Form) */
@@ -124,6 +145,9 @@ export function Select<
   disabled,
   options = [],
   placeholder,
+  searchable = false,
+  searchPlaceholder,
+  emptyText,
   allowClear,
   id: providedId,
   control: externalControl,
@@ -134,6 +158,7 @@ export function Select<
 }: SelectProps<TFieldValues, TName>) {
   const generatedId = useId();
   const inputId = providedId ?? generatedId;
+  const [open, setOpen] = useState(false);
   
   // Try to get form context
   const formConfigContext = useContext(FormConfigContext);
@@ -179,6 +204,104 @@ export function Select<
   
   // Determine variant based on error state
   const effectiveVariant = hasError ? "error" : variant;
+
+  const ariaDescribedBy = hasError
+    ? `${inputId}-error`
+    : helperText
+      ? `${inputId}-helper`
+      : undefined;
+
+  // Searchable mode: a Popover + command palette (cmdk) that filters options
+  // as you type. Only used with the `options` prop; custom `children` and the
+  // default `searchable={false}` keep the accessible Radix dropdown.
+  if (searchable && !children) {
+    const selectedOption = options.find(
+      (option) => option.value.toString() === field.value?.toString()
+    );
+    return (
+      <FieldLayout
+        inputId={inputId}
+        label={label}
+        required={!!required}
+        helperText={helperText}
+        help={help}
+        helpIcon={helpIcon}
+        errorMessage={showError ? errorMessage : undefined}
+        showError={showError}
+        fullWidth={fullWidth}
+        formConfig={formConfig}
+      >
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              id={inputId}
+              type="button"
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              disabled={effectiveDisabled}
+              aria-invalid={hasError}
+              aria-describedby={ariaDescribedBy}
+              className={cn(
+                "h-auto min-h-10 w-full justify-between font-normal",
+                selectSizeVariants({ size: effectiveSize }),
+                effectiveVariant === "error" && "border-destructive focus:ring-destructive",
+                effectiveVariant === "success" && "border-success focus:ring-success",
+                !field.value && "text-muted-foreground",
+                className
+              )}
+            >
+              <span className="truncate">{selectedOption?.label ?? placeholder ?? "Select option"}</span>
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[320px] p-0" align="start">
+            <Command>
+              <CommandInput placeholder={searchPlaceholder} />
+              <CommandList>
+                <CommandEmpty>{emptyText ?? "No option found."}</CommandEmpty>
+                <CommandGroup>
+                  {allowClear && field.value && (
+                    <CommandItem
+                      value=""
+                      onSelect={() => {
+                        field.onChange(undefined);
+                        setOpen(false);
+                      }}
+                    >
+                      <X className="mr-2 h-4 w-4" />
+                      Clear selection
+                    </CommandItem>
+                  )}
+                  {options.map((option) => (
+                    <CommandItem
+                      key={option.value}
+                      value={option.label}
+                      disabled={option.disabled}
+                      onSelect={() => {
+                        field.onChange(option.value.toString());
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          field.value?.toString() === option.value.toString()
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {option.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      </FieldLayout>
+    );
+  }
 
   return (
     <FieldLayout

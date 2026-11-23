@@ -24,6 +24,9 @@ export const Controlled: Story = {
     return <MultiSelect options={options} value={value} onChange={setValue} />
   },
 }
+export const CommaVariant: Story = { args: { selectionVariant: "comma", defaultValue: ["design", "sales"] } }
+export const CheckboxVariant: Story = { args: { selectionVariant: "checkbox", defaultValue: ["eng"] } }
+export const ListVariant: Story = { args: { selectionVariant: "list", defaultValue: ["design", "eng", "sales"] } }
 export const Disabled: Story = { args: { disabled: true, defaultValue: ["design"] } }
 export const Loading: Story = { args: { loading: true } }
 export const Empty: Story = { args: { options: [] } }

@@ -1,6 +1,6 @@
 # Migrating to nebula-ui 1.0.1
 
-> Note: filename kept as `migration-2.0.md` for continuity; this release is published as **1.0.1**.
+> Renamed from `migration-2.0.md` — this release is published as **1.0.1**.
 
 ## Breaking changes
 

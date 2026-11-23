@@ -16,6 +16,9 @@ dist-ssr
 # Build-visualizer output
 stats.html
 
+# Storybook build output (deployed to gh-pages by CI)
+storybook-static
+
 # Local publish helper (contains a token placeholder)
 .npmrc.publish
 

@@ -1,0 +1,39 @@
+name: Storybook → gh-pages
+
+on:
+  push:
+    branches: [main]
+  # Allow re-deploying on demand from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Storybook is built from source (tsconfig paths resolve src/), so no
+      # library build is required here.
+      - run: pnpm build-storybook
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_branch: gh-pages
+          deploy_path: storybook-static/
+          # Keep the page alive at the repo root; no custom base path needed.
+          publish_dir: storybook-static/
