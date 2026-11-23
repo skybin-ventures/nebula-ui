@@ -95,7 +95,11 @@ export default defineConfig({
     ...(isStorybook
       ? []
       : [
-          checker({ typescript: true }),
+          // Type-check src/ only (tsconfig.app.json). The solution tsconfig.json also
+        // references tsconfig.consumer.json, which resolves @skybin-tech/nebula-ui to
+        // the built dist/ declarations — unavailable during build:lib on a fresh CI runner.
+        // The consumer project is still checked later by `pnpm exec tsc -b` (after dist exists).
+        checker({ typescript: { tsconfigPath: "./tsconfig.app.json" } }),
           eslint({
             emitError: false,
             emitWarning: false,

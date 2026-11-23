@@ -6,6 +6,7 @@ import {
   ToastAction,
   ToastClose,
   ToastDescription,
+  ToastProvider,
   ToastTitle,
   ToastViewport,
 } from "..";
@@ -14,12 +15,16 @@ const meta = {
   title: "Feedback/Toast",
   parameters: { layout: "centered" },
   decorators: [
+    // Radix's `Toast` (the primitive root) registers with a `ToastProvider`
+    // context and throws without one, so wrap every story in the provider.
     (Story) => (
       <div className="relative h-[300px] w-full">
-        <div className="flex flex-wrap justify-end gap-2 p-4">
-          <Story />
-        </div>
-        <ToastViewport className="top-4 bottom-auto" />
+        <ToastProvider>
+          <div className="flex flex-wrap justify-end gap-2 p-4">
+            <Story />
+          </div>
+          <ToastViewport className="top-4 bottom-auto" />
+        </ToastProvider>
       </div>
     ),
   ],
@@ -38,7 +43,7 @@ function ToastDemo({ onDone }: { onDone?: () => void }) {
         </ToastAction>
       ) : null}
       <ToastTitle>You have a new message.</ToastTitle>
-      <ToastDescription>from @radix-ui · just now</ToastDescription>
+      <ToastDescription>from the Radix toast primitive · just now</ToastDescription>
       <ToastClose />
     </Toast>
   );
@@ -54,7 +59,7 @@ export const AutoDismiss: Story = {
 
 export const Destructive: Story = {
   render: () => (
-    <Toast>
+    <Toast variant="destructive">
       <ToastTitle>Something went wrong.</ToastTitle>
       <ToastDescription>Your session expired. Please log in again.</ToastDescription>
       <ToastClose />

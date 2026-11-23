@@ -33,7 +33,8 @@ jobs:
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          deploy_branch: gh-pages
-          deploy_path: storybook-static/
-          # Keep the page alive at the repo root; no custom base path needed.
+          # v4 requires an explicit auth token; `contents: write` above authorizes the generated token to push gh-pages.
+          github_token: ${{ github.token }}
+          publish_branch: gh-pages
           publish_dir: storybook-static/
+          commit_message: 'Deploy Storybook build (${{ github.sha }})'
