@@ -1,0 +1,3 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./slider-BJwyqgNH.js";var i,a,o,s;function c(){return(c=e((()=>{n(),i=t(),a={title:`Form/Slider`,component:r,parameters:{layout:`centered`}},o={render:()=>(0,i.jsx)(r,{defaultValue:[50],max:100,step:1,className:`w-[300px]`})},s=[`Default`],o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  render: () => <Slider defaultValue={[50]} max={100} step={1} className="w-[300px]" />
+}`,...o.parameters?.docs?.source}}}})))()}c();export{o as Default,s as __namedExportsOrder,a as default};
