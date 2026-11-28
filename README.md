@@ -442,7 +442,7 @@ Every component below is exported from the package root and has its own subpath 
 
 **Feedback & status** — `Alert`, `ErrorBoundary`, `ErrorState`, `EmptyState`, `LoadingSpinner`, `Notification`, `Skeleton`, `StatusIndicator`, `SuspenseFallback`, `Toaster` / `toast` (Sonner).
 
-**Overlays & containers** — `Dialog` / `ModalForm`, `ConfirmDialog` (+`useConfirm`), `Sheet`, `AlertDialog`, `Tooltip`, `Popover`, `DropdownMenu`, `Card`, `Section`, `Divider`, `Accordion`, `ScrollArea`.
+**Overlays & containers** — `Dialog` / `ModalForm`, `ConfirmDialog` (+`useConfirm`), `Sheet`, `AlertDialog`, `Tooltip`, `Popover`, `DropdownMenu`, `Card`, `Section`, `Divider`, `Accordion`, `ScrollArea`, `Tour` (+`TourTrigger` / `startTour`) — product tour with spotlight + positioned popover, progress indicator, and focus management.
 
 **Forms (detailed docs above)** — `Form`, `TextBox`, `TextArea`, `FormCheckbox` / `Checkbox`, `RadioGroup`, `FormSwitch`, `FormSelect`, `CountrySelect` / `FormCountrySelect`, `PhoneInput` / `FormPhoneInput`, `FormPassword`, `FormConsent`, `FormRating`, `FormCurrencyInput`, `FormPercentageInput`, `FormAutocomplete`, `FieldLayout`, `FieldHelpIcon`.
 

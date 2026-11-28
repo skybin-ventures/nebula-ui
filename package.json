@@ -799,6 +799,16 @@
         "types": "./dist/components/SuspenseFallback/index.d.ts",
         "default": "./dist/cjs/components/SuspenseFallback/index.cjs"
       }
+    },
+    "./components/Tour": {
+      "import": {
+        "types": "./dist/components/Tour/index.d.ts",
+        "default": "./dist/components/Tour/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Tour/index.d.ts",
+        "default": "./dist/cjs/components/Tour/index.cjs"
+      }
     }
   },
   "typesVersions": {
@@ -1033,6 +1043,9 @@
       ],
       "components/SuspenseFallback": [
         "./dist/components/SuspenseFallback/index.d.ts"
+      ],
+      "components/Tour": [
+        "./dist/components/Tour/index.d.ts"
       ]
     }
   },

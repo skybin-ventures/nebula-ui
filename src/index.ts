@@ -516,3 +516,6 @@ export type { ErrorBoundaryProps, ErrorBoundaryFallbackProps } from "./component
 
 export { SuspenseFallback } from "./components/SuspenseFallback"
 export type { SuspenseFallbackProps } from "./components/SuspenseFallback"
+
+export { Tour, TourTrigger, startTour } from "./components/Tour"
+export type { TourProps, TourStep, TourTriggerProps } from "./components/Tour"

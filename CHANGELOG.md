@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9] - 2026-01-20
+
+### Added
+- `Tour`, `TourTrigger`, and `startTour` under `src/components/Tour/` — first-party product tour primitive with spotlight overlay, positioned popover, progress indicator, keyboard navigation (Escape to skip, Tab trap), and focus restoration
+- Seven Storybook stories: `Default`, `WithOptionalStep`, `Uncontrolled`, `PayrollSettings` (CaeloHR acceptance example), `AllSides`, `CustomLabels`, `Minimal`, and `CustomStyling` demonstrating per-element className props
+- Eleven styling props on `TourProps` (`className`, `backdropClassName`, `spotlightClassName`, `spotlightPadding`, `popoverClassName`, `progressClassName`, `progressFillClassName`, `skipClassName`, `nextClassName`, `backClassName`) so apps can theme any sub-element without overriding the component
+- Subpath export `./components/Tour` with ESM/CJS/`.d.ts` entries in `package.json` `exports` and `typesVersions`
+- 17 unit tests covering render, navigation, skip/complete callbacks, progress labels, optional step filtering, a11y attributes, backdrop/spotlight presence, and controlled/uncontrolled modes
+
 ## [1.0.8] - 2026-11-23
 - Bump GitHub Actions to Node 24–compatible majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-dotnet@v5`, `pnpm/action-setup@v6`) to clear the Node.js 20 deprecation warning.
 
